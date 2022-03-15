@@ -2,7 +2,7 @@
 
 item::item(){
     this->id=0;
-    this->name="name";
+    this->name="-";
     this->type="type";
 }
 item::item(int id, string name, string type){
@@ -12,6 +12,14 @@ item::item(int id, string name, string type){
 }
 item::item(string name){
     // nyari tau id dan tipe dari config file
+}
+
+int item::get_id(){
+    return this->id;
+}
+
+string item::get_name(){
+    return this->name;
 }
 
 

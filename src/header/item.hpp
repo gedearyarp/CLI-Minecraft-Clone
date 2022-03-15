@@ -13,6 +13,8 @@ public:
     item();
     item(int id, string name, string type);
     item(string name);
+    int get_id();
+    string get_name();
 };
 
 class tool : virtual public item{
