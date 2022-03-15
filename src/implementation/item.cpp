@@ -1,4 +1,4 @@
-#include "./header/item.hpp"
+#include "../header/item.hpp"
 
 item::item(){
     this->id=0;
