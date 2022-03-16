@@ -4,7 +4,6 @@
 #include <string>
 
 #include "../header/helper.hpp"
-#include "../header/item.hpp"
 
 vector<Item> readConfigPath(){
     vector<Item> itemConfigs;
@@ -36,6 +35,6 @@ string findCategoryByName(string nameItem){
     vector<Item> itemConfigs = readConfigPath();
 
     for(int i=0; i<itemConfigs.size(); i++){
-        if(itemConfigs[i].name == nameItem) return itemConfigs[i].category;
+        if(itemConfigs[i].get_name() == nameItem) return itemConfigs[i].get_category();
     }
 }
