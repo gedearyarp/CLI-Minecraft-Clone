@@ -68,27 +68,27 @@ void Inventory::give(string itemName, int itemQty)
     }
 }
 
-void discard(string slotId, int itemQty)
+void Inventory::discard(string slotId, int itemQty)
 {
     //TODO
 }
 
-void move(string srcSlot, int itemQty, vector<string> destSlot)
+void Inventory::move(string srcSlot, int itemQty, vector<string> destSlot)
 {
     //TODO
 }
 
-void moveItoC(string srcSlot, vector<string> destSlot)
+void Inventory::moveItoC(string srcSlot, vector<string> destSlot)
 {
     //TODO
 }
 
-void moveItoI(string srcSlot, string destSlot)
+void Inventory::moveItoI(string srcSlot, string destSlot)
 {
     //TODO
 }
 
-void moveCtoI(string srcSlot, string destSlot)
+void Inventory::moveCtoI(string srcSlot, string destSlot)
 {
     //TODO
 }
