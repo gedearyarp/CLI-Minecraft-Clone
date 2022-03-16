@@ -11,6 +11,7 @@ class Slot {
         Item item;
         int quantity;
     public:
+        Slot();
         Slot(Item item, int qty);
 
         void addItemSlot(int qty);
@@ -18,6 +19,8 @@ class Slot {
 
         int getQuantity();
         Item getItem();
+
+        bool isTool();
 };
 
 class Inventory {
