@@ -93,12 +93,12 @@ void Inventory::moveCtoI(string srcSlot, string destSlot)
     //TODO
 }
 
-void exportFile()
+void Inventory::exportFile()
 {
     //TODO
 }
 
-bool isFull()
+bool Inventory::isFull()
 {
     
 }
