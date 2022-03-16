@@ -14,6 +14,13 @@ Slot::Slot(Item item, int qty)
     this-> quantity = qty;
 }
 
+Slot::Slot(string item, int qty)
+{
+    Item newItem = Item(item);
+    this->item = newItem;
+    this-> quantity = qty;
+}
+
 void Slot::addItemSlot(int qty)
 {
     this->quantity += qty;
@@ -36,8 +43,7 @@ Item Slot::getItem()
 
 bool Slot::isTool()
 {
-    //Harus nambah isTool di item soalnya categorynya private
-    return(this->item.get_category() == "TOOL");
+    return (this->item.get_category() == "TOOL");
 }
 
 bool Slot::isEmpty()
@@ -68,13 +74,15 @@ void Inventory::showInventory()
 
 void Inventory::give(string itemName, int itemQty)
 {
+    Item thisItem = Item(itemName);
+    bool thisIsTool = (thisItem.get_category() != "TOOL");
     if(itemQty <= 0) return;
 
     for(int i = 0; i < 3;i++){
         for(int j = 0; j < 9; j++){
             if(itemQty <= 0) break;
             
-            if (slot[i][j].getItem().get_name() == itemName && !slot[i][j].isFull()) {
+            if (!thisIsTool && slot[i][j].getItem().get_name() == itemName && !slot[i][j].isFull()) {
                 int remainQty = 64 - slot[i][j].getQuantity();
                 int addQty = min(itemQty, remainQty);
 
@@ -88,13 +96,21 @@ void Inventory::give(string itemName, int itemQty)
         for(int j = 0; j < 9; j++){
             if(itemQty <= 0) break;
 
-            if(slot[i][j].isEmpty()){
-                Item newItem = Item(itemName);
-
+            if(slot[i][j].isEmpty() && !thisIsTool){
+                NonTool newItem = NonTool(itemName);
                 int addQty = min(64, itemQty);
                 slot[i][j] = Slot(newItem, addQty);
                 
+                this->slotUsed++;
                 itemQty -= addQty;
+            } 
+
+            if(slot[i][j].isEmpty() && thisIsTool){
+                Tool newItem = Tool(itemName);
+                slot[i][j] = Slot(newItem, 1);
+                
+                this->slotUsed++;
+                itemQty--;
             } 
         }
     }
@@ -102,32 +118,32 @@ void Inventory::give(string itemName, int itemQty)
 
 void discard(string slotId, int itemQty)
 {
-
+    //TODO
 }
 
 void move(string srcSlot, int itemQty, vector<string> destSlot)
 {
-
+    //TODO
 }
 
 void moveItoC(string srcSlot, vector<string> destSlot)
 {
-
+    //TODO
 }
 
 void moveItoI(string srcSlot, string destSlot)
 {
-
+    //TODO
 }
 
 void moveCtoI(string srcSlot, string destSlot)
 {
-
+    //TODO
 }
 
 void exportFile()
 {
-
+    //TODO
 }
 
 bool isFull()

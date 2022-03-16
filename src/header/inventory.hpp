@@ -13,6 +13,7 @@ class Slot {
     public:
         Slot();
         Slot(Item item, int qty);
+        Slot(string item, int qty);
 
         void addItemSlot(int qty);
         void discardItemSlot(int qty);

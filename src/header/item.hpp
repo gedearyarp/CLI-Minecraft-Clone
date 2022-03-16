@@ -42,14 +42,10 @@ public:
 
 class NonTool : virtual public Item
 {
-private:
-    int quantity;
-
 public:
     NonTool();
-    NonTool(int id, string name, string type, int quantity);
-    NonTool(string name, int quantity);
-    int get_quantity() const;
+    NonTool(int id, string name, string type);
+    NonTool(string name);
     void itemInfo() const;
 };
 #endif

@@ -94,25 +94,20 @@ void Tool::itemInfo() const
 
 NonTool::NonTool() : Item(0, "-", "-", "-")
 {
-    this->quantity = 0;
+
 }
 
-NonTool::NonTool(int id, string name, string type, int quantity) : Item(id, name, type, "NONTOOL")
+NonTool::NonTool(int id, string name, string type) : Item(id, name, type, "NONTOOL")
 {
-    this->quantity = quantity;
+
 }
 
-NonTool::NonTool(string name, int quantity) : Item(name)
+NonTool::NonTool(string name) : Item(name)
 {
-    this->quantity = quantity;
-}
 
-int NonTool::get_quantity() const{
-    return this->quantity;
 }
 
 void NonTool::itemInfo() const
 {
     Item::itemInfo();
-    cout << "Quantity :" << this->quantity << endl;
 }
