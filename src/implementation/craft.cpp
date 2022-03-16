@@ -132,7 +132,7 @@ void CraftingTable::ShowCraftingTable()
         cout << "[ C", idx, ": ";
         for (int j = 0; j < 3; j++)
         {   
-            string itemName = this->TableSlot[i][j].getItem().get_name();
+            string itemName = this->TableSlot[i][j].getItem().getName();
             int itemQuantity = this->TableSlot[i][j].getQuantity();
             cout << itemName << " - " << itemQuantity << " ]";
             idx++;

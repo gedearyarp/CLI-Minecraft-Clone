@@ -35,22 +35,22 @@ Item::Item(string name)
     this->category = itemConfigs[i].category;
 }
 
-int Item::get_id()
+int Item::getId()
 {
     return this->id;
 }
 
-string Item::get_name() const
+string Item::getName() const
 {
     return this->name;
 }
 
-string Item::get_type() const
+string Item::getType() const
 {
     return this->type;
 }
 
-string Item::get_category() const
+string Item::getCategory() const
 {
     return this->category;
 }

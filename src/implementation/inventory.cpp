@@ -43,7 +43,7 @@ Item Slot::getItem()
 
 bool Slot::isTool()
 {
-    return (this->item.get_category() == "TOOL");
+    return (this->item.getCategory() == "TOOL");
 }
 
 bool Slot::isEmpty()
@@ -65,7 +65,7 @@ void Inventory::showInventory()
 {
     for(int i = 0; i < 3;i++){
         for(int j = 0; j < 9; j++){
-            string curItem = slot[i][j].getItem().get_name();
+            string curItem = slot[i][j].getItem().getName();
             cout << curItem << " ";
         }
         cout << '\n';
@@ -75,14 +75,14 @@ void Inventory::showInventory()
 void Inventory::give(string itemName, int itemQty)
 {
     Item thisItem = Item(itemName);
-    bool thisIsTool = (thisItem.get_category() != "TOOL");
+    bool thisIsTool = (thisItem.getCategory() != "TOOL");
     if(itemQty <= 0) return;
 
     for(int i = 0; i < 3;i++){
         for(int j = 0; j < 9; j++){
             if(itemQty <= 0) break;
             
-            if (!thisIsTool && slot[i][j].getItem().get_name() == itemName && !slot[i][j].isFull()) {
+            if (!thisIsTool && slot[i][j].getItem().getName() == itemName && !slot[i][j].isFull()) {
                 int remainQty = 64 - slot[i][j].getQuantity();
                 int addQty = min(itemQty, remainQty);
 

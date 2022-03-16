@@ -35,6 +35,6 @@ string findCategoryByName(string nameItem){
     vector<Item> itemConfigs = readConfigPath();
 
     for(int i=0; i<itemConfigs.size(); i++){
-        if(itemConfigs[i].get_name() == nameItem) return itemConfigs[i].get_category();
+        if(itemConfigs[i].getName() == nameItem) return itemConfigs[i].getCategory();
     }
 }

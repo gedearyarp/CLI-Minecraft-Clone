@@ -19,11 +19,10 @@ public:
     Item(int id, string name, string type, string category);
     Item(string name);
 
-    int get_id();
-    string get_name() const;
-    string get_type() const;
-    string get_category() const;
-    string get_name();
+    int getId();
+    string getName() const;
+    string getType() const;
+    string getCategory() const;
 
     virtual void itemInfo() const;
 };
