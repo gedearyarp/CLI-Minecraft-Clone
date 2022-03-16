@@ -30,9 +30,9 @@ class Inventory {
         void showInventory();
         void give(string itemName, int itemQty);
         void discard(string slotId, int itemQty);
-        void move(string srcSlot, int itemQty, string* destSlot);
+        void move(string srcSlot, int itemQty, vector<string> destSlot);
 
-        void moveItoC(string srcSlot, string* destSlot);
+        void moveItoC(string srcSlot, vector<string> destSlot);
         void moveItoI(string srcSlot, string destSlot);
         void moveCtoI(string srcSlot, string destSlot);
 
