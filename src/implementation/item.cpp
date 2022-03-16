@@ -24,13 +24,13 @@ Item::Item(string name)
     bool found = false;
     int i = 0;
     while (!found && i < itemConfigs.size()){
-        if (itemConfigs[i].get_name() == name) found = true;
+        if (itemConfigs[i].name == name) found = true;
         else i++;
     }
-    this->id = itemConfigs[i].get_id();
-    this->name = itemConfigs[i].get_name();
-    this->type = itemConfigs[i].get_type();
-    this->category = itemConfigs[i].get_category();
+    this->id = itemConfigs[i].id;
+    this->name = itemConfigs[i].name;
+    this->type = itemConfigs[i].type;
+    this->category = itemConfigs[i].category;
 }
 
 int Item::get_id()
