@@ -6,7 +6,7 @@ using namespace std;
 CraftingTable::CraftingTable() {
     for (int i=0; i<3; i++) {
         for (int j=0; j<3; j++) {
-            this->Table[i][j] = item();
+            this->Table[i][j] = Item();
             this->quantity[i][j] = 0;
         }
     }
