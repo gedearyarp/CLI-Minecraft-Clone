@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class item
+class Item
 {
 protected:
     int id;
@@ -14,35 +14,35 @@ protected:
     string category; // TOOL & NONTOOL
 
 public:
-    item();
-    item(int id, string name, string type, string category);
-    item(string name);
+    Item();
+    Item(int id, string name, string type, string category);
+    Item(string name);
     int get_id();
     string get_name();
     virtual void itemInfo() const;
 };
 
-class tool : virtual public item
+class Tool : virtual public Item
 {
 private:
     int durability;
 
 public:
-    tool();
-    tool(int id, string name, int durability);
-    tool(string name);
+    Tool();
+    Tool(int id, string name, int durability);
+    Tool(string name);
     void use();
     void itemInfo() const;
 };
 
-class nontool : virtual public item
+class NonTool : virtual public Item
 {
 private:
     int quantity;
 
 public:
-    nontool();
-    nontool(int id, string name, string type, int quantity);
+    NonTool();
+    NonTool(int id, string name, string type, int quantity);
     void itemInfo() const;
 };
 

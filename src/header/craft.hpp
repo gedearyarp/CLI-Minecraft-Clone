@@ -11,7 +11,7 @@ using namespace std;
 
 class CraftingTable {
     private:
-        item Table[3][3];
+        Item Table[3][3];
         int quantity[3][3];
     public:
         // Create table of 9 x 9 matrix 
