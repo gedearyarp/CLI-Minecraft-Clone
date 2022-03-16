@@ -119,6 +119,10 @@ bool NonTool::isFull() const{
     return this->quantity >= 64;
 }
 
+bool NonTool::isEmpty() const{
+    return this->quantity <= 0;
+}
+
 int NonTool::getQuantity() const{
     return this->quantity;
 }

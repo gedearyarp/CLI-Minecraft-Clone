@@ -53,6 +53,7 @@ public:
     NonTool(string name, int quantity);
 
     bool isFull() const;
+    bool isEmpty() const;
 
     int getQuantity() const;
     void setQuantity(int qty);
