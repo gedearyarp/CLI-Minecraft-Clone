@@ -16,11 +16,12 @@ class Slot {
 
         void addItemSlot(int qty);
         void discardItemSlot(int qty);
-
+        
         int getQuantity();
         Item getItem();
 
         bool isTool();
+        bool isEmpty();
 };
 
 class Inventory {
