@@ -24,25 +24,25 @@ void Slot::discardItemSlot(int qty)
 
 }
 
-int Slot::getQuantity(Slot slot)
+int Slot::getQuantity()
 {
-    return slot.quantity;
+    return this->quantity;
 }
 
-Item Slot::getItem(Slot slot)
+Item Slot::getItem()
 {
-    return slot.item;
+    return this->item;
 }
 
-bool Slot::isTool(Slot slot)
+bool Slot::isTool()
 {
     //Harus nambah isTool di item soalnya categorynya private
     // return(slot.item.category == "TOOL");
 }
 
-bool Slot::isEmpty(Slot slot)
+bool Slot::isEmpty()
 {
-    return (slot.quantity == 0);
+    return (this->quantity == 0);
 }
 
 Inventory:: Inventory()
@@ -69,9 +69,7 @@ void Inventory::give(string itemName, int itemQty)
 {
     for(int i = 0; i < 3;i++){
         for(int j = 0; j < 9; j++){
-            if(isEmpty(slot[i][j])){
-                slot[i][j].item.name = itemName;
-                slot[i][j].quantity += itemQty;
+            if(slot[i][j].isEmpty()){
                 break;
             }
             }
