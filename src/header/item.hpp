@@ -22,6 +22,7 @@ public:
     string get_name() const;
     string get_type() const;
     string get_category() const;
+    string get_name();
     virtual void itemInfo() const;
 };
 
