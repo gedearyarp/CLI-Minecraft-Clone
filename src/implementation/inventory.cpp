@@ -26,17 +26,12 @@ void Inventory::showInventory()
 
 void Inventory::give(string itemName, int itemQty)
 {
-    Item thisItem = Item(itemName);
-    
+    Item thisItem = Item(itemName); 
     string ctg = findCategoryByName(itemName);
 
-    if(itemQty <= 0) return;
-
-    for(int i = 0; i < 3 && ctg == "NONTOOL";i++){
-        for(int j = 0; j < 9; j++){
-            if(itemQty <= 0) break;
-            
-            if (slot[i][j].getName() == itemName && !slot[i][j].isFull()) {
+    for(int i = 0; i < 3 && itemQty > 0;i++){
+        for(int j = 0; j < 9 && itemQty > 0; j++){          
+            if (ctg == "NONTOOL" && slot[i][j].getName() == itemName && !slot[i][j].isFull()) {
                 int remainQty = 64 - slot[i][j].getQuantity();
                 int addQty = min(itemQty, remainQty);
 
@@ -46,10 +41,8 @@ void Inventory::give(string itemName, int itemQty)
         }
     }
 
-    for(int i = 0; i < 3;i++){
-        for(int j = 0; j < 9; j++){
-            if(itemQty <= 0) break;
-
+    for(int i = 0; i < 3 && itemQty > 0;i++){
+        for(int j = 0; j < 9 && itemQty > 0; j++){
             if(ctg == "NONTOOL" && slot[i][j].isEmpty()){
                 int addQty = min(64, itemQty);
                 slot[i][j] = NonTool(itemName, addQty);
@@ -100,5 +93,10 @@ void Inventory::exportFile()
 
 bool Inventory::isFull()
 {
-    
+    for(int i=0; i<3; i++){
+        for(int j=0; j<9; j++){
+            if(slot[i][j].isNothing()) return false;
+        }
+    }
+    return true;
 }

@@ -24,6 +24,8 @@ public:
     string getType() const;
     string getCategory() const;
 
+    bool isNothing() const;
+
     virtual int getQuantity();
     virtual int getDurability();
     virtual void setQuantity(int qty);

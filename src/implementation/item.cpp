@@ -11,7 +11,7 @@ Item::Item()
     this->name = "-";
     this->type = "type";
     this->category = "-";
-} // ini kenapa ga declare = NULL aja terus id nya -1 (igede)
+}
 
 Item::Item(int id, string name, string type, string category)
 {
@@ -53,6 +53,11 @@ string Item::getType() const
 string Item::getCategory() const
 {
     return this->category;
+}
+
+bool Item::isNothing() const
+{
+    return (id == -1);
 }
 
 void Item::itemInfo() const
