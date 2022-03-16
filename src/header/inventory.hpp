@@ -8,11 +8,12 @@ using namespace std;
 
 class Inventory {
     private:
-        pair<item, int> [3][9];
+        pair<Item, int> slot[3][9];
+        int slotUsed;
     public:
         void showInventory();
         void addItemToInventory(string itemName, int itemQty);
-        
+        void discardItemfromInventory();
 };
 
 #endif
