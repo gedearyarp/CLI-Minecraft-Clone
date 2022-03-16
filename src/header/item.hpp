@@ -24,6 +24,14 @@ public:
     string getType() const;
     string getCategory() const;
 
+    virtual int getQuantity();
+    virtual int getDurability();
+    virtual void setQuantity(int qty);
+    virtual void setDurability(int durability);
+    virtual bool isEmpty() const;
+    virtual bool isFull() const;
+    // enam fungsi diatas cuman buat ga error kalo dipanggil ke data (Item& X = NonTool) atau (Item& Y = Tool)
+
     virtual void itemInfo() const;
 };
 
