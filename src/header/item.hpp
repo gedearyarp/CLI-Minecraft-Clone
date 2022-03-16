@@ -19,6 +19,7 @@ public:
     Item(string name);
     int get_id();
     string get_name();
+    string get_category();
     virtual void itemInfo() const;
 };
 

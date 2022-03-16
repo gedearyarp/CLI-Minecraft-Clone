@@ -16,12 +16,12 @@ Slot::Slot(Item item, int qty)
 
 void Slot::addItemSlot(int qty)
 {
-
+    this->quantity += qty;
 }
 
 void Slot::discardItemSlot(int qty)
 {
-
+    this->quantity -= qty;
 }
 
 int Slot::getQuantity()
@@ -37,7 +37,7 @@ Item Slot::getItem()
 bool Slot::isTool()
 {
     //Harus nambah isTool di item soalnya categorynya private
-    // return(slot.item.category == "TOOL");
+    return(this->item.get_category() == "TOOL");
 }
 
 bool Slot::isEmpty()

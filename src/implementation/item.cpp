@@ -32,6 +32,11 @@ string Item::get_name()
     return this->name;
 }
 
+string Item::get_category()
+{
+    return this->category;
+}
+
 Tool::Tool() : Item(0, "name", "-", "TOOL")
 {
     this->durability = 10;
