@@ -60,19 +60,43 @@ void Inventory::showInventory()
     for(int i = 0; i < 3;i++){
         for(int j = 0; j < 9; j++){
             string curItem = slot[i][j].getItem().get_name();
-            cout << curItem;
+            cout << curItem << " ";
         }
+        cout << '\n';
     }
 }
 
 void Inventory::give(string itemName, int itemQty)
 {
+    if(itemQty <= 0) return;
+
     for(int i = 0; i < 3;i++){
         for(int j = 0; j < 9; j++){
+            if(itemQty <= 0) break;
+            
+            if (slot[i][j].getItem().get_name() == itemName && !slot[i][j].isFull()) {
+                int remainQty = 64 - slot[i][j].getQuantity();
+                int addQty = min(itemQty, remainQty);
+
+                slot[i][j].addItemSlot(addQty);
+                itemQty -= remainQty;
+            }
+        }
+    }
+
+    for(int i = 0; i < 3;i++){
+        for(int j = 0; j < 9; j++){
+            if(itemQty <= 0) break;
+
             if(slot[i][j].isEmpty()){
-                break;
-            }
-            }
+                Item newItem = Item(itemName);
+
+                int addQty = min(64, itemQty);
+                slot[i][j] = Slot(newItem, addQty);
+                
+                itemQty -= addQty;
+            } 
+        }
     }
 }
 

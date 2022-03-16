@@ -22,6 +22,7 @@ class Slot {
 
         bool isTool();
         bool isEmpty();
+        bool isFull();
 };
 
 class Inventory {
