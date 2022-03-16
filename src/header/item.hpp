@@ -1,6 +1,7 @@
 #ifndef __ITEM_H
 #define __ITEM_H
 #include <string>
+#include <vector>
 #define MAX_NONTOOL 64
 
 using namespace std;
@@ -18,7 +19,9 @@ public:
     Item(int id, string name, string type, string category);
     Item(string name);
     int get_id();
-    string get_name();
+    string get_name() const;
+    string get_type() const;
+    string get_category() const;
     virtual void itemInfo() const;
 };
 
@@ -31,6 +34,7 @@ public:
     Tool();
     Tool(int id, string name, int durability);
     Tool(string name);
+    int get_durability() const;
     void use();
     void itemInfo() const;
 };
@@ -43,7 +47,8 @@ private:
 public:
     NonTool();
     NonTool(int id, string name, string type, int quantity);
+    NonTool(string name, int quantity);
+    int get_quantity() const;
     void itemInfo() const;
 };
-
 #endif
