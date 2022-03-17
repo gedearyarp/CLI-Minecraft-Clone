@@ -15,6 +15,9 @@ public:
     int findIdByName(string nameItem) const;
     string findTypeByName(string nameItem) const;
     string findCategoryByName(string nameItem) const;
+    string findNameById(int idItem) const;
+    string findTypeById(int idItem) const;
+    string findCategoryById(int idItem) const;
 };
 
 

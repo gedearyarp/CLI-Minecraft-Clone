@@ -7,8 +7,6 @@
 ItemConfig::ItemConfig(string configPath, string fileName)
 {
     vector<Item> itemConfigs;
-    // string configPath = "./config";
-    // string itemConfigPath = configPath + "/item.txt";
     string itemConfigPath = configPath + "/" + fileName;
 
     // read item from config file
@@ -57,6 +55,30 @@ string ItemConfig::findCategoryByName(string nameItem) const
 {
     for(int i=0; i<this->configs.size(); i++){
         if(this->configs[i].getName() == nameItem) return this->configs[i].getCategory();
+    }
+    return "-";
+}
+
+string ItemConfig::findNameById(int idItem) const
+{
+    for(int i=0; i<this->configs.size(); i++){
+        if(this->configs[i].getId() == idItem) return this->configs[i].getName();
+    }
+    return "-";
+}
+
+string ItemConfig::findTypeById(int idItem) const
+{
+    for(int i=0; i<this->configs.size(); i++){
+        if(this->configs[i].getId() == idItem) return this->configs[i].getType();
+    }
+    return "-";
+}
+
+string ItemConfig::findCategoryById(int idItem) const
+{
+    for(int i=0; i<this->configs.size(); i++){
+        if(this->configs[i].getId() == idItem) return this->configs[i].getCategory();
     }
     return "-";
 }
