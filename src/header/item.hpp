@@ -27,8 +27,8 @@ public:
     bool isNothing() const;
 
     virtual int getQuantity() const;
-    virtual int getDurability();
-    virtual void setQuantity(int qty) const;
+    virtual int getDurability() const;
+    virtual void setQuantity(int qty);
     virtual void setDurability(int durability);
     virtual bool isEmpty() const;
     virtual bool isFull() const;

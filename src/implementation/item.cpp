@@ -61,8 +61,8 @@ bool Item::isNothing() const
 }
 
 int Item::getQuantity() const {return -1;}
-int Item::getDurability(){return -1;}
-void Item::setQuantity(int qty) const {}
+int Item::getDurability()const {return -1;}
+void Item::setQuantity(int qty){}
 void Item::setDurability(int durability){}
 bool Item::isEmpty() const{return false;}
 bool Item::isFull() const{return false;}
