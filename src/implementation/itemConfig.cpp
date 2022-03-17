@@ -53,7 +53,7 @@ int ItemConfig::findIdByName(string nameItem) const
         if (this->configs[i].getName() == nameItem)
             return this->configs[i].getId();
     }
-    return -1;
+    return -1; //TODO THROW invalid item name
 }
 
 string ItemConfig::findTypeByName(string nameItem) const
@@ -63,7 +63,7 @@ string ItemConfig::findTypeByName(string nameItem) const
         if (this->configs[i].getName() == nameItem)
             return this->configs[i].getType();
     }
-    return "-";
+    return "-"; //TODO THROW invalid item name
 }
 
 string ItemConfig::findCategoryByName(string nameItem) const
@@ -73,7 +73,7 @@ string ItemConfig::findCategoryByName(string nameItem) const
         if (this->configs[i].getName() == nameItem)
             return this->configs[i].getCategory();
     }
-    return "-";
+    return "-"; //TODO THROW invalid item name
 }
 
 string ItemConfig::findNameById(int idItem) const
@@ -83,7 +83,7 @@ string ItemConfig::findNameById(int idItem) const
         if (this->configs[i].getId() == idItem)
             return this->configs[i].getName();
     }
-    return "-";
+    return "-"; //TODO THROW invalid item id
 }
 
 string ItemConfig::findTypeById(int idItem) const
@@ -93,7 +93,7 @@ string ItemConfig::findTypeById(int idItem) const
         if (this->configs[i].getId() == idItem)
             return this->configs[i].getType();
     }
-    return "-";
+    return "-"; //TODO THROW invalid item id
 }
 
 string ItemConfig::findCategoryById(int idItem) const
@@ -103,7 +103,7 @@ string ItemConfig::findCategoryById(int idItem) const
         if (this->configs[i].getId() == idItem)
             return this->configs[i].getCategory();
     }
-    return "-";
+    return "-"; //TODO THROW invalid item id
 }
 
 void ItemConfig::displayItems() const

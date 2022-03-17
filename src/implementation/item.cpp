@@ -1,9 +1,10 @@
 #include "../header/item.hpp"
+#include "../header/itemConfig.hpp"
 #include <iostream>
 
 using namespace std;
 
-vector<Item> itemConfigs;
+ItemConfig itemConfigs = ItemConfig("../../config","item.txt");
 
 Item::Item()
 {
@@ -25,14 +26,14 @@ Item::Item(string name)
 {
     bool found = false;
     int i = 0;
-    while (!found && i < itemConfigs.size()){
-        if (itemConfigs[i].name == name) found = true;
+    while (!found && i < itemConfigs.getItemConfig().size()){
+        if (itemConfigs.getItemConfig()[i].name == name) found = true;
         else i++;
-    }
-    this->id = itemConfigs[i].id;
-    this->name = itemConfigs[i].name;
-    this->type = itemConfigs[i].type;
-    this->category = itemConfigs[i].category;
+    }   //TODO THROW invalid item name
+    this->id = itemConfigs.getItemConfig()[i].id;
+    this->name = itemConfigs.getItemConfig()[i].name;
+    this->type = itemConfigs.getItemConfig()[i].type;
+    this->category = itemConfigs.getItemConfig()[i].category;
 }
 
 int Item::getId() const
@@ -66,6 +67,7 @@ void Item::setQuantity(int qty){}
 void Item::setDurability(int durability){}
 bool Item::isEmpty() const{return false;}
 bool Item::isFull() const{return false;}
+// TODO THROW invalid class
 // JANGAN PAKAI 6 FUNGSI DI ATAS KALAU BUKAN SUBCLASS ITEM
 
 void Item::itemInfo() const

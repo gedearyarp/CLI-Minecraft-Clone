@@ -26,6 +26,11 @@ void Inventory::showInventory()
 
 void Inventory::give(string itemName, int itemQty)
 {
+    if (itemQty < 0){
+        return; //TODO THROW jumlah item tidak boleh negatif
+    }
+    if (itemQty == 0) return;
+    
     string configPath = "../../config";
     string fileName = "item.txt";
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
@@ -67,20 +72,30 @@ void Inventory::give(string itemName, int itemQty)
 
 void Inventory::discard(string slotId, int itemQty)
 {
-    if(itemQty <= 0) return;
-
     slotId.erase(0,1); 
     int idNum = stoi(slotId);
 
     int row = idNum/COLSLOT;
     int col = idNum%COLSLOT;
 
-    if (slot[row][col].getCategory() == "TOOL" && itemQty > 1){
-        return; //TODO THROW item yang dibuang melebihi kapasitas
+    if (row < 0 || col < 0 || row >= ROWSLOT || col >= COLSLOT) {
+        return; //TODO THROW out of index slot
     }
 
-    if (slot[row][col].getCategory() == "NONTOOL" && itemQty > slot[row][col].getQuantity()){
-        return; //TODO THROW item yang dibuang melebihi kapasitas
+    if (slot[row][col].isNothing()){
+        return; //TODO THROW slot kosong
+    }
+
+    if (itemQty < 0){
+        return; //TODO THROW jumlah item tidak boleh negatif
+    }
+    
+    if (itemQty == 0) return;
+
+    if ((slot[row][col].getCategory() == "TOOL" && itemQty > 1) ||
+        (slot[row][col].getCategory() == "NONTOOL" && itemQty > slot[row][col].getQuantity())
+    ){
+        return; //TODO THROW jumlah item yang dibuang melebihi kapasitas
     }
 
     if ((slot[row][col].getCategory() == "TOOL") || 
