@@ -67,7 +67,27 @@ void Inventory::give(string itemName, int itemQty)
 
 void Inventory::discard(string slotId, int itemQty)
 {
-    
+    if(itemQty <= 0) return;
+
+    slotId.erase(0,1); 
+    int idNum = stoi(slotId);
+
+    int row = idNum/COLSLOT;
+    int col = idNum%COLSLOT;
+
+    if (slot[row][col].getCategory() == "TOOL" && itemQty > 1){
+        return; //TODO THROW item yang dibuang melebihi kapasitas
+    }
+
+    if (slot[row][col].getCategory() == "NONTOOL" && itemQty > slot[row][col].getQuantity()){
+        return; //TODO THROW item yang dibuang melebihi kapasitas
+    }
+
+    if ((slot[row][col].getCategory() == "TOOL") || 
+        (slot[row][col].getCategory() == "NONTOOL" && itemQty == slot[row][col].getQuantity())
+    ) slot[row][col] = Item();
+
+    slot[row][col].setQuantity(slot[row][col].getQuantity() - itemQty);
 }
 
 void Inventory::move(string srcSlot, int itemQty, vector<string> destSlot)
