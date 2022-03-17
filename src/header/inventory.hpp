@@ -3,9 +3,12 @@
 
 #include <bits/stdc++.h>
 #include "item.hpp"
-#include "helper.hpp"
+#include "itemConfig.hpp"
 
 using namespace std;
+
+#define ROWSLOT 3
+#define COLSLOT 9
 
 class Inventory {
     private:
@@ -25,7 +28,8 @@ class Inventory {
 
         void exportFile();
 
-        bool isFull();
+        int countItem(string itemName) const;
+        bool isFull() const;
 };
 
 #endif

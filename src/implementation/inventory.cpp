@@ -5,8 +5,8 @@ using namespace std;
 
 Inventory::Inventory()
 {
-    for(int i = 0; i < 3;i++){
-        for(int j = 0; j < 9; j++){
+    for(int i = 0; i < ROWSLOT;i++){
+        for(int j = 0; j < COLSLOT; j++){
             this->slot[i][j] = Item();
         }
     }
@@ -15,8 +15,8 @@ Inventory::Inventory()
 
 void Inventory::showInventory()
 {
-    for(int i = 0; i < 3;i++){
-        for(int j = 0; j < 9; j++){
+    for(int i = 0; i < ROWSLOT;i++){
+        for(int j = 0; j < COLSLOT; j++){
             string curItem = slot[i][j].getName();
             cout << curItem << " ";
         }
@@ -26,11 +26,15 @@ void Inventory::showInventory()
 
 void Inventory::give(string itemName, int itemQty)
 {
-    Item thisItem = Item(itemName); 
-    string ctg = findCategoryByName(itemName);
+    string configPath = "../../config";
+    string fileName = "item.txt";
+    ItemConfig readItemConfig = ItemConfig(configPath, fileName);
+    string ctg = readItemConfig.findCategoryByName(itemName);
 
-    for(int i = 0; i < 3 && itemQty > 0;i++){
-        for(int j = 0; j < 9 && itemQty > 0; j++){          
+    Item thisItem = Item(itemName); 
+
+    for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
+        for(int j = 0; j < COLSLOT && itemQty > 0; j++){          
             if (ctg == "NONTOOL" && slot[i][j].getName() == itemName && !slot[i][j].isFull()) {
                 int remainQty = 64 - slot[i][j].getQuantity();
                 int addQty = min(itemQty, remainQty);
@@ -41,8 +45,8 @@ void Inventory::give(string itemName, int itemQty)
         }
     }
 
-    for(int i = 0; i < 3 && itemQty > 0;i++){
-        for(int j = 0; j < 9 && itemQty > 0; j++){
+    for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
+        for(int j = 0; j < COLSLOT && itemQty > 0; j++){
             if(ctg == "NONTOOL" && slot[i][j].isEmpty()){
                 int addQty = min(64, itemQty);
                 slot[i][j] = NonTool(itemName, addQty);
@@ -63,7 +67,7 @@ void Inventory::give(string itemName, int itemQty)
 
 void Inventory::discard(string slotId, int itemQty)
 {
-    //TODO
+    
 }
 
 void Inventory::move(string srcSlot, int itemQty, vector<string> destSlot)
@@ -91,10 +95,24 @@ void Inventory::exportFile()
     //TODO
 }
 
-bool Inventory::isFull()
+int Inventory::countItem(string itemName) const
+{   
+    int count = 0;
+    for(int i=0; i < ROWSLOT; i++){
+        for(int j=0; j < COLSLOT; j++){
+            if(!slot[i][j].isNothing() && slot[i][j].getName() == itemName){
+                if(slot[i][j].getCategory() == "TOOL") count ++;
+                else count += slot[i][j].getQuantity();
+            }
+        }
+    }
+    return count;
+}
+
+bool Inventory::isFull() const
 {
-    for(int i=0; i<3; i++){
-        for(int j=0; j<9; j++){
+    for(int i=0; i < ROWSLOT; i++){
+        for(int j=0; j < COLSLOT; j++){
             if(slot[i][j].isNothing()) return false;
         }
     }
