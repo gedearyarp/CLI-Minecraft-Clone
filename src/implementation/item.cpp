@@ -35,7 +35,7 @@ Item::Item(string name)
     this->category = itemConfigs[i].category;
 }
 
-int Item::getId()
+int Item::getId() const
 {
     return this->id;
 }
@@ -59,6 +59,14 @@ bool Item::isNothing() const
 {
     return (id == -1);
 }
+
+int Item::getQuantity(){return -1;}
+int Item::getDurability(){return -1;}
+void Item::setQuantity(int qty){}
+void Item::setDurability(int durability){}
+bool Item::isEmpty() const{return false;}
+bool Item::isFull() const{return false;}
+// JANGAN PAKAI 6 FUNGSI DI ATAS KALAU OBJECT ITEM (BUKAN NONTOOL/TOOL)
 
 void Item::itemInfo() const
 {
