@@ -7,6 +7,7 @@ class ItemConfig
 {
 private:
     vector<Item> configs;
+
 public:
     ItemConfig(string configPath, string fileName);
 
@@ -18,7 +19,7 @@ public:
     string findNameById(int idItem) const;
     string findTypeById(int idItem) const;
     string findCategoryById(int idItem) const;
+    void displayItems() const;
 };
-
 
 #endif

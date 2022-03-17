@@ -11,21 +11,32 @@ ItemConfig::ItemConfig(string configPath, string fileName)
 
     // read item from config file
     ifstream itemConfigFile(itemConfigPath);
-    for (string line; getline(itemConfigFile, line);) {
+    for (string line; getline(itemConfigFile, line);)
+    {
         int spaces = 0;
-        string id = ""; string name = ""; string type = ""; string category = "";
-        for (int i = 0; i < line.size(); i++){
-            if (line[i] != ' '){
-                if (spaces == 0) id += line[i];
-                else if (spaces == 1) name += line[i];
-                else if (spaces == 2) type += line[i];
-                else if (spaces == 3) category += line[i];
+        string id = "";
+        string name = "";
+        string type = "";
+        string category = "";
+        for (int i = 0; i < line.size(); i++)
+        {
+            if (line[i] != ' ')
+            {
+                if (spaces == 0)
+                    id += line[i];
+                else if (spaces == 1)
+                    name += line[i];
+                else if (spaces == 2)
+                    type += line[i];
+                else if (spaces == 3)
+                    category += line[i];
             }
-            else {
+            else
+            {
                 spaces += 1;
             }
         }
-        itemConfigs.push_back(Item(stoi(id),name,type,category));
+        itemConfigs.push_back(Item(stoi(id), name, type, category));
     }
     this->configs = itemConfigs;
 }
@@ -37,48 +48,68 @@ vector<Item> ItemConfig::getItemConfig() const
 
 int ItemConfig::findIdByName(string nameItem) const
 {
-    for(int i=0; i<this->configs.size(); i++){
-        if(this->configs[i].getName() == nameItem) return this->configs[i].getId();
+    for (int i = 0; i < this->configs.size(); i++)
+    {
+        if (this->configs[i].getName() == nameItem)
+            return this->configs[i].getId();
     }
     return -1;
 }
 
 string ItemConfig::findTypeByName(string nameItem) const
 {
-    for(int i=0; i<this->configs.size(); i++){
-        if(this->configs[i].getName() == nameItem) return this->configs[i].getType();
+    for (int i = 0; i < this->configs.size(); i++)
+    {
+        if (this->configs[i].getName() == nameItem)
+            return this->configs[i].getType();
     }
     return "-";
 }
 
 string ItemConfig::findCategoryByName(string nameItem) const
 {
-    for(int i=0; i<this->configs.size(); i++){
-        if(this->configs[i].getName() == nameItem) return this->configs[i].getCategory();
+    for (int i = 0; i < this->configs.size(); i++)
+    {
+        if (this->configs[i].getName() == nameItem)
+            return this->configs[i].getCategory();
     }
     return "-";
 }
 
 string ItemConfig::findNameById(int idItem) const
 {
-    for(int i=0; i<this->configs.size(); i++){
-        if(this->configs[i].getId() == idItem) return this->configs[i].getName();
+    for (int i = 0; i < this->configs.size(); i++)
+    {
+        if (this->configs[i].getId() == idItem)
+            return this->configs[i].getName();
     }
     return "-";
 }
 
 string ItemConfig::findTypeById(int idItem) const
 {
-    for(int i=0; i<this->configs.size(); i++){
-        if(this->configs[i].getId() == idItem) return this->configs[i].getType();
+    for (int i = 0; i < this->configs.size(); i++)
+    {
+        if (this->configs[i].getId() == idItem)
+            return this->configs[i].getType();
     }
     return "-";
 }
 
 string ItemConfig::findCategoryById(int idItem) const
 {
-    for(int i=0; i<this->configs.size(); i++){
-        if(this->configs[i].getId() == idItem) return this->configs[i].getCategory();
+    for (int i = 0; i < this->configs.size(); i++)
+    {
+        if (this->configs[i].getId() == idItem)
+            return this->configs[i].getCategory();
     }
     return "-";
+}
+
+void ItemConfig::displayItems() const
+{
+    for (int i = 0; i < this->configs.size(); i++)
+    {
+        this->configs.at(i).itemInfo();
+    }
 }
