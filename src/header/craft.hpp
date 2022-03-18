@@ -24,10 +24,13 @@ class CraftingTable {
         // check recipe
         bool eligibleForCrafting() const;
 
+        Item getSlot(int slotKe) const;
+        void setSlot(int slotKe, Item item);
+        
         // CRAFT -> di implementasi, panggil GIVE
         void craft();
         // ngecek ada yg sesuai recipe ga
-        
+
         // melihat table crafting
         void showCraftingTable();
 
