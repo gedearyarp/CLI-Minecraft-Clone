@@ -282,7 +282,68 @@ void Inventory::setSlot(int slotKe, Item item) {
 
 void Inventory::exportFile()
 {
-    //TODO
+    string inventoryPath = "../../config/inventory/inventory.txt";
+    ifstream inv(inventoryPath);
+    string line;
+
+    string configPath = "../../config";
+    string fileName = "item.txt";
+    ItemConfig readItemConfig = ItemConfig(configPath, fileName);
+
+    if(inv.is_open()) {
+        for(int idx = 0; idx < 27; idx++){
+            if (line == "0:0") {
+                setSlot(idx, Item());
+                idx++;
+                continue;
+            } 
+
+            string idItem = "", qtyItem = ""; 
+            bool flag = false;
+            
+            for(int i=0; i < line.size(); i++){
+                if(line[i] == ':'){
+                    flag = true;
+                    continue;
+                }
+
+                if(flag) qtyItem += line[i];
+                else idItem += line[i];
+            }
+            
+            int id, qty;
+
+            try {
+                id = stoi(idItem);
+                qty = stoi(idItem);
+            } catch(exception &err) {
+                return; //TODO THROW stoi error
+            } 
+
+            int id = stoi(idItem), qty = stoi(qtyItem);
+            
+            if (id < 1 || id > 27) {
+                return; //TODO THROW out of index slot
+            }
+
+            if (qty < 1 || qty > 64) {
+                return; //TODO THROW quantity not valid
+            }
+
+            string ctg = readItemConfig.findCategoryById(id);
+            string itemName = readItemConfig.findNameById(id);
+            Item newSlot;
+
+            if (ctg == "TOOL") newSlot = Tool(itemName, readItemConfig.getItemConfig());
+            else newSlot = NonTool(itemName, qty, readItemConfig.getItemConfig());
+
+            setSlot(idx, newSlot);
+        }
+
+        inv.close();
+    } else {
+        return; //TODO THROW gak bisa buka file
+    }
 }
 
 int Inventory::countItem(string itemName) const
