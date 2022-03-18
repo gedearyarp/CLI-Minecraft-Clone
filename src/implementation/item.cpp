@@ -78,7 +78,6 @@ bool isType(string name)
 {
     ItemConfig readConfig = ItemConfig("./config", "item.txt");
     vector<Item> config = readConfig.getItemConfig();
-    int count = 0;
     int i = 0;
     bool found = false;
     while (!found && i < config.size())
@@ -105,6 +104,22 @@ vector<string> listOfItemWithType(string itemType)
         }
     }
     return items;
+}
+
+bool isItemChildofParent(string itemNameChild, string itemNameParent)
+{
+    vector<string> items = listOfItemWithType(itemNameParent);
+    int i = 0;
+    bool found = false;
+    while (!found && i < items.size())
+    {
+        if (items.at(i) == itemNameChild)
+        {
+            found = true;
+        }
+        i++;
+    }
+    return found;
 }
 
 int Item::getQuantity() const { return -1; }
