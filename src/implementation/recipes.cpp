@@ -11,10 +11,10 @@ SingleRecipe::SingleRecipe(){
     this->NColRecipe = 0;
     this->ItemResultName = "-";
     this->ItemResultQuantity = 0;
-    this->ItemPlacement = vector<vector<Item>>(0, vector<Item>(0));
+    this->ItemPlacement = vector<vector<string>>(0, vector<string>(0));
 }
 
-SingleRecipe::SingleRecipe(string filename, int Row, int Col, string ItemResultName, int ItemResultQuantity, vector<vector<Item>> ItemPlacement){
+SingleRecipe::SingleRecipe(string filename, int Row, int Col, string ItemResultName, int ItemResultQuantity, vector<vector<string>> ItemPlacement){
     this->filename = filename;
     this->NRowRecipe = Row;
     this->NColRecipe = Col;
@@ -40,9 +40,10 @@ int SingleRecipe::totalSlotNeededForCraft() {
     int none = 0;
     for(int i= 0; i < this->getNRowRecipe(); i++){
         for(int j = 0; j < this->getNColRecipe(); j++){
-            if(this->ItemPlacement[i][j].getId() == -1){
-                none++;
-            }
+            // TODO 
+            // if(this->ItemPlacement[i][j].getId() == -1){
+            //     none++;
+            // }
         }
     }   
     return itemsNeeded - none;          
@@ -68,19 +69,18 @@ int SingleRecipe::getItemResultQuantity(){
     return this->ItemResultQuantity;
 }
 
-vector<vector<Item>> SingleRecipe::getItemPlacement(){
+vector<vector<string>> SingleRecipe::getItemPlacement(){
     return this->ItemPlacement;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 SingleRecipe SingleRecipe::getItemMirroredInPlacement(SingleRecipe originalRecipe){
     SingleRecipe mirroredRecipe;
     mirroredRecipe.NRowRecipe = originalRecipe.getNRowRecipe();
     mirroredRecipe.NColRecipe = originalRecipe.getNColRecipe();
     mirroredRecipe.ItemResultName = originalRecipe.getItemResultName();
     mirroredRecipe.ItemResultQuantity = originalRecipe.getItemResultQuantity();
-    vector<vector<Item>> originalPlacement = originalRecipe.getItemPlacement();
-    vector<vector<Item>> mirroredPlacement = originalRecipe.getItemPlacement();
+    vector<vector<string>> originalPlacement = originalRecipe.getItemPlacement();
+    vector<vector<string>> mirroredPlacement = originalRecipe.getItemPlacement();
         
     // mirrored matrix
     for (int i = 0; i < mirroredRecipe.NRowRecipe; i++) {
@@ -104,7 +104,6 @@ SingleRecipe SingleRecipe::getItemMirroredInPlacement(SingleRecipe originalRecip
     
     return mirroredRecipe;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 // panggilnya nanti 
 // mirroredRecipe = getItemMirroredInPlacement(SingleRecipe originalRecipe)
@@ -112,7 +111,7 @@ SingleRecipe SingleRecipe::getItemMirroredInPlacement(SingleRecipe originalRecip
 bool SingleRecipe::isOriginalRecipeSameAsMirroredRecipe(SingleRecipe mirroredRecipe){
     for(int i= 0; i < this->getNRowRecipe(); i++){
         for(int j = 0; j < this->getNColRecipe(); j++){
-            if(this->ItemPlacement[i][j].getName() != mirroredRecipe.ItemPlacement[i][j].getName()){
+            if(this->ItemPlacement[i][j] != mirroredRecipe.ItemPlacement[i][j]){
                 return false;
             }
         }
@@ -123,7 +122,7 @@ bool SingleRecipe::isOriginalRecipeSameAsMirroredRecipe(SingleRecipe mirroredRec
 void SingleRecipe::showItemPlacement(){
     for (int i = 0; i < NRowRecipe; i++) {
         for(int j=0; j<NColRecipe; j++){
-            cout << ItemPlacement[i][j].getName() << " ";
+            cout << ItemPlacement[i][j] << " ";
         }
         cout << endl;
     }

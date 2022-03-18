@@ -18,7 +18,7 @@ void SingleRecipeVisualization(SingleRecipe single)
     string resultName = single.getItemResultName();
     int resultQuantity = single.getItemResultQuantity();
     string filename = single.getFilename();
-    vector<vector<Item>> iPlacement = single.getItemPlacement();
+    vector<vector<string>> iPlacement = single.getItemPlacement();
 
     cout << "filename: " << filename << endl;
     cout << "Row & Column:" << Row << " " << Col << endl;
@@ -30,8 +30,7 @@ void SingleRecipeVisualization(SingleRecipe single)
     {
         for (int k = 0; k < Col; k++)
         {
-            Item el = iPlacement[j][k];
-            cout << el.getName() << " ";
+            cout << iPlacement[j][k] << " ";
         }
         cout << endl;
     }
@@ -43,15 +42,14 @@ int countItemInSingleRecipe(SingleRecipe single)
 {
     int Row = single.getNRowRecipe();
     int Col = single.getNColRecipe();
-    vector<vector<Item>> iPlacement = single.getItemPlacement();
+    vector<vector<string>> iPlacement = single.getItemPlacement();
     int countItem = 0;
 
     for (int j = 0; j < Row; j++)
     {
         for (int k = 0; k < Col; k++)
         {
-            Item el = iPlacement[j][k];
-            if (el.getName() != "-") {
+            if (iPlacement[j][k] != "-") {
                 countItem++;
             }
         }
@@ -110,7 +108,7 @@ Recipes ReadRecipesFromConfigToRecipesClass()
                 int NCol = 0;
                 string itemResultName = "";
                 string itemResultQuantity = "0";
-                vector<vector<Item>> itemPlacement;
+                vector<vector<string>> itemPlacement;
                 ItemConfig readItemConfigs = ItemConfig("../../config","item.txt"); // config buat item
 
                 string line;
@@ -130,12 +128,12 @@ Recipes ReadRecipesFromConfigToRecipesClass()
                     getline(file, line);
                     stringstream ss(line);
                     string word;
-                    vector<Item> temp;
+                    vector<string> temp;
                     for (int j = 0; j < NCol; j++)
                     {
                         ss >> word;
                         // TODO ITEMNYA GABISA CONSTRUCT DARI STRING
-                        temp.push_back(Item(word, readItemConfigs.getItemConfig()));
+                        temp.push_back(word);
                     }
                     itemPlacement.push_back(temp);
                 }

@@ -23,16 +23,17 @@ int CraftingTable::countItemOnTable() {
     return count;
 }
 
-bool CraftingTable::isSameAsRecipe(SingleRecipe mirroredRecipe) const{
-    int count = 0;
-    for (int i=0; i<3; i++) {
-        for (int j=0; j<3; j++) {
-            if (this->Table[i][j].getName() != mirroredRecipe.getItemPlacement()[i][j].getName()) {
-                return false;
-            }
-        }
-    }
-    return true;
+bool CraftingTable::isSameAsRecipe(SingleRecipe mirroredRecipe){
+    // TODO
+    // for (int i=0; i<3; i++) {
+    //     for (int j=0; j<3; j++) {
+    //         // t
+    //         if (this->Table[i][j].getName() != mirroredRecipe.getItemPlacement()[i][j]) {
+    //             return false;
+    //         }
+    //     }
+    // }
+    // return true;
 }
 
 
