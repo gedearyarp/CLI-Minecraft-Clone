@@ -11,9 +11,12 @@ using namespace std;
 #define ROWSLOT 3
 #define COLSLOT 9
 
+#define MAXQTY 64
+#define MAXINV 27
+
 class Inventory {
     private:
-        Item slot[3][9];
+        Item slot[ROWSLOT][COLSLOT];
         int slotUsed;
     public:
         Inventory();
@@ -22,17 +25,15 @@ class Inventory {
         void give(string itemName, int itemQty);
         void discard(string slotId, int itemQty);
         void discardAll(string slotId);
-        // void move(string srcSlot, int itemQty, vector<string> destSlot);
+
+        void moveItoI(string srcSlot, int itemQty, vector<string> destSlot);
+        void moveItoC(string srcSlot, int itemQty, string destSlot, CraftingTable craft);
+        void moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingTable craft);
+        
+        void exportFile();
 
         Item locateSlot(int slotKe);
         void setSlot(int slotKe, Item item);
-
-        void moveItoI(string srcSlot, int itemQty, vector<string> destSlot);
-        // void moveItoI(string srcSlot, int itemQty, string destSlot);
-        void moveItoC(string srcSlot, int itemQty, string destSlot, CraftingTable craft);
-        void moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingTable craft);
-
-        void exportFile();
         int countItem(string itemName) const;
         bool isFull() const;
 
