@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 #define MAX_NONTOOL 64
@@ -25,6 +26,9 @@ public:
     string getCategory() const;
 
     bool isNothing() const;
+    bool isType(string name, vector<Item> config); // buat ngecek apakah name merupakan nama type yang bakal punya item turunan
+
+    vector<string> listOfItemWithType(string itemType, vector<Item> config); // balikin semua item dengan type itemType
 
     virtual int getQuantity() const;
     virtual int getDurability() const;
@@ -42,11 +46,12 @@ class Tool : virtual public Item
 {
 private:
     int durability;
+
 public:
     Tool();
     Tool(int id, string name, int durability);
     Tool(string name, vector<Item> config);
-    
+
     int getDurability() const;
     void setDurability(int durability);
     int getQuantity() const; // bakal selalu return 1
@@ -59,6 +64,7 @@ class NonTool : virtual public Item
 {
 private:
     int quantity;
+
 public:
     NonTool();
     NonTool(int id, string name, string type, int quantity);

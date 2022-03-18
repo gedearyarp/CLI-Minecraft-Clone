@@ -24,23 +24,28 @@ Item::Item(string name, vector<Item> config)
 {
     bool found = false;
     int i = 0;
-    while (!found && i < config.size()){
-        if (config[i].name == name) found = true;
-        else i++;
-    }   //TODO THROW invalid item name
-    if (found){
+    while (!found && i < config.size())
+    {
+        if (config[i].name == name)
+            found = true;
+        else
+            i++;
+    } // TODO THROW invalid item name
+    if (found)
+    {
         this->id = config[i].id;
         this->name = config[i].name;
         this->type = config[i].type;
         this->category = config[i].category;
     }
-    else{
+    else
     {
-        this->id = -1;
-        this->name = "-";
-        this->type = "-";
-        this->category = "-";
-    }
+        {
+            this->id = -1;
+            this->name = "-";
+            this->type = "-";
+            this->category = "-";
+        }
     }
 }
 
@@ -69,12 +74,45 @@ bool Item::isNothing() const
     return (id == -1);
 }
 
-int Item::getQuantity() const {return -1;}
-int Item::getDurability()const {return -1;}
-void Item::setQuantity(int qty){}
-void Item::setDurability(int durability){}
-bool Item::isEmpty() const{return false;}
-bool Item::isFull() const{return false;}
+bool isType(string name)
+{
+    ItemConfig readConfig = ItemConfig("./config", "item.txt");
+    vector<Item> config = readConfig.getItemConfig();
+    int count = 0;
+    int i = 0;
+    bool found = false;
+    while (!found && i < config.size())
+    {
+        if (config[i].getType() == name)
+        {
+            found = true;
+        }
+        i++;
+    }
+    return found;
+}
+
+vector<string> listOfItemWithType(string itemType)
+{
+    ItemConfig readConfig = ItemConfig("./config", "item.txt");
+    vector<Item> config = readConfig.getItemConfig();
+    vector<string> items;
+    for (int i = 0; i < config.size(); i++)
+    {
+        if (config[i].getType() == itemType)
+        {
+            items.push_back(config[i].getName());
+        }
+    }
+    return items;
+}
+
+int Item::getQuantity() const { return -1; }
+int Item::getDurability() const { return -1; }
+void Item::setQuantity(int qty) {}
+void Item::setDurability(int durability) {}
+bool Item::isEmpty() const { return false; }
+bool Item::isFull() const { return false; }
 // TODO THROW invalid class
 // JANGAN PAKAI 6 FUNGSI DI ATAS KALAU BUKAN SUBCLASS ITEM
 
@@ -100,11 +138,12 @@ Tool::Tool(string name, vector<Item> config) : Item(name, config)
     this->durability = 10;
 }
 
-int Tool::getDurability() const{
+int Tool::getDurability() const
+{
     return this->durability;
 }
 
-void Tool::setDurability(int durability) 
+void Tool::setDurability(int durability)
 {
     this->durability = durability;
 }
@@ -143,19 +182,23 @@ NonTool::NonTool(string name, int quantity, vector<Item> config) : Item(name, co
     this->quantity = quantity;
 }
 
-bool NonTool::isFull() const{
+bool NonTool::isFull() const
+{
     return this->quantity >= 64;
 }
 
-bool NonTool::isEmpty() const{
+bool NonTool::isEmpty() const
+{
     return this->quantity <= 0;
 }
 
-int NonTool::getQuantity() const{
+int NonTool::getQuantity() const
+{
     return this->quantity;
 }
 
-void NonTool::setQuantity(int qty) {
+void NonTool::setQuantity(int qty)
+{
     this->quantity = qty;
 }
 
