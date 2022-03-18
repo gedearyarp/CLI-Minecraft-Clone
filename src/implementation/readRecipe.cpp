@@ -38,6 +38,19 @@ void SingleRecipeVisualization(SingleRecipe single)
     cout << endl;
 }
 
+void visualizeMapping(map<int, vector<string>> mapping) {
+    for (const auto &elem : mapping)
+    {
+        cout << elem.first << " : "
+             << "[  ";
+        for (const auto &elem2 : elem.second)
+        {
+            cout << elem2 << ", ";
+        }
+        cout << "]" << endl;
+    }
+}
+
 int countItemInSingleRecipe(SingleRecipe single)
 {
     int Row = single.getNRowRecipe();
@@ -66,20 +79,8 @@ map<int, vector<string>> MapRecipesFromRecipesClass(Recipes recipes)
     {
         SingleRecipe single = RecipesList[i];
         int countItem = countItemInSingleRecipe(single);
-        recipesMapping[countItem].push_back(single.getFilename());
+        recipesMapping[countItem].push_back(single.getItemResultName());
     }
-
-    // // visualization 
-    // for (const auto &elem : recipesMapping)
-    // {
-    //     cout << elem.first << " : "
-    //          << "[";
-    //     for (const auto &elem2 : elem.second)
-    //     {
-    //         cout << elem2 << " ";
-    //     }
-    //     cout << "]" << endl;
-    // }
 
     return recipesMapping;
 }
@@ -132,7 +133,6 @@ Recipes ReadRecipesFromConfigToRecipesClass()
                     for (int j = 0; j < NCol; j++)
                     {
                         ss >> word;
-                        // TODO ITEMNYA GABISA CONSTRUCT DARI STRING
                         temp.push_back(word);
                     }
                     itemPlacement.push_back(temp);
@@ -160,17 +160,17 @@ Recipes ReadRecipesFromConfigToRecipesClass()
     return newRecipes;
 }
 
-int main()
-{
-    Recipes newRecipes = ReadRecipesFromConfigToRecipesClass();
-    vector<SingleRecipe> RecipesList = newRecipes.getRecipesList();
+// int main()
+// {
+//     Recipes newRecipes = ReadRecipesFromConfigToRecipesClass();
+//     vector<SingleRecipe> RecipesList = newRecipes.getRecipesList();
 
-    for (int i = 0; i < newRecipes.getTotalRecipe(); i++)
-    {
-        SingleRecipe single = RecipesList[i];
-        SingleRecipeVisualization(single);
-    }
+//     for (int i = 0; i < newRecipes.getTotalRecipe(); i++)
+//     {
+//         SingleRecipe single = RecipesList[i];
+//         SingleRecipeVisualization(single);
+//     }
 
-    map<int, vector<string>> newMapping = MapRecipesFromRecipesClass(newRecipes);
-    return 0;
-}
+//     map<int, vector<string>> newMapping = MapRecipesFromRecipesClass(newRecipes);
+//     return 0;
+// }

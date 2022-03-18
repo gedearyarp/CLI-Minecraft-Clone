@@ -1,7 +1,34 @@
 #include "../header/craft.hpp"
+#include "../header/item.hpp"
+
 #include "readRecipe.cpp"
+#include "possiblePlacement.cpp"
+
+#include <map>
 
 using namespace std;
+
+bool isBlockTheSame(string wordInRecipe, string wordInTable)
+{
+    Item temp;
+    bool isWordAType = temp.isType(wordInRecipe);
+    if (!isWordAType)
+    {
+        return wordInRecipe == wordInTable;
+    }
+    else
+    {
+        vector<string> listOfItemString = temp.listOfItemWithType(wordInRecipe);
+        for (int i = 0; i < listOfItemString.size(); i++)
+        {
+            if (listOfItemString[i] == wordInTable)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 CraftingTable::CraftingTable()
 {
@@ -12,6 +39,7 @@ CraftingTable::CraftingTable()
             this->Table[i][j] = Item();
         }
     }
+    this->recipes = ReadRecipesFromConfigToRecipesClass();
 };
 
 int CraftingTable::countItemOnTable()
@@ -28,73 +56,17 @@ int CraftingTable::countItemOnTable()
         }
     }
     return count;
-}
+};
 
-bool CraftingTable::isSameAsRecipe(SingleRecipe mirroredRecipe)
+void CraftingTable::clearTable()
 {
-    // TODO
-    // for (int i=0; i<3; i++) {
-    //     for (int j=0; j<3; j++) {
-    //         // t
-    //         if (this->Table[i][j].getName() != mirroredRecipe.getItemPlacement()[i][j]) {
-    //             return false;
-    //         }
-    //     }
-    // }
-    // return true;
-}
-
-bool CraftingTable::eligibleForCrafting() const
-{
-    // TODO
-    // int itemInTable = countItemOnTable();
-    // bool canBeingCrafted = false;
-    // // BIRCH_PLANK = 1
-    // // DIAMOND_AXE = 5
-    // // DIAMOND_PICKAXE = 5
-    // // DIAMOND_SWORD = 3
-    // // IRON_AXE = 5
-    // // IRON_INGOT = 9
-    // // IRON_NUGGET = 1
-    // // IRON_PICKAXE = 5
-    // // IRON_SWORD = 3
-    // // OAK_PLANK = 1
-    // // SPRUCE_PLANK = 1
-    // // STICK = 2
-    // // STONE_AXE = 5
-    // // STONE_PICKAXE = 5
-    // // STONE_SWORD  = 3
-    // // WOODEN_AXE = 5
-    // // WOODEN_PICKAXE = 5
-    // // WOODEN_SWORD = 3
-    // // 1 : BIRCH_PLANK, IRON_NUGGET, OAK_PLANK, SPRUCE_PLANK
-    // // 2 : STICK
-    // // 3 : DIAMOND_SWORD, IRON_SWORD, STONE_SWORD, WOODEN_SWORD
-    // // 5 : DIAMOND_AXE, DIAMOND_PICKAXE, IRON_AXE, IRON_PICKAXE, STONE_AXE, STONE_PICKAXE
-    // // 9 : IRON INGOT
-    // if (itemInTable==1){
-    //     // BIRCH_PLANK
-    //     // IRON_NUGGET
-    //     // OAK_PLANK
-    //     // SPRUCE_PLANK
-    // }if (itemInTable==2){
-    //     // STICK
-    // }if (itemInTable==3){
-    //     // DIAMOND_SWORD
-    //     // IRON_SWORD
-    //     // STONE_SWORD
-    //     // WOODEN_SWORD
-    // }if (itemInTable==5){
-    //     // DIAMOND_AXE
-    //     // DIAMOND_PICKAXE
-    //     // IRON_AXE
-    //     // IRON_PICKAXE
-    //     // STONE_AXE
-    //     // STONE_PICKAXE
-    // }
-    // if (itemInTable==9){
-    //     // IRON INGOT
-    // }
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            this->Table[i][j] = Item();
+        }
+    }
 }
 
 Item CraftingTable::getSlot(int slotKe) const
@@ -105,11 +77,6 @@ Item CraftingTable::getSlot(int slotKe) const
 void CraftingTable::setSlot(int slotKe, Item item)
 {
     this->Table[slotKe / 3][slotKe % 3] = item;
-}
-
-void CraftingTable::craft()
-{
-    // TODO
 }
 
 void CraftingTable::showCraftingTable()
@@ -134,7 +101,120 @@ void CraftingTable::showCraftingTable()
     }
 }
 
-void CraftingTable::readRecipes()
+bool CraftingTable::itemInTableSameAsRecipePlacement(vector<vector<string>> recipePlacement)
 {
-    this->recipes = ReadRecipesFromConfigToRecipesClass();
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            return isBlockTheSame(recipePlacement[i][j], this->Table[i][j].getName());
+        }
+    }
+    return true;
+};
+
+void CraftingTable::craft(Inventory inventory)
+{
+    int nItem = this->countItemOnTable();
+    if (nItem == 0)
+    {
+        cout << "No item on table" << endl;
+    }
+
+    ItemConfig readItemConfigs = ItemConfig("../../config", "item.txt");
+    map<int, vector<string>> mapOfRecipe = MapRecipesFromRecipesClass(this->recipes);
+
+    auto it = mapOfRecipe.find(nItem);
+    vector<string> stringOfPossibleRecipe = it->second;
+
+    vector<SingleRecipe> recipesList = this->recipes.getRecipesList();
+
+    Item itemTemp;
+    bool found = false;
+    SingleRecipe resultRecipe;
+    // INFINITE LOOP ?! :<
+    int count = 0;
+    while (!found)
+    {
+        for (string possibleRecipe : stringOfPossibleRecipe)
+        {
+            for (SingleRecipe recipe : recipesList)
+            {
+                if (possibleRecipe == recipe.getItemResultName())
+                {
+                    // TODO
+                    // ini berarti "recipe" udah merupakan recipe yang ada di possibleRecipe
+                    int recipeRow = recipe.getNRowRecipe();
+                    int recipeCol = recipe.getNColRecipe();
+
+                    // 1x1
+                    if (recipeRow == 1 && recipeCol == 1)
+                    {
+                        for (int i = 1; i <= 9; i++)
+                        {
+                            vector<vector<string>> recipePlacement = makePossibleRecipePlacement1x1(recipe.getItemResultName(), i);
+                            found = this->itemInTableSameAsRecipePlacement(recipePlacement);
+                            resultRecipe = recipe;
+                        }
+                    }
+                    // 3x3
+                    else if (recipeRow == 3 && recipeCol == 3)
+                    {
+                        vector<vector<string>> recipePlacement = recipe.getItemPlacement();
+                        found = this->itemInTableSameAsRecipePlacement(recipePlacement);
+                        if (!found)
+                        {
+                            SingleRecipe mirrorRecipe = recipe.getItemMirroredInPlacement();
+                            bool sameMatrixAsOriginal = recipe.isOriginalRecipeSameAsMirroredRecipe(mirrorRecipe);
+                            if (sameMatrixAsOriginal)
+                            {
+                                found = this->itemInTableSameAsRecipePlacement(mirrorRecipe.getItemPlacement());
+                            }
+                        }
+                    }
+                    // 2x1
+                    else if (recipeRow == 2 && recipeCol == 1)
+                    {
+                    }
+                    // 1x2
+                    else if (recipeRow == 1 && recipeCol == 2)
+                    {
+                    }
+                    // 3x1
+                    else if (recipeRow == 3 && recipeCol == 1)
+                    {
+                    }
+                    // 1x3
+                    else if (recipeRow == 1 && recipeCol == 3)
+                    {
+                    }
+                    // 2x3
+                    else if (recipeRow == 2 && recipeCol == 3)
+                    {
+                    }
+                    // 3x2
+                    else if (recipeRow == 3 && recipeCol == 2)
+                    {
+                    }
+                    // 2x2
+                    else if (recipeRow == 2 && recipeCol == 2)
+                    {
+                    }
+                }
+            }
+            count++;
+        }
+    }
+
+    if (found)
+    {
+        cout << "Crafting success" << endl;
+        cout << "Created : " << resultRecipe.getItemResultQuantity() << " " << resultRecipe.getItemResultName() << endl;
+        inventory.give(resultRecipe.getItemResultName(), resultRecipe.getItemResultQuantity());
+        this->clearTable();
+    }
+    else
+    {
+        cout << "No recipe match with item on crafting table" << endl;
+    }
 }

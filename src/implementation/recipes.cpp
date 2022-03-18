@@ -84,15 +84,15 @@ vector<vector<string>> SingleRecipe::getItemPlacement()
     return this->ItemPlacement;
 }
 
-SingleRecipe SingleRecipe::getItemMirroredInPlacement(SingleRecipe originalRecipe)
+SingleRecipe SingleRecipe::getItemMirroredInPlacement()
 {
     SingleRecipe mirroredRecipe;
-    mirroredRecipe.NRowRecipe = originalRecipe.getNRowRecipe();
-    mirroredRecipe.NColRecipe = originalRecipe.getNColRecipe();
-    mirroredRecipe.ItemResultName = originalRecipe.getItemResultName();
-    mirroredRecipe.ItemResultQuantity = originalRecipe.getItemResultQuantity();
-    vector<vector<string>> originalPlacement = originalRecipe.getItemPlacement();
-    vector<vector<string>> mirroredPlacement = originalRecipe.getItemPlacement();
+    mirroredRecipe.NRowRecipe = this->getNRowRecipe();
+    mirroredRecipe.NColRecipe = this->getNColRecipe();
+    mirroredRecipe.ItemResultName = this->getItemResultName();
+    mirroredRecipe.ItemResultQuantity = this->getItemResultQuantity();
+    vector<vector<string>> originalPlacement = this->getItemPlacement();
+    vector<vector<string>> mirroredPlacement = this->getItemPlacement();
 
     // mirrored matrix
     for (int i = 0; i < mirroredRecipe.NRowRecipe; i++)
