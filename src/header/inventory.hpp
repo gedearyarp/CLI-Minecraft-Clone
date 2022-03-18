@@ -35,6 +35,7 @@ class Inventory {
         void exportFile();
         int countItem(string itemName) const;
         bool isFull() const;
+
 };
 
 #endif

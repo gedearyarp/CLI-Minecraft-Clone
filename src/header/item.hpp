@@ -26,9 +26,10 @@ public:
     string getCategory() const;
 
     bool isNothing() const;
-    bool isType(string name, vector<Item> config); // buat ngecek apakah name merupakan nama type yang bakal punya item turunan
+    bool isType(string name); // buat ngecek apakah name merupakan nama type yang bakal punya item turunan
+    bool isItemChildofParent(string itemName);
 
-    vector<string> listOfItemWithType(string itemType, vector<Item> config); // balikin semua item dengan type itemType
+    vector<string> listOfItemWithType(string itemType); // balikin semua item dengan type itemType
 
     virtual int getQuantity() const;
     virtual int getDurability() const;
