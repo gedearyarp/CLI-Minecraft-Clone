@@ -38,7 +38,7 @@ class SingleRecipe {
         vector<vector<string>> getItemPlacement();
 
         // mirror of itemplacement;
-        SingleRecipe getItemMirroredInPlacement(SingleRecipe originalRecipe);
+        SingleRecipe getItemMirroredInPlacement();
 
         // checking if mirrored matrix have the same recipe as the recipe
         bool isOriginalRecipeSameAsMirroredRecipe(SingleRecipe mirroredRecipe);

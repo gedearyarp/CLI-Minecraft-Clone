@@ -3,6 +3,7 @@
 
 #include "item.hpp"
 #include "recipes.hpp"
+#include "inventory.hpp"
 
 // STL
 #include <string>
@@ -19,22 +20,19 @@ class CraftingTable {
         // Counting item on crafting table
         int countItemOnTable();
 
-        bool isSameAsRecipe(SingleRecipe recipe);
-
-        // check recipe
-        bool eligibleForCrafting() const;
+        void clearTable();
 
         Item getSlot(int slotKe) const;
         void setSlot(int slotKe, Item item);
         
-        // CRAFT -> di implementasi, panggil GIVE
-        void craft();
-        // ngecek ada yg sesuai recipe ga
-
         // melihat table crafting
         void showCraftingTable();
 
-        void readRecipes();
+        // ngecek ada yg sesuai recipe ga
+        bool itemInTableSameAsRecipePlacement(vector<vector<string>> recipePlacement);
+        
+        // CRAFT -> di implementasi, panggil GIVE
+        void craft(Inventory inventory);
 };
 
 #endif
