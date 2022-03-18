@@ -12,6 +12,7 @@ using namespace std;
 #define COLSLOT 9
 
 #define MAXQTY 64
+#define MAXINV 27
 
 class Inventory {
     private:
