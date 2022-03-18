@@ -11,9 +11,11 @@ using namespace std;
 #define ROWSLOT 3
 #define COLSLOT 9
 
+#define MAXQTY 64
+
 class Inventory {
     private:
-        Item slot[3][9];
+        Item slot[ROWSLOT][COLSLOT];
         int slotUsed;
     public:
         Inventory();

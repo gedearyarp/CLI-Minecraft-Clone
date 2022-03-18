@@ -42,7 +42,7 @@ void Inventory::give(string itemName, int itemQty)
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){          
             if (ctg == "NONTOOL" && slot[i][j].getName() == itemName && !slot[i][j].isFull()) {
-                int remainQty = 64 - slot[i][j].getQuantity();
+                int remainQty = MAXQTY - slot[i][j].getQuantity();
                 int addQty = min(itemQty, remainQty);
 
                 slot[i][j].setQuantity(slot[i][j].getQuantity() + addQty);
@@ -54,7 +54,7 @@ void Inventory::give(string itemName, int itemQty)
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){
             if(ctg == "NONTOOL" && slot[i][j].isEmpty()){
-                int addQty = min(64, itemQty);
+                int addQty = min(MAXQTY, itemQty);
                 slot[i][j] = NonTool(itemName, addQty, readItemConfig.getItemConfig());
                 
                 this->slotUsed++;
@@ -108,7 +108,7 @@ void Inventory::discard(string slotId, int itemQty)
 
 void Inventory::discardAll(string slotId){
     int slotKe = stoi(slotId);
-    slot[slotKe / 9][slotKe % 9] = Item();
+    slot[slotKe / COLSLOT][slotKe % COLSLOT] = Item();
 }
 
 void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
@@ -128,7 +128,7 @@ void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
         if (isrc.getCategory() == "TOOL"){
             Item slotdes = locateSlot(des[i]);
             if(slotdes.isEmpty()){
-                slot[des[i] / 9][des[i] % 9] = Tool(isrc.getName(),isrc.getDurability(), readItemConfig.getItemConfig());
+                slot[des[i] / COLSLOT][des[i] % COLSLOT] = Tool(isrc.getName(),isrc.getDurability(), readItemConfig.getItemConfig());
                 discard(srcSlot,isrc.getQuantity());
             }
             //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
@@ -137,7 +137,7 @@ void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
             Item slotdes = locateSlot(des[i]);
 
             if(slotdes.isEmpty()){
-                slot[des[i] / 9][des[i] % 9] = NonTool(isrc.getName(),isrc.getQuantity(), readItemConfig.getItemConfig());
+                slot[des[i] / COLSLOT][des[i] % COLSLOT] = NonTool(isrc.getName(),isrc.getQuantity(), readItemConfig.getItemConfig());
                 discard(srcSlot ,isrc.getQuantity());
             }
             else{
@@ -145,18 +145,18 @@ void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
                     return; //BEDA BARANG
                 }
                 if(isrc.getName() == slotdes.getName()){
-                    if(itemQty + slotdes.getQuantity() > 64){
-                        int remainder = (isrc.getQuantity() + slotdes.getQuantity()) - 64;
-                        slot[des[i] / 9][des[i] % 9].setQuantity(64);
-                        slot[src / 9][src % 9].setQuantity(remainder);
-                        if(slot[src / 9][src % 9].getQuantity() <= 0){
+                    if(itemQty + slotdes.getQuantity() > MAXQTY){
+                        int remainder = (isrc.getQuantity() + slotdes.getQuantity()) - MAXQTY;
+                        slot[des[i] / COLSLOT][des[i] % COLSLOT].setQuantity(MAXQTY);
+                        slot[src / COLSLOT][src % COLSLOT].setQuantity(remainder);
+                        if(slot[src / COLSLOT][src % COLSLOT].getQuantity() <= 0){
                             discardAll(srcSlot);
                         }
                     }
-                    if(itemQty + slotdes.getQuantity() <= 64){
-                        slot[des[i] / 9][des[i] % 9].setQuantity(slotdes.getQuantity()+itemQty);
-                        slot[src / 9][src % 9].setQuantity(isrc.getQuantity() - itemQty);
-                        if(slot[src / 9][src % 9].getQuantity() <= 0){
+                    if(itemQty + slotdes.getQuantity() <= MAXQTY){
+                        slot[des[i] / COLSLOT][des[i] % COLSLOT].setQuantity(slotdes.getQuantity()+itemQty);
+                        slot[src / COLSLOT][src % COLSLOT].setQuantity(isrc.getQuantity() - itemQty);
+                        if(slot[src / COLSLOT][src % COLSLOT].getQuantity() <= 0){
                             discardAll(srcSlot);
                         }
                     }   
@@ -195,15 +195,15 @@ void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingT
                 return; //BEDA BARANG
             }
             if(isrc.getName() == ides.getName()){
-                if(itemQty + ides.getQuantity() > 64){
-                    int remainder = (isrc.getQuantity() + ides.getQuantity()) - 64;
-                    craft.setSlot(des, NonTool(isrc.getName(), 64,readItemConfig.getItemConfig()));
-                    this->slot[src / 9][src % 9].setQuantity(remainder);
+                if(itemQty + ides.getQuantity() > MAXQTY){
+                    int remainder = (isrc.getQuantity() + ides.getQuantity()) - MAXQTY;
+                    craft.setSlot(des, NonTool(isrc.getName(), MAXQTY,readItemConfig.getItemConfig()));
+                    this->slot[src / COLSLOT][src % COLSLOT].setQuantity(remainder);
                 }
-                if(itemQty + ides.getQuantity() <= 64){
+                if(itemQty + ides.getQuantity() <= MAXQTY){
                     craft.setSlot(des, NonTool(isrc.getName(), ides.getQuantity()+itemQty,readItemConfig.getItemConfig()));
-                    this->slot[src / 9][src % 9].setQuantity(isrc.getQuantity() - itemQty);
-                    if(slot[src / 9][src % 9].getQuantity() <= 0){
+                    this->slot[src / COLSLOT][src % COLSLOT].setQuantity(isrc.getQuantity() - itemQty);
+                    if(slot[src / COLSLOT][src % COLSLOT].getQuantity() <= 0){
                         this->discardAll(srcSlot);
                     }
                 }   
@@ -224,7 +224,7 @@ void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingT
     if (isrc.getCategory() == "TOOL"){
         if(ides.isEmpty()){
             craft.setSlot(des,Item());
-            this->slot[src / 9][src % 9] = Tool(isrc.getName(), isrc.getDurability(),readItemConfig.getItemConfig());
+            this->slot[src / COLSLOT][src % COLSLOT] = Tool(isrc.getName(), isrc.getDurability(),readItemConfig.getItemConfig());
         }
         //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
     }
@@ -234,7 +234,7 @@ void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingT
             this->discard(srcSlot ,itemQty);
 
             craft.setSlot(src,NonTool(isrc.getName(), isrc.getQuantity() - itemQty, readItemConfig.getItemConfig()));
-            this->slot[src / 9][src % 9] = NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig());
+            this->slot[src / COLSLOT][src % COLSLOT] = NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig());
             if(isrc.getQuantity()-itemQty <= 0){
                 craft.setSlot(src, Item());
             }
@@ -244,15 +244,15 @@ void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingT
                 return; //BEDA BARANG
             }
             if(isrc.getName() == ides.getName()){
-                if(itemQty + ides.getQuantity() > 64){
-                    int remainder = (isrc.getQuantity() + ides.getQuantity()) - 64;
+                if(itemQty + ides.getQuantity() > MAXQTY){
+                    int remainder = (isrc.getQuantity() + ides.getQuantity()) - MAXQTY;
                     craft.setSlot(src, NonTool(isrc.getName(), remainder ,readItemConfig.getItemConfig()));
-                    this->slot[src / 9][src % 9].setQuantity(64);
+                    this->slot[src / COLSLOT][src % COLSLOT].setQuantity(MAXQTY);
                 }
-                if(itemQty + ides.getQuantity() <= 64){
+                if(itemQty + ides.getQuantity() <= MAXQTY){
                     craft.setSlot(src, NonTool(isrc.getName(), isrc.getQuantity()-itemQty,readItemConfig.getItemConfig()));
-                    this->slot[des / 9][des % 9].setQuantity(ides.getQuantity() + itemQty);
-                    if(slot[src / 9][src % 9].getQuantity() <= 0){
+                    this->slot[des / COLSLOT][des % COLSLOT].setQuantity(ides.getQuantity() + itemQty);
+                    if(slot[src / COLSLOT][src % COLSLOT].getQuantity() <= 0){
                         this->discardAll(srcSlot);
                     }
                 }   
@@ -307,7 +307,7 @@ void Inventory::exportFile()
                 return; //TODO THROW out of index slot
             }
 
-            if (qty < 1 || qty > 64) {
+            if (qty < 1 || qty > MAXQTY) {
                 return; //TODO THROW quantity not valid
             }
 
@@ -328,11 +328,11 @@ void Inventory::exportFile()
 }
 
 Item Inventory::locateSlot(int slotKe){
-    return this->slot[slotKe / 9][slotKe % 9];
+    return this->slot[slotKe / COLSLOT][slotKe % COLSLOT];
 }
 
 void Inventory::setSlot(int slotKe, Item item) {
-    this->slot[slotKe / 9][slotKe % 9] = item;
+    this->slot[slotKe / COLSLOT][slotKe % COLSLOT] = item;
 }
 
 int Inventory::countItem(string itemName) const
