@@ -105,57 +105,66 @@ void Inventory::discard(string slotId, int itemQty)
     slot[row][col].setQuantity(slot[row][col].getQuantity() - itemQty);
 }
 
+void Inventory::discardAll(string slotId){
+    int slotKe = stoi(slotId);
+    slot[slotKe / 9][slotKe % 9] = Item();
+}
+
 void Inventory::move(string srcSlot, int itemQty, vector<string> destSlot)
 {
+    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
     int src = stoi(srcSlot);
-
-    Slot ssrc = locateSlot(src);
-    Item isrc = locateSlot(src).getItem();
+    Item isrc = locateSlot(src);
 
     int ndes = destSlot.size();
     int des[ndes];
+
     for(int i = 0; i < ndes; i++){
         des[i] = stoi(destSlot[i]);
     }
 
     for(int i = 0; i < ndes; i++){
         if (isrc.getCategory() == "TOOL"){
-            Slot slotdes = locateSlot(des[i]);
+            Item slotdes = locateSlot(des[i]);
             if(slotdes.isEmpty()){
-                slotdes = Slot(isrc,ssrc.getQuantity());
-                discard(srcSlot,ssrc.getQuantity());
+                slot[des[i] / 9][des[i] % 9] = Tool(isrc.getName(),isrc.getDurability(), readItemConfig.getItemConfig());
+                discard(srcSlot,isrc.getQuantity());
             }
-
-            //ASUMSI LOKASI PILIHAN SELALU KOSONG
+            //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
         }
         if (isrc.getCategory() != "TOOL"){
-            Slot slotdes = locateSlot(des[i]);
+            Item slotdes = locateSlot(des[i]);
 
             if(slotdes.isEmpty()){
-                slot[des[i] / 9][des[i] % 9] = Slot(isrc,ssrc.getQuantity());
-                discard(srcSlot ,ssrc.getQuantity());
+                slot[des[i] / 9][des[i] % 9] = NonTool(isrc.getName(),isrc.getQuantity(), readItemConfig.getItemConfig());
+                discard(srcSlot ,isrc.getQuantity());
             }
             else{
-                if(isrc.getName() != slotdes.getItem().getName()){
+                if(isrc.getName() != slotdes.getName()){
                     return; //BEDA BARANG
                 }
-                if(isrc.getName() == slotdes.getItem().getName()){
-                    if(itemQty + slotdes.getItem().getQuantity() > 64){
-                        int remainder = (itemQty + slotdes.getItem().getQuantity()) - 64;
-                        slot[des[i] / 9][des[i] % 9].getItem().setQuantity(64);
-                        slot[src / 9][src % 9].getItem().setQuantity(remainder);
+                if(isrc.getName() == slotdes.getName()){
+                    if(itemQty + slotdes.getQuantity() > 64){
+                        int remainder = (itemQty + slotdes.getQuantity()) - 64;
+                        slot[des[i] / 9][des[i] % 9].setQuantity(64);
+                        slot[src / 9][src % 9].setQuantity(remainder);
+                        if(slot[src / 9][src % 9].getQuantity() <= 0){
+                            discardAll(srcSlot);
+                        }
                     }
-                    if(itemQty + slotdes.getItem().getQuantity() <= 64){
-                        slot[des[i] / 9][des[i] % 9].getItem().setQuantity(slotdes.getItem().getQuantity()+itemQty);
-                        slot[src / 9][src % 9].getItem().setQuantity(ssrc.getItem().getQuantity() - itemQty);
-                    }
+                    if(itemQty + slotdes.getQuantity() <= 64){
+                        slot[des[i] / 9][des[i] % 9].setQuantity(slotdes.getQuantity()+itemQty);
+                        slot[src / 9][src % 9].setQuantity(isrc.getQuantity() - itemQty);
+                        if(slot[src / 9][src % 9].getQuantity() <= 0){
+                            discardAll(srcSlot);
+                        }
+                    }   
                 }
             }
         }
     }
     // for(int i = 0; i < des.lengt)
     //TODO
-
 }
 
 void Inventory::moveItoC(string srcSlot, vector<string> destSlot)
@@ -173,7 +182,7 @@ void Inventory::moveCtoI(string srcSlot, string destSlot)
     //TODO
 }
 
-Slot Inventory::locateSlot(int slotKe){
+Item Inventory::locateSlot(int slotKe){
     // return this->slot[slotKe / 9][(slotKe % 9)-1]; KALO PENGEN SLOT PERTAMA ITU i1 BUKAN i0
     return this->slot[slotKe / 9][slotKe % 9];
 }

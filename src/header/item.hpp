@@ -46,6 +46,7 @@ public:
     Tool();
     Tool(int id, string name, int durability);
     Tool(string name, vector<Item> config);
+    Tool(string name, int durability, vector<Item> config);
     
     int getDurability() const;
     void setDurability(int durability);

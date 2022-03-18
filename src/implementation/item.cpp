@@ -100,6 +100,11 @@ Tool::Tool(string name, vector<Item> config) : Item(name, config)
     this->durability = 10;
 }
 
+Tool::Tool(string name, int durability, vector<Item> config) : Item(name, config)
+{
+    this->durability = durability;
+}
+
 int Tool::getDurability() const{
     return this->durability;
 }
