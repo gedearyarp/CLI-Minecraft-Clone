@@ -111,7 +111,9 @@ void Inventory::discardAll(string slotId){
     slot[slotKe / 9][slotKe % 9] = Item();
 }
 
-void Inventory::move(string srcSlot, int itemQty, vector<string> destSlot)
+// void move(string srcSlot, int itemQty, vector<string> destSlot){}
+
+void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
 {
     ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
     int src = stoi(srcSlot);
@@ -220,14 +222,53 @@ void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingT
     //TODO
 }
 
-void Inventory::moveItoI(string srcSlot, int itemQty, string destSlot)
+void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingTable craft)
 {
-    //TODO
-}
+    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
+    int src = stoi(srcSlot);
+    Item isrc = craft.getSlot(src);
+    int des = stoi(destSlot);
+    Item ides = locateSlot(des);
 
-void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot)
-{
-    //TODO
+
+    if (isrc.getCategory() == "TOOL"){
+        if(ides.isEmpty()){
+            craft.setSlot(des,Item());
+            this->slot[src / 9][src % 9] = Tool(isrc.getName(), isrc.getDurability(),readItemConfig.getItemConfig());
+        }
+        //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
+    }
+    if (isrc.getCategory() != "TOOL"){
+        if(ides.isEmpty()){
+            craft.setSlot(des,NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig()));
+            this->discard(srcSlot ,itemQty);
+
+            craft.setSlot(src,NonTool(isrc.getName(), isrc.getQuantity() - itemQty, readItemConfig.getItemConfig()));
+            this->slot[src / 9][src % 9] = NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig());
+            if(isrc.getQuantity()-itemQty <= 0){
+                craft.setSlot(src, Item());
+            }
+        }
+        else{
+            if(isrc.getName() != ides.getName()){
+                return; //BEDA BARANG
+            }
+            if(isrc.getName() == ides.getName()){
+                if(itemQty + ides.getQuantity() > 64){
+                    int remainder = (isrc.getQuantity() + ides.getQuantity()) - 64;
+                    craft.setSlot(src, NonTool(isrc.getName(), remainder ,readItemConfig.getItemConfig()));
+                    this->slot[src / 9][src % 9].setQuantity(64);
+                }
+                if(itemQty + ides.getQuantity() <= 64){
+                    craft.setSlot(src, NonTool(isrc.getName(), isrc.getQuantity()-itemQty,readItemConfig.getItemConfig()));
+                    this->slot[des / 9][des % 9].setQuantity(ides.getQuantity() + itemQty);
+                    if(slot[src / 9][src % 9].getQuantity() <= 0){
+                        this->discardAll(srcSlot);
+                    }
+                }   
+            }
+        }
+    }
 }
 
 Item Inventory::locateSlot(int slotKe){

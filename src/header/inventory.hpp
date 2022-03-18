@@ -4,7 +4,7 @@
 #include <bits/stdc++.h>
 #include "item.hpp"
 #include "itemConfig.hpp"
-#include "../header/craft.hpp"
+#include "craft.hpp"
 
 using namespace std;
 
@@ -22,14 +22,15 @@ class Inventory {
         void give(string itemName, int itemQty);
         void discard(string slotId, int itemQty);
         void discardAll(string slotId);
-        void move(string srcSlot, int itemQty, vector<string> destSlot);
+        // void move(string srcSlot, int itemQty, vector<string> destSlot);
 
         Item locateSlot(int slotKe);
         void setSlot(int slotKe, Item item);
 
+        void moveItoI(string srcSlot, int itemQty, vector<string> destSlot);
+        // void moveItoI(string srcSlot, int itemQty, string destSlot);
         void moveItoC(string srcSlot, int itemQty, string destSlot, CraftingTable craft);
-        void moveItoI(string srcSlot, int itemQty, string destSlot);
-        void moveCtoI(string srcSlot, int itemQty, string destSlot);
+        void moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingTable craft);
 
         void exportFile();
         int countItem(string itemName) const;
