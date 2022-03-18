@@ -1,18 +1,32 @@
 #ifndef INVENTORY_HPP
 #define INVENTORY_HPP
 
-#include <bits/stdc++.h>
 #include "item.hpp"
-#include "itemConfig.hpp"
+#include <bits/stdc++.h>
 
 using namespace std;
 
-#define ROWSLOT 3
-#define COLSLOT 9
+class Slot {
+    private:
+        Item item;
+        int quantity;
+    public:
+        Slot();
+        Slot(Item item, int qty);
+
+        void addItemSlot(int qty);
+        void discardItemSlot(int qty);
+        
+        int getQuantity();
+        Item getItem();
+
+        bool isTool();
+        bool isEmpty();
+};
 
 class Inventory {
     private:
-        Item slot[3][9];
+        Slot slot[3][9];
         int slotUsed;
     public:
         Inventory();
@@ -26,10 +40,9 @@ class Inventory {
         void moveItoI(string srcSlot, string destSlot);
         void moveCtoI(string srcSlot, string destSlot);
 
+        Slot locateSlot(int slotKe);
         void exportFile();
-
-        int countItem(string itemName) const;
-        bool isFull() const;
+        bool isFull();
 };
 
 #endif
