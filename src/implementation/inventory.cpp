@@ -111,8 +111,6 @@ void Inventory::discardAll(string slotId){
     slot[slotKe / 9][slotKe % 9] = Item();
 }
 
-// void move(string srcSlot, int itemQty, vector<string> destSlot){}
-
 void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
 {
     ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
@@ -166,8 +164,6 @@ void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
             }
         }
     }
-    // for(int i = 0; i < des.lengt)
-    //TODO
 }
 
 void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingTable craft)
@@ -214,12 +210,6 @@ void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingT
             }
         }
     }
-
-// for(int i = 0; i < des.lengt)
-//TODO
-    
-
-    //TODO
 }
 
 void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingTable craft)
@@ -269,15 +259,6 @@ void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingT
             }
         }
     }
-}
-
-Item Inventory::locateSlot(int slotKe){
-    // return this->slot[slotKe / 9][(slotKe % 9)-1]; KALO PENGEN SLOT PERTAMA ITU i1 BUKAN i0
-    return this->slot[slotKe / 9][slotKe % 9];
-}
-
-void Inventory::setSlot(int slotKe, Item item) {
-    this->slot[slotKe / 9][slotKe % 9] = item;
 }
 
 void Inventory::exportFile()
@@ -344,6 +325,14 @@ void Inventory::exportFile()
     } else {
         return; //TODO THROW gak bisa buka file
     }
+}
+
+Item Inventory::locateSlot(int slotKe){
+    return this->slot[slotKe / 9][slotKe % 9];
+}
+
+void Inventory::setSlot(int slotKe, Item item) {
+    this->slot[slotKe / 9][slotKe % 9] = item;
 }
 
 int Inventory::countItem(string itemName) const
