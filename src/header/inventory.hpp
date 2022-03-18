@@ -4,6 +4,7 @@
 #include <bits/stdc++.h>
 #include "item.hpp"
 #include "itemConfig.hpp"
+#include "../header/craft.hpp"
 
 using namespace std;
 

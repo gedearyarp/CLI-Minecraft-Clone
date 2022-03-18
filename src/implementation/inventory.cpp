@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../header/inventory.hpp"
-#include "../header/craft.hpp"
+
 
 using namespace std;
 
@@ -176,19 +176,12 @@ void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingT
     int des = stoi(destSlot);
     Item ides = craft.getSlot(des);
 
-    // if(ides.isEmpty() && isrc.getCategory() == "NONTOOL"){
-    //     craft.setSlot(des, NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig()));
-    //     this->setSlot(src, NonTool(isrc.getName(), isrc.getQuantity()-itemQty, readItemConfig.getItemConfig()));
-    //     if(isrc.getQuantity()-itemQty <= 0){
-    //         discardAll(srcSlot);
-    //     }
-    // }
 
     if (isrc.getCategory() == "TOOL"){
         if(craft.getSlot(des).isEmpty()){
             craft.setSlot(des,isrc);
             this->discardAll(srcSlot);
-        }else return;
+        }
         //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
     }
     if (isrc.getCategory() != "TOOL"){
@@ -213,7 +206,7 @@ void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingT
                     craft.setSlot(des, NonTool(isrc.getName(), ides.getQuantity()+itemQty,readItemConfig.getItemConfig()));
                     this->slot[src / 9][src % 9].setQuantity(isrc.getQuantity() - itemQty);
                     if(slot[src / 9][src % 9].getQuantity() <= 0){
-                        discardAll(srcSlot);
+                        this->discardAll(srcSlot);
                     }
                 }   
             }
