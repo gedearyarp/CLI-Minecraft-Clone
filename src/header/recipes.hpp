@@ -15,7 +15,7 @@ class SingleRecipe {
         int NColRecipe;
         string ItemResultName;
         int ItemResultQuantity;
-        vector<vector<Item>> ItemPlacement;
+        vector<vector<string>> ItemPlacement;
         // array of array
         // 
         //     [[Plank], 
@@ -25,7 +25,7 @@ class SingleRecipe {
         
     public:
         SingleRecipe();
-        SingleRecipe(string filename, int NrowRecipe, int NcolRecipe, string ItemResultName, int ItemResultQuantity, vector<vector<Item>> ItemPlacement);
+        SingleRecipe(string filename, int NrowRecipe, int NcolRecipe, string ItemResultName, int ItemResultQuantity, vector<vector<string>> ItemPlacement);
 
         int totalSlotNeededForCraft();
         
@@ -35,7 +35,7 @@ class SingleRecipe {
         int getNColRecipe();
         string getItemResultName();
         int getItemResultQuantity();
-        vector<vector<Item>> getItemPlacement();
+        vector<vector<string>> getItemPlacement();
 
         // mirror of itemplacement;
         SingleRecipe getItemMirroredInPlacement(SingleRecipe originalRecipe);

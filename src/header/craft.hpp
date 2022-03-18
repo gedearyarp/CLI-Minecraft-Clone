@@ -19,7 +19,7 @@ class CraftingTable {
         // Counting item on crafting table
         int countItemOnTable();
 
-        bool CraftingTable::isSameAsRecipe(SingleRecipe mirroredRecipe) const;
+        bool isSameAsRecipe(SingleRecipe recipe);
 
         // check recipe
         bool eligibleForCrafting() const;

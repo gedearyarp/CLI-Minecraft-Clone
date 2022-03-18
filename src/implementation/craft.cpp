@@ -3,19 +3,26 @@
 
 using namespace std;
 
-CraftingTable::CraftingTable() {
-    for (int i=0; i<3; i++) {
-        for (int j=0; j<3; j++) {
+CraftingTable::CraftingTable()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
             this->Table[i][j] = Item();
         }
     }
 };
 
-int CraftingTable::countItemOnTable() {
+int CraftingTable::countItemOnTable()
+{
     int count = 0;
-    for (int i=0; i<3; i++) {
-        for (int j=0; j<3; j++) {
-            if (this->Table[i][j].getName() != "-") {
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (this->Table[i][j].getName() != "-")
+            {
                 count++;
             }
         }
@@ -23,20 +30,22 @@ int CraftingTable::countItemOnTable() {
     return count;
 }
 
-bool CraftingTable::isSameAsRecipe(SingleRecipe mirroredRecipe) const{
-    int count = 0;
-    for (int i=0; i<3; i++) {
-        for (int j=0; j<3; j++) {
-            if (this->Table[i][j].getName() != mirroredRecipe.getItemPlacement()[i][j].getName()) {
-                return false;
-            }
-        }
-    }
-    return true;
+bool CraftingTable::isSameAsRecipe(SingleRecipe mirroredRecipe)
+{
+    // TODO
+    // for (int i=0; i<3; i++) {
+    //     for (int j=0; j<3; j++) {
+    //         // t
+    //         if (this->Table[i][j].getName() != mirroredRecipe.getItemPlacement()[i][j]) {
+    //             return false;
+    //         }
+    //     }
+    // }
+    // return true;
 }
 
-
-bool CraftingTable::eligibleForCrafting() const{
+bool CraftingTable::eligibleForCrafting() const
+{
     // TODO
     // int itemInTable = countItemOnTable();
     // bool canBeingCrafted = false;
@@ -88,11 +97,13 @@ bool CraftingTable::eligibleForCrafting() const{
     // }
 }
 
-Item CraftingTable::getSlot(int slotKe) const {
+Item CraftingTable::getSlot(int slotKe) const
+{
     return this->Table[slotKe / 3][slotKe % 3];
 }
 
-void CraftingTable::setSlot(int slotKe, Item item) {
+void CraftingTable::setSlot(int slotKe, Item item)
+{
     this->Table[slotKe / 3][slotKe % 3] = item;
 }
 
@@ -101,16 +112,20 @@ void CraftingTable::craft()
     // TODO
 }
 
-void CraftingTable::showCraftingTable() {
+void CraftingTable::showCraftingTable()
+{
     cout << "Crafting Table" << endl;
     int idx = 0;
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++)
+    {
         cout << "[ C", idx, ": ";
-        for (int j = 0; j < 3; j++) {
+        for (int j = 0; j < 3; j++)
+        {
             string name = Table[i][j].getName();
             int quantity = Table[i][j].getQuantity();
             cout << name << " - " << quantity << " ]";
-            if (j != 2) {
+            if (j != 2)
+            {
                 cout << " ";
             }
             idx++;
@@ -119,6 +134,7 @@ void CraftingTable::showCraftingTable() {
     }
 }
 
-void CraftingTable::readRecipes(){
+void CraftingTable::readRecipes()
+{
     this->recipes = ReadRecipesFromConfigToRecipesClass();
 }
