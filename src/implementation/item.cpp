@@ -4,8 +4,6 @@
 
 using namespace std;
 
-ItemConfig itemConfigs = ItemConfig("../../config","item.txt");
-
 Item::Item()
 {
     this->id = -1;
@@ -22,18 +20,28 @@ Item::Item(int id, string name, string type, string category)
     this->category = category;
 }
 
-Item::Item(string name)
+Item::Item(string name, vector<Item> config)
 {
     bool found = false;
     int i = 0;
-    while (!found && i < itemConfigs.getItemConfig().size()){
-        if (itemConfigs.getItemConfig()[i].name == name) found = true;
+    while (!found && i < config.size()){
+        if (config[i].name == name) found = true;
         else i++;
     }   //TODO THROW invalid item name
-    this->id = itemConfigs.getItemConfig()[i].id;
-    this->name = itemConfigs.getItemConfig()[i].name;
-    this->type = itemConfigs.getItemConfig()[i].type;
-    this->category = itemConfigs.getItemConfig()[i].category;
+    if (found){
+        this->id = config[i].id;
+        this->name = config[i].name;
+        this->type = config[i].type;
+        this->category = config[i].category;
+    }
+    else{
+    {
+        this->id = -1;
+        this->name = "-";
+        this->type = "-";
+        this->category = "-";
+    }
+    }
 }
 
 int Item::getId() const
@@ -87,7 +95,7 @@ Tool::Tool(int id, string name, int durability) : Item(id, name, "-", "TOOL")
     this->durability = durability;
 }
 
-Tool::Tool(string name) : Item(name)
+Tool::Tool(string name, vector<Item> config) : Item(name, config)
 {
     this->durability = 10;
 }
@@ -99,6 +107,11 @@ int Tool::getDurability() const{
 void Tool::setDurability(int durability) 
 {
     this->durability = durability;
+}
+
+int Tool::getQuantity() const
+{
+    return 1;
 }
 
 void Tool::use()
@@ -125,7 +138,7 @@ NonTool::NonTool(int id, string name, string type, int quantity) : Item(id, name
     this->quantity = quantity;
 }
 
-NonTool::NonTool(string name, int quantity) : Item(name)
+NonTool::NonTool(string name, int quantity, vector<Item> config) : Item(name, config)
 {
     this->quantity = quantity;
 }

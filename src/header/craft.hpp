@@ -2,7 +2,7 @@
 #define CRAFT_HPP
 
 #include "item.hpp"
-#include "Recipes.hpp"
+#include "recipes.hpp"
 
 // STL
 #include <string>

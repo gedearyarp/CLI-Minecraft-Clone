@@ -1,4 +1,5 @@
 #include "../header/recipes.hpp"
+#include "../header/itemConfig.hpp"
 #include <bits/stdc++.h>
 #include <cstdio>
 #include <cerrno>
@@ -6,6 +7,7 @@
 #include <map>
 #include <fstream>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
@@ -109,6 +111,7 @@ Recipes ReadRecipesFromConfigToRecipesClass()
                 string itemResultName = "";
                 string itemResultQuantity = "0";
                 vector<vector<Item>> itemPlacement;
+                ItemConfig readItemConfigs = ItemConfig("../../config","item.txt"); // config buat item
 
                 string line;
 
@@ -132,7 +135,7 @@ Recipes ReadRecipesFromConfigToRecipesClass()
                     {
                         ss >> word;
                         // TODO ITEMNYA GABISA CONSTRUCT DARI STRING
-                        temp.push_back(Item());
+                        temp.push_back(Item(word, readItemConfigs.getItemConfig()));
                     }
                     itemPlacement.push_back(temp);
                 }

@@ -36,7 +36,7 @@ void Inventory::give(string itemName, int itemQty)
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
     string ctg = readItemConfig.findCategoryByName(itemName);
 
-    Item thisItem = Item(itemName); 
+    Item thisItem = Item(itemName,readItemConfig.getItemConfig()); 
 
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){          
@@ -54,14 +54,14 @@ void Inventory::give(string itemName, int itemQty)
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){
             if(ctg == "NONTOOL" && slot[i][j].isEmpty()){
                 int addQty = min(64, itemQty);
-                slot[i][j] = NonTool(itemName, addQty);
+                slot[i][j] = NonTool(itemName, addQty, readItemConfig.getItemConfig());
                 
                 this->slotUsed++;
                 itemQty -= addQty;
             } 
 
             if(ctg == "TOOL" && slot[i][j].isEmpty()){
-                slot[i][j] = Tool(itemName);
+                slot[i][j] = Tool(itemName, readItemConfig.getItemConfig());
                 
                 this->slotUsed++;
                 itemQty--;

@@ -17,7 +17,7 @@ protected:
 public:
     Item();
     Item(int id, string name, string type, string category);
-    Item(string name);
+    Item(string name, vector<Item> config);
 
     int getId() const;
     string getName() const;
@@ -45,10 +45,11 @@ private:
 public:
     Tool();
     Tool(int id, string name, int durability);
-    Tool(string name);
+    Tool(string name, vector<Item> config);
     
     int getDurability() const;
     void setDurability(int durability);
+    int getQuantity() const; // bakal selalu return 1
     void use();
 
     void itemInfo() const;
@@ -61,7 +62,7 @@ private:
 public:
     NonTool();
     NonTool(int id, string name, string type, int quantity);
-    NonTool(string name, int quantity);
+    NonTool(string name, int quantity, vector<Item> config);
 
     bool isFull() const;
     bool isEmpty() const;
