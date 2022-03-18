@@ -272,7 +272,7 @@ void Inventory::exportFile()
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
 
     if(inv.is_open()) {
-        for(int idx = 0; idx < 27; idx++){
+        for(int idx = 0; idx < MAXINV; idx++){
             if (line == "0:0") {
                 setSlot(idx, Item());
                 idx++;
@@ -303,7 +303,7 @@ void Inventory::exportFile()
 
             int id = stoi(idItem), qty = stoi(qtyItem);
             
-            if (id < 1 || id > 27) {
+            if (id < 1 || id > MAXINV) {
                 return; //TODO THROW out of index slot
             }
 
