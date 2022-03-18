@@ -88,6 +88,14 @@ bool CraftingTable::eligibleForCrafting() const{
     // }
 }
 
+Item CraftingTable::getSlot(int slotKe) const {
+    return this->Table[slotKe / 3][slotKe % 3];
+}
+
+void CraftingTable::setSlot(int slotKe, Item item) {
+    this->Table[slotKe / 3][slotKe % 3] = item;
+}
+
 void CraftingTable::craft()
 {
     // TODO

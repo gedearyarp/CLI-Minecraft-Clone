@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../header/inventory.hpp"
+#include "../header/craft.hpp"
 
 using namespace std;
 
@@ -145,7 +146,7 @@ void Inventory::move(string srcSlot, int itemQty, vector<string> destSlot)
                 }
                 if(isrc.getName() == slotdes.getName()){
                     if(itemQty + slotdes.getQuantity() > 64){
-                        int remainder = (itemQty + slotdes.getQuantity()) - 64;
+                        int remainder = (isrc.getQuantity() + slotdes.getQuantity()) - 64;
                         slot[des[i] / 9][des[i] % 9].setQuantity(64);
                         slot[src / 9][src % 9].setQuantity(remainder);
                         if(slot[src / 9][src % 9].getQuantity() <= 0){
@@ -167,17 +168,71 @@ void Inventory::move(string srcSlot, int itemQty, vector<string> destSlot)
     //TODO
 }
 
-void Inventory::moveItoC(string srcSlot, vector<string> destSlot)
+void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingTable craft)
+{
+    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
+    int src = stoi(srcSlot);
+    Item isrc = locateSlot(src);
+    int des = stoi(destSlot);
+    Item ides = craft.getSlot(des);
+
+    // if(ides.isEmpty() && isrc.getCategory() == "NONTOOL"){
+    //     craft.setSlot(des, NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig()));
+    //     this->setSlot(src, NonTool(isrc.getName(), isrc.getQuantity()-itemQty, readItemConfig.getItemConfig()));
+    //     if(isrc.getQuantity()-itemQty <= 0){
+    //         discardAll(srcSlot);
+    //     }
+    // }
+
+    if (isrc.getCategory() == "TOOL"){
+        if(craft.getSlot(des).isEmpty()){
+            craft.setSlot(des,isrc);
+            this->discardAll(srcSlot);
+        }else return;
+        //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
+    }
+    if (isrc.getCategory() != "TOOL"){
+        if(craft.getSlot(des).isEmpty()){
+            craft.setSlot(des,NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig()));
+            this->discard(srcSlot ,itemQty);
+            if(isrc.getQuantity()-itemQty <= 0){
+                this->discardAll(srcSlot);
+            }
+        }
+        else{
+            if(isrc.getName() != ides.getName()){
+                return; //BEDA BARANG
+            }
+            if(isrc.getName() == ides.getName()){
+                if(itemQty + ides.getQuantity() > 64){
+                    int remainder = (isrc.getQuantity() + ides.getQuantity()) - 64;
+                    craft.setSlot(des, NonTool(isrc.getName(), 64,readItemConfig.getItemConfig()));
+                    this->slot[src / 9][src % 9].setQuantity(remainder);
+                }
+                if(itemQty + ides.getQuantity() <= 64){
+                    craft.setSlot(des, NonTool(isrc.getName(), ides.getQuantity()+itemQty,readItemConfig.getItemConfig()));
+                    this->slot[src / 9][src % 9].setQuantity(isrc.getQuantity() - itemQty);
+                    if(slot[src / 9][src % 9].getQuantity() <= 0){
+                        discardAll(srcSlot);
+                    }
+                }   
+            }
+        }
+    }
+
+// for(int i = 0; i < des.lengt)
+//TODO
+    
+
+    //TODO
+}
+
+void Inventory::moveItoI(string srcSlot, int itemQty, string destSlot)
 {
     //TODO
 }
 
-void Inventory::moveItoI(string srcSlot, string destSlot)
-{
-    //TODO
-}
-
-void Inventory::moveCtoI(string srcSlot, string destSlot)
+void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot)
 {
     //TODO
 }
@@ -185,6 +240,10 @@ void Inventory::moveCtoI(string srcSlot, string destSlot)
 Item Inventory::locateSlot(int slotKe){
     // return this->slot[slotKe / 9][(slotKe % 9)-1]; KALO PENGEN SLOT PERTAMA ITU i1 BUKAN i0
     return this->slot[slotKe / 9][slotKe % 9];
+}
+
+void Inventory::setSlot(int slotKe, Item item) {
+    this->slot[slotKe / 9][slotKe % 9] = item;
 }
 
 void Inventory::exportFile()
