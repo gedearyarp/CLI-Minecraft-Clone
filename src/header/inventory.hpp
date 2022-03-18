@@ -27,7 +27,7 @@ class Inventory {
         void moveCtoI(string srcSlot, string destSlot);
 
         void exportFile();
-
+        Slot locateSlot(int slotKe);
         int countItem(string itemName) const;
         bool isFull() const;
 };
