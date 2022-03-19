@@ -23,35 +23,6 @@ SingleRecipe::SingleRecipe(string filename, int Row, int Col, string ItemResultN
     this->ItemResultName = ItemResultName;
     this->ItemResultQuantity = ItemResultQuantity;
     this->ItemPlacement = ItemPlacement;
-
-    // vector<vector<Item>> temp;
-    // for (int i = 0; i < NRowRecipe; i++) {
-    //     vector<Item> temp1;
-    //     for(int j=0; j< NColRecipe; j++){
-    //         Item el = new Item(ItemPlacement[i][j]);
-    //         temp1.push_back(el);
-    //     }
-    //     temp.push_back(temp1);
-    // }
-
-    // this->ItemPlacement = temp;
-}
-
-int SingleRecipe::totalSlotNeededForCraft()
-{
-    int itemsNeeded = this->getNColRecipe() * this->getNRowRecipe();
-    int none = 0;
-    for (int i = 0; i < this->getNRowRecipe(); i++)
-    {
-        for (int j = 0; j < this->getNColRecipe(); j++)
-        {
-            // TODO
-            // if(this->ItemPlacement[i][j].getId() == -1){
-            //     none++;
-            // }
-        }
-    }
-    return itemsNeeded - none;
 }
 
 string SingleRecipe::getFilename()
@@ -103,18 +74,6 @@ SingleRecipe SingleRecipe::getItemMirroredInPlacement()
         }
     }
     mirroredRecipe.ItemPlacement = mirroredPlacement;
-
-    // // vector<vector<Item>> temp;
-    // // for (int i = 0; i < NRowRecipe; i++) {
-    // //     vector<Item> temp1;
-    // //     for(int j=0; j< NColRecipe; j++){
-    // //         SingleRecipe el = new Item(ItemPlacement[i][j]);
-    // //         temp1.push_back(el);
-    // //     }
-    // //     temp.push_back(temp1);
-    // // }
-
-    // mirroredRecipe.ItemPlacement = temp;
 
     return mirroredRecipe;
 }

@@ -107,7 +107,10 @@ bool CraftingTable::itemInTableSameAsRecipePlacement(vector<vector<string>> reci
     {
         for (int j = 0; j < 3; j++)
         {
-            return isBlockTheSame(recipePlacement[i][j], this->Table[i][j].getName());
+            if (!isBlockTheSame(recipePlacement[i][j], this->Table[i][j].getName()))
+            {
+                return false;
+            }
         }
     }
     return true;
@@ -132,9 +135,8 @@ void CraftingTable::craft(Inventory inventory)
     Item itemTemp;
     bool found = false;
     SingleRecipe resultRecipe;
-    // INFINITE LOOP ?! :<
     int count = 0;
-    while (!found)
+    while (!found && count < stringOfPossibleRecipe.size())
     {
         for (string possibleRecipe : stringOfPossibleRecipe)
         {
@@ -142,63 +144,89 @@ void CraftingTable::craft(Inventory inventory)
             {
                 if (possibleRecipe == recipe.getItemResultName())
                 {
-                    // TODO
                     // ini berarti "recipe" udah merupakan recipe yang ada di possibleRecipe
                     int recipeRow = recipe.getNRowRecipe();
                     int recipeCol = recipe.getNColRecipe();
 
+                    SingleRecipe mirrorRecipe = recipe.getItemMirroredInPlacement();
+                    bool sameMatrixAsOriginal = recipe.isOriginalRecipeSameAsMirroredRecipe(mirrorRecipe);
+
+                    vector<int> positions;
+
                     // 1x1
                     if (recipeRow == 1 && recipeCol == 1)
                     {
-                        for (int i = 1; i <= 9; i++)
-                        {
-                            vector<vector<string>> recipePlacement = makePossibleRecipePlacement1x1(recipe.getItemResultName(), i);
-                            found = this->itemInTableSameAsRecipePlacement(recipePlacement);
-                            resultRecipe = recipe;
-                        }
+                        positions = {1, 2, 3, 4, 5, 6, 7, 8, 9};
                     }
                     // 3x3
                     else if (recipeRow == 3 && recipeCol == 3)
                     {
-                        vector<vector<string>> recipePlacement = recipe.getItemPlacement();
-                        found = this->itemInTableSameAsRecipePlacement(recipePlacement);
-                        if (!found)
-                        {
-                            SingleRecipe mirrorRecipe = recipe.getItemMirroredInPlacement();
-                            bool sameMatrixAsOriginal = recipe.isOriginalRecipeSameAsMirroredRecipe(mirrorRecipe);
-                            if (sameMatrixAsOriginal)
-                            {
-                                found = this->itemInTableSameAsRecipePlacement(mirrorRecipe.getItemPlacement());
-                            }
-                        }
+                        positions = {1};
                     }
                     // 2x1
                     else if (recipeRow == 2 && recipeCol == 1)
                     {
+                        positions = {1, 2, 3, 4, 5, 6};
                     }
                     // 1x2
                     else if (recipeRow == 1 && recipeCol == 2)
                     {
+                        positions = {1, 2, 4, 5, 7, 8};
                     }
                     // 3x1
                     else if (recipeRow == 3 && recipeCol == 1)
                     {
+                        positions = {1, 2, 3, 4, 5, 6};
                     }
                     // 1x3
                     else if (recipeRow == 1 && recipeCol == 3)
                     {
+                        positions = {1, 2, 3, 4, 5, 6};
                     }
                     // 2x3
                     else if (recipeRow == 2 && recipeCol == 3)
                     {
+                        positions = {1, 4, 7};
                     }
                     // 3x2
                     else if (recipeRow == 3 && recipeCol == 2)
                     {
+                        positions = {1, 2, 3};
                     }
                     // 2x2
                     else if (recipeRow == 2 && recipeCol == 2)
                     {
+                        positions = {1, 2, 4, 5};
+                    }
+                    else
+                    {
+                        positions = {};
+                    }
+
+                    vector<vector<string>> recipePossiblePlacement;
+                    for (int position : positions)
+                    {
+                        recipePossiblePlacement = makeNewMatrix(position, recipe.getItemPlacement());
+                        if (itemInTableSameAsRecipePlacement(recipePossiblePlacement))
+                        {
+                            found = true;
+                            resultRecipe = recipe;
+                            break;
+                        }
+                    }
+
+                    if (!found && !sameMatrixAsOriginal)
+                    {
+                        for (int position : positions)
+                        {
+                            recipePossiblePlacement = makeNewMatrix(position, mirrorRecipe.getItemPlacement());
+                            if (itemInTableSameAsRecipePlacement(recipePossiblePlacement))
+                            {
+                                found = true;
+                                resultRecipe = mirrorRecipe;
+                                break;
+                            }
+                        }
                     }
                 }
             }
