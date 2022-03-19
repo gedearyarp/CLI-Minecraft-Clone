@@ -5,6 +5,7 @@
 #include "item.hpp"
 #include "itemConfig.hpp"
 #include "craft.hpp"
+#include "baseException.hpp"
 
 using namespace std;
 

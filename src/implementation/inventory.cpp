@@ -1,7 +1,6 @@
 #include <iostream>
 #include "../header/inventory.hpp"
 
-
 using namespace std;
 
 Inventory::Inventory()
@@ -28,8 +27,9 @@ void Inventory::showInventory()
 void Inventory::give(string itemName, int itemQty)
 {
     if (itemQty < 0){
-        return; //TODO THROW jumlah item tidak boleh negatif
+        throw new InvalidQuantityException(itemQty);
     }
+
     if (itemQty == 0) return;
     
     string configPath = "../../config";
@@ -79,16 +79,20 @@ void Inventory::discard(string slotId, int itemQty)
     int row = idNum/COLSLOT;
     int col = idNum%COLSLOT;
 
-    if (row < 0 || col < 0 || row >= ROWSLOT || col >= COLSLOT) {
-        return; //TODO THROW out of index slot
+    if (row < 0 || row >= ROWSLOT) {
+        throw new IndexOutOfRangeException(row);
+    }
+
+    if (col < 0 || col >= COLSLOT) {
+        throw new IndexOutOfRangeException(col);
     }
 
     if (slot[row][col].isNothing()){
-        return; //TODO THROW slot kosong
+        throw new EmptySlotException(row, col);
     }
 
     if (itemQty < 0){
-        return; //TODO THROW jumlah item tidak boleh negatif
+        throw new InvalidQuantityException(itemQty);
     }
     
     if (itemQty == 0) return;
@@ -96,7 +100,10 @@ void Inventory::discard(string slotId, int itemQty)
     if ((slot[row][col].getCategory() == "TOOL" && itemQty > 1) ||
         (slot[row][col].getCategory() == "NONTOOL" && itemQty > slot[row][col].getQuantity())
     ){
-        return; //TODO THROW jumlah item yang dibuang melebihi kapasitas
+        throw new DiscardQuantityException(
+            itemQty,
+            (slot[row][col].getCategory() == "TOOL") ? 1 : (slot[row][col].getQuantity())
+        );
     }
 
     if ((slot[row][col].getCategory() == "TOOL") || 
@@ -291,27 +298,30 @@ void Inventory::exportFile()
                 if(flag) qtyItem += line[i];
                 else idItem += line[i];
             }
-            
-            int id, qty;
 
+            if (!flag) {
+                throw new InvalidInventoryTextException(line);
+            }
+
+            int id, qty;
             try {
                 id = stoi(idItem);
                 qty = stoi(idItem);
             } catch(exception &err) {
-                return; //TODO THROW stoi error
-            } 
-
-            int id = stoi(idItem), qty = stoi(qtyItem);
+                throw new InvalidInventoryTextException(line);
+            }
             
             if (id < 1 || id > MAXINV) {
-                return; //TODO THROW out of index slot
-            }
-
-            if (qty < 1 || qty > MAXQTY) {
-                return; //TODO THROW quantity not valid
+                throw new IndexOutOfRangeException(id);
             }
 
             string ctg = readItemConfig.findCategoryById(id);
+            if ((ctg == "TOOL" && qty != 1) ||
+                (ctg == "NONTOOL" && (qty < 1 || qty > MAXQTY))
+            ) {
+                throw new InvalidQuantityException(qty);
+            }
+
             string itemName = readItemConfig.findNameById(id);
             Item newSlot;
 
@@ -323,7 +333,7 @@ void Inventory::exportFile()
 
         inv.close();
     } else {
-        return; //TODO THROW gak bisa buka file
+        throw new OpenFileErrorException(fileName);
     }
 }
 
