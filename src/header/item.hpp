@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 
+
 using namespace std;
 #define MAX_NONTOOL 64
 

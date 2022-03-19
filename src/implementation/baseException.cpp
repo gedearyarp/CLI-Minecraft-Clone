@@ -57,3 +57,21 @@ OpenFileErrorException::OpenFileErrorException(string fileName){
 void OpenFileErrorException::printMessage(){
     cout << "Error while opening \"" << fileName << "\"." << '\n';
 }
+
+InvalidNameException::InvalidNameException(string itemName)
+{
+    this->itemName = itemName;
+}
+
+void InvalidNameException::printMessage(){
+    cout << itemName << "is not a valid item name" << endl;
+}
+
+InvalidIDException::InvalidIDException(int id)
+{
+    this->id = id;
+}
+
+void InvalidIDException::printMessage(){
+    cout << id << "is not a valid item id" << endl;
+}

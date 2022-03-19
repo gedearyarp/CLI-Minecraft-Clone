@@ -2,6 +2,7 @@
 #define ITEMCONFIG_HPP
 
 #include "../header/item.hpp"
+#include "baseException.hpp"
 
 class ItemConfig
 {

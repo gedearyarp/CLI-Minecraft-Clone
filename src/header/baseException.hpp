@@ -59,4 +59,20 @@ public:
     void printMessage();
 };
 
+class InvalidNameException : public BaseException {
+private:
+    string itemName;
+public:
+    InvalidNameException(string itemName);
+    void printMessage();
+};
+
+class InvalidIDException : public BaseException {
+private:
+    int id;
+public:
+    InvalidIDException(int id);
+    void printMessage();
+};
+
 #endif
