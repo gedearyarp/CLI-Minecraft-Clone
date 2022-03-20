@@ -8,6 +8,7 @@
 #include "itemconfig.hpp"
 #include "recipes.hpp"
 #include "craft.hpp"
+#include "../implementation/readRecipe.cpp"
 
 using namespace std;
 int main()
@@ -15,7 +16,8 @@ int main()
     string configPath = "./config";
     string fileName = "item.txt";
     Inventory playerInventory = Inventory();
-
+    CraftingTable playerCraftingTable = CraftingTable();
+    
     // read item from config file
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
 
@@ -25,9 +27,15 @@ int main()
     // }
 
     // read recipes
-    readItemConfig.displayItems();
+    Recipes newRecipes = ReadRecipesFromConfigToRecipesClass();
+    vector<SingleRecipe> RecipesList = newRecipes.getRecipesList();
+    for (int i = 0; i < newRecipes.getTotalRecipe(); i++)
+    {
+        SingleRecipe single = RecipesList[i];
+        SingleRecipeVisualization(single);
+    }
+    map<int, vector<string>> newMapping = MapRecipesFromRecipesClass(newRecipes);
 
-    // TODO ADD READ RECIPE
 
     // sample interaction
     string command;
@@ -42,7 +50,7 @@ int main()
         }
         else if (command == "CRAFT")
         {
-            // TODO
+            playerCraftingTable.craft(playerInventory);
         }
         else if (command == "GIVE")
         {
@@ -56,9 +64,23 @@ int main()
             string slotSrc;
             int slotQty;
             string slotDest;
+            string I = "I";
+            string C = "C";
             // need to handle multiple destinations
             cin >> slotSrc >> slotQty >> slotDest;
-            // TODO
+            if (strstr(slotSrc.c_str(), I.c_str()) && strstr(slotDest.c_str(), I.c_str()))
+            {
+                //TODO
+            }
+            else if (strstr(slotSrc.c_str(), C.c_str()) && strstr(slotDest.c_str(), I.c_str()))
+            {
+                playerInventory.moveCtoI(slotSrc,slotQty,slotDest,playerCraftingTable);
+            }
+            else if (strstr(slotSrc.c_str(), I.c_str()) && strstr(slotDest.c_str(), C.c_str()))
+            {
+                playerInventory.moveItoC(slotSrc, slotQty, slotDest, playerCraftingTable);
+            }
+
         }
         else if (command == "SHOW")
         {
