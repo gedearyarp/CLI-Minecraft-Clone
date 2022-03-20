@@ -8,7 +8,7 @@
 #include <fstream>
 #include <cstring>
 #include <iostream>
-
+#include <dirent.h>
 using namespace std;
 
 void SingleRecipeVisualization(SingleRecipe single)
