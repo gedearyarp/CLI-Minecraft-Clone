@@ -75,4 +75,12 @@ public:
     void printMessage();
 };
 
+class InvalidDestinationSlot : public BaseException {
+private:
+    int id;
+public:
+    InvalidDestinationSlot(int id);
+    void printMessage();
+};
+
 #endif

@@ -75,3 +75,12 @@ InvalidIDException::InvalidIDException(int id)
 void InvalidIDException::printMessage(){
     cout << id << "is not a valid item id" << endl;
 }
+
+InvalidDestinationSlot::InvalidDestinationSlot(int id)
+{
+    this->id = id;
+}
+
+void InvalidDestinationSlot::printMessage(){
+    cout << id << "is not a valid destionation" << endl;
+}

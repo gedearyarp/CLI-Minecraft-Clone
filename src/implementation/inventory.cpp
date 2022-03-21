@@ -122,13 +122,43 @@ void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
 {
     ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
     int src = stoi(srcSlot);
+    int srow = src/COLSLOT;
+    int scol = src%COLSLOT;
     Item isrc = locateSlot(src);
 
     int ndes = destSlot.size();
     int des[ndes];
 
-    for(int i = 0; i < ndes; i++){
+    for(int i = 0; i < ndes; i++)
+    {
+        int drow = stoi(destSlot[i]) / COLSLOT;
+        int dcol = stoi(destSlot[i]) % COLSLOT;
+        if (drow < 0 || drow >= ROWSLOT) {
+            throw new IndexOutOfRangeException(drow);
+        }
+
+        if (dcol < 0 || dcol >= COLSLOT) {
+            throw new IndexOutOfRangeException(dcol);
+        }
         des[i] = stoi(destSlot[i]);
+    }
+
+    if (itemQty < 0){
+        throw new InvalidQuantityException(itemQty);
+    }
+    
+    if (itemQty == 0) return;
+
+    if (srow < 0 || srow >= ROWSLOT) {
+        throw new IndexOutOfRangeException(srow);
+    }
+
+    if (scol < 0 || scol >= COLSLOT) {
+        throw new IndexOutOfRangeException(scol);
+    }
+
+    if (slot[srow][scol].isNothing()){
+        throw new EmptySlotException(srow, scol);
     }
 
     for(int i = 0; i < ndes; i++){
@@ -138,6 +168,7 @@ void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
                 slot[des[i] / COLSLOT][des[i] % COLSLOT] = Tool(isrc.getName(),isrc.getDurability(), readItemConfig.getItemConfig());
                 discard(srcSlot,isrc.getQuantity());
             }
+            throw new InvalidDestinationSlot(des[i]);
             //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
         }
         if (isrc.getCategory() != "TOOL"){
@@ -175,19 +206,52 @@ void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
 
 void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingTable craft)
 {
+    
     ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
     int src = stoi(srcSlot);
+    int srow = src/COLSLOT;
+    int scol = src%COLSLOT;
     Item isrc = locateSlot(src);
     int des = stoi(destSlot);
+    int drow = des/3;
+    int dcol = des%3;
     Item ides = craft.getSlot(des);
 
+    if (itemQty < 0){
+        throw new InvalidQuantityException(itemQty);
+    }
+    
+    if (itemQty == 0) return;
+
+    if (srow < 0 || srow >= ROWSLOT) {
+        throw new IndexOutOfRangeException(srow);
+    }
+
+    if (scol < 0 || scol >= COLSLOT) {
+        throw new IndexOutOfRangeException(scol);
+    }
+
+    if (drow < 0 || drow >= 3) {
+        throw new IndexOutOfRangeException(drow);
+    }
+
+    if (dcol < 0 || dcol >= 3) {
+        throw new IndexOutOfRangeException(dcol);
+    }
+
+    if (slot[srow][scol].isNothing()){
+        throw new EmptySlotException(srow, scol);
+    }
 
     if (isrc.getCategory() == "TOOL"){
         if(craft.getSlot(des).isEmpty()){
             craft.setSlot(des,isrc);
             this->discardAll(srcSlot);
         }
-        //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
+        else {
+            throw new InvalidDestinationSlot(des);
+            //Destinasi tool harus kosong
+        }
     }
     if (isrc.getCategory() != "TOOL"){
         if(craft.getSlot(des).isEmpty()){
@@ -199,7 +263,8 @@ void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingT
         }
         else{
             if(isrc.getName() != ides.getName()){
-                return; //BEDA BARANG
+                throw new InvalidDestinationSlot(des);
+                //BEDA BARANG
             }
             if(isrc.getName() == ides.getName()){
                 if(itemQty + ides.getQuantity() > MAXQTY){
@@ -223,17 +288,49 @@ void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingT
 {
     ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
     int src = stoi(srcSlot);
+    int srow = src/3;
+    int scol = src%3;
     Item isrc = craft.getSlot(src);
     int des = stoi(destSlot);
+    int drow = des/COLSLOT;
+    int dcol = des%COLSLOT;
     Item ides = locateSlot(des);
 
+    if (itemQty < 0){
+        throw new InvalidQuantityException(itemQty);
+    }
+    
+    if (itemQty == 0) return;
+    
+    if (srow < 0 || srow >= 3) {
+        throw new IndexOutOfRangeException(srow);
+    }
+
+    if (scol < 0 || scol >= 3) {
+        throw new IndexOutOfRangeException(scol);
+    }
+
+    if (drow < 0 || drow >= ROWSLOT) {
+        throw new IndexOutOfRangeException(drow);
+    }
+
+    if (dcol < 0 || dcol >= COLSLOT) {
+        throw new IndexOutOfRangeException(dcol);
+    }
+
+    if (craft.getSlot(src).isNothing()){
+        throw new EmptySlotException(srow, scol);
+    }
 
     if (isrc.getCategory() == "TOOL"){
         if(ides.isEmpty()){
             craft.setSlot(des,Item());
             this->slot[src / COLSLOT][src % COLSLOT] = Tool(isrc.getName(), isrc.getDurability(),readItemConfig.getItemConfig());
         }
-        //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
+        else {
+            throw new InvalidDestinationSlot(des);
+            //Destinasi tool harus kosong
+        }
     }
     if (isrc.getCategory() != "TOOL"){
         if(ides.isEmpty()){
@@ -248,7 +345,7 @@ void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingT
         }
         else{
             if(isrc.getName() != ides.getName()){
-                return; //BEDA BARANG
+                throw new InvalidDestinationSlot(des);
             }
             if(isrc.getName() == ides.getName()){
                 if(itemQty + ides.getQuantity() > MAXQTY){
