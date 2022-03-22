@@ -1,5 +1,4 @@
 #include "../header/item.hpp"
-#include "../header/itemConfig.hpp"
 #include <iostream>
 
 using namespace std;
@@ -18,35 +17,6 @@ Item::Item(int id, string name, string type, string category)
     this->name = name;
     this->type = type;
     this->category = category;
-}
-
-Item::Item(string name, vector<Item> config)
-{
-    bool found = false;
-    int i = 0;
-    while (!found && i < config.size())
-    {
-        if (config[i].name == name)
-            found = true;
-        else
-            i++;
-    } // TODO THROW invalid item name
-    if (found)
-    {
-        this->id = config[i].id;
-        this->name = config[i].name;
-        this->type = config[i].type;
-        this->category = config[i].category;
-    }
-    else
-    {
-        {
-            this->id = -1;
-            this->name = "-";
-            this->type = "-";
-            this->category = "-";
-        }
-    }
 }
 
 int Item::getId() const
@@ -72,54 +42,6 @@ string Item::getCategory() const
 bool Item::isNothing() const
 {
     return (id == -1);
-}
-
-bool isType(string name)
-{
-    ItemConfig readConfig = ItemConfig("./config", "item.txt");
-    vector<Item> config = readConfig.getItemConfig();
-    int i = 0;
-    bool found = false;
-    while (!found && i < config.size())
-    {
-        if (config[i].getType() == name)
-        {
-            found = true;
-        }
-        i++;
-    }
-    return found;
-}
-
-vector<string> listOfItemWithType(string itemType)
-{
-    ItemConfig readConfig = ItemConfig("./config", "item.txt");
-    vector<Item> config = readConfig.getItemConfig();
-    vector<string> items;
-    for (int i = 0; i < config.size(); i++)
-    {
-        if (config[i].getType() == itemType)
-        {
-            items.push_back(config[i].getName());
-        }
-    }
-    return items;
-}
-
-bool isItemChildofParent(string itemNameChild, string itemNameParent)
-{
-    vector<string> items = listOfItemWithType(itemNameParent);
-    int i = 0;
-    bool found = false;
-    while (!found && i < items.size())
-    {
-        if (items.at(i) == itemNameChild)
-        {
-            found = true;
-        }
-        i++;
-    }
-    return found;
 }
 
 int Item::getQuantity() const { return -1; }
@@ -148,14 +70,9 @@ Tool::Tool(int id, string name, int durability) : Item(id, name, "-", "TOOL")
     this->durability = durability;
 }
 
-Tool::Tool(string name, vector<Item> config) : Item(name, config)
+Tool::Tool(int id, string name) : Item(id, name, "-", "TOOL")
 {
     this->durability = 10;
-}
-
-Tool::Tool(string name, int durability, vector<Item> config) : Item(name, config)
-{
-    this->durability = durability;
 }
 
 int Tool::getDurability() const
@@ -193,11 +110,6 @@ NonTool::NonTool() : Item(0, "-", "-", "-")
 }
 
 NonTool::NonTool(int id, string name, string type, int quantity) : Item(id, name, type, "NONTOOL")
-{
-    this->quantity = quantity;
-}
-
-NonTool::NonTool(string name, int quantity, vector<Item> config) : Item(name, config)
 {
     this->quantity = quantity;
 }

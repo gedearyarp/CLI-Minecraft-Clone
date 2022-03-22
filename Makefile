@@ -10,7 +10,9 @@ all: compile test check
 
 # Compile all cpp files except check.cpp
 compile:
-	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS)
+	g++ ./src/implementation/baseException.cpp ./src/implementation/craft.cpp \
+	./src/implementation/inventory.cpp ./src/implementation/item.cpp ./src/implementation/itemConfig.cpp \
+	./src/implementation/recipes.cpp ./src/implementation/move.cpp -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS)
 
 # Test
 test: $(TC_FOLDER)/*.$(EXT_IN) $(EXECUTABLE_FILENAME)

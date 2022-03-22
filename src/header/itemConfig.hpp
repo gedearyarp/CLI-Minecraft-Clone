@@ -1,7 +1,7 @@
 #ifndef ITEMCONFIG_HPP
 #define ITEMCONFIG_HPP
 
-#include "../header/item.hpp"
+#include "item.hpp"
 #include "baseException.hpp"
 
 class ItemConfig
@@ -21,6 +21,8 @@ public:
     string findTypeById(int idItem) const;
     string findCategoryById(int idItem) const;
     void displayItems() const;
+    bool isType(string name); // buat ngecek apakah name merupakan nama type yang bakal punya item turunan
+    vector<string> listOfItemWithType(string itemType); // balikin semua item dengan type itemType
 };
 
 #endif

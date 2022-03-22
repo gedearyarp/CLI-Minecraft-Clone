@@ -5,7 +5,6 @@
 #include <vector>
 #include <algorithm>
 
-
 using namespace std;
 #define MAX_NONTOOL 64
 
@@ -19,18 +18,15 @@ protected:
 public:
     Item();
     Item(int id, string name, string type, string category);
-    Item(string name, vector<Item> config);
 
     int getId() const;
     string getName() const;
     string getType() const;
     string getCategory() const;
-
-    bool isNothing() const;
+bool isNothing() const;
     bool isType(string name); // buat ngecek apakah name merupakan nama type yang bakal punya item turunan
-    bool isItemChildofParent(string itemName);
 
-    vector<string> listOfItemWithType(string itemType); // balikin semua item dengan type itemType
+    
 
     virtual int getQuantity() const;
     virtual int getDurability() const;
@@ -52,8 +48,7 @@ private:
 public:
     Tool();
     Tool(int id, string name, int durability);
-    Tool(string name, vector<Item> config);
-    Tool(string name, int durability, vector<Item> config);
+    Tool(int id, string name);
 
     int getDurability() const;
     void setDurability(int durability);
@@ -71,7 +66,6 @@ private:
 public:
     NonTool();
     NonTool(int id, string name, string type, int quantity);
-    NonTool(string name, int quantity, vector<Item> config);
 
     bool isFull() const;
     bool isEmpty() const;

@@ -2,10 +2,7 @@
 #define INVENTORY_HPP
 
 #include <bits/stdc++.h>
-#include "item.hpp"
-#include "itemConfig.hpp"
-#include "craft.hpp"
-#include "baseException.hpp"
+#include "itemConfig.hpp" 
 
 using namespace std;
 
@@ -27,10 +24,6 @@ class Inventory {
         void discard(string slotId, int itemQty);
         void discardAll(string slotId);
 
-        void moveItoI(string srcSlot, int itemQty, vector<string> destSlot);
-        void moveItoC(string srcSlot, int itemQty, string destSlot, CraftingTable craft);
-        void moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingTable craft);
-        
         void exportFile();
 
         Item locateSlot(int slotKe);

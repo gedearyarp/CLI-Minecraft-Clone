@@ -3,12 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "inventory.hpp"
-#include "item.hpp"
-#include "itemconfig.hpp"
-#include "recipes.hpp"
-#include "craft.hpp"
-#include "../implementation/readRecipe.cpp"
+#include "./src/header/move.hpp"
+// #include "./src/implementation/readRecipe.cpp"
 
 using namespace std;
 int main()
@@ -17,26 +13,9 @@ int main()
     string fileName = "item.txt";
     Inventory playerInventory = Inventory();
     CraftingTable playerCraftingTable = CraftingTable();
-    
     // read item from config file
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
-
-    // for (int i = 0; i < readItemConfig.getItemConfig().size(); i++){
-    //   readItemConfig.getItemConfig()[i].itemInfo();
-    //   cout << endl;
-    // }
-
-    // read recipes
-    Recipes newRecipes = ReadRecipesFromConfigToRecipesClass();
-    vector<SingleRecipe> RecipesList = newRecipes.getRecipesList();
-    for (int i = 0; i < newRecipes.getTotalRecipe(); i++)
-    {
-        SingleRecipe single = RecipesList[i];
-        SingleRecipeVisualization(single);
-    }
-    map<int, vector<string>> newMapping = MapRecipesFromRecipesClass(newRecipes);
-
-
+    
     // sample interaction
     string command;
     while (cin >> command)
@@ -46,11 +25,14 @@ int main()
             string outputPath;
             cin >> outputPath;
             ofstream outputFile(outputPath);
-            // TODO
+            //TODO, fungsi exportfile harusnya nerima parameter path tempat export, terus ngelist semua item yang ada di inventory
         }
         else if (command == "CRAFT")
         {
-            playerCraftingTable.craft(playerInventory);
+            map<string, int> result = playerCraftingTable.craft();
+            for (auto it = result.begin(); it != result.end(); ++it) {
+                playerInventory.give(it->first, it->second);
+            }
         }
         else if (command == "GIVE")
         {
@@ -66,20 +48,36 @@ int main()
             string slotDest;
             string I = "I";
             string C = "C";
-            // need to handle multiple destinations
-            cin >> slotSrc >> slotQty >> slotDest;
+            
+            Move move = Move();
+            cin >> slotSrc >> slotQty;
+            getline(cin, slotDest);
             if (strstr(slotSrc.c_str(), I.c_str()) && strstr(slotDest.c_str(), I.c_str()))
             {
-                //TODO
+                vector<string> slotDests;
+                slotDests.push_back(slotDest);
+                move.moveItoI(playerInventory,slotSrc,slotQty,slotDest);
+                //TODO move i to i, gangerti kenapa slotDest vector of string
             }
             else if (strstr(slotSrc.c_str(), C.c_str()) && strstr(slotDest.c_str(), I.c_str()))
             {
-                playerInventory.moveCtoI(slotSrc,slotQty,slotDest,playerCraftingTable);
+                move.moveCtoI(playerInventory,slotSrc,slotQty,slotDest,playerCraftingTable);
             }
             else if (strstr(slotSrc.c_str(), I.c_str()) && strstr(slotDest.c_str(), C.c_str()))
             {
-                playerInventory.moveItoC(slotSrc, slotQty, slotDest, playerCraftingTable);
-            }
+                int spaces = 0;
+                vector<string> destVector;
+                for (int i = 0; i < slotDest.size(); i++){
+                    if (slotDest[i] == ' '){
+                        spaces ++;
+                    }
+                    else{
+                        destVector[spaces] += slotDest[i]; 
+                    }
+                }
+                for (int i = 0; i < destVector.size(); i++){
+                    move.moveItoC(playerInventory, slotSrc, slotQty, destVector[i], playerCraftingTable);
+                }
 
         }
         else if (command == "SHOW")
@@ -105,4 +103,5 @@ int main()
         }
     }
     return 0;
+}
 }

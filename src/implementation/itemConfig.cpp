@@ -118,3 +118,31 @@ void ItemConfig::displayItems() const
         this->configs.at(i).itemInfo();
     }
 }
+
+bool ItemConfig::isType(string name)
+{
+    int i = 0;
+    bool found = false;
+    while (!found && i < this->configs.size())
+    {
+        if (this->configs[i].getType() == name)
+        {
+            found = true;
+        }
+        i++;
+    }
+    return found;
+}
+
+vector<string> ItemConfig::listOfItemWithType(string itemType)
+{
+    vector<string> items;
+    for (int i = 0; i < this->configs.size(); i++)
+    {
+        if (this->configs[i].getType() == itemType)
+        {
+            items.push_back(this->configs[i].getName());
+        }
+    }
+    return items;
+}

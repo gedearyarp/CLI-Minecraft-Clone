@@ -1,4 +1,3 @@
-#include <iostream>
 #include "../header/inventory.hpp"
 
 using namespace std;
@@ -37,7 +36,7 @@ void Inventory::give(string itemName, int itemQty)
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
     string ctg = readItemConfig.findCategoryByName(itemName);
 
-    Item thisItem = Item(itemName,readItemConfig.getItemConfig()); 
+    Item thisItem = Item(readItemConfig.findIdByName(itemName),itemName,readItemConfig.findTypeByName(itemName),readItemConfig.findCategoryByName(itemName)); 
 
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){          
@@ -55,14 +54,14 @@ void Inventory::give(string itemName, int itemQty)
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){
             if(ctg == "NONTOOL" && slot[i][j].isEmpty()){
                 int addQty = min(MAXQTY, itemQty);
-                slot[i][j] = NonTool(itemName, addQty, readItemConfig.getItemConfig());
+                slot[i][j] = NonTool(readItemConfig.findIdByName(itemName),itemName, readItemConfig.findTypeByName(itemName), addQty);
                 
                 this->slotUsed++;
                 itemQty -= addQty;
             } 
 
             if(ctg == "TOOL" && slot[i][j].isEmpty()){
-                slot[i][j] = Tool(itemName, readItemConfig.getItemConfig());
+                slot[i][j] = Tool(readItemConfig.findIdByName(itemName),itemName);
                 
                 this->slotUsed++;
                 itemQty--;
@@ -116,253 +115,6 @@ void Inventory::discard(string slotId, int itemQty)
 void Inventory::discardAll(string slotId){
     int slotKe = stoi(slotId);
     slot[slotKe / COLSLOT][slotKe % COLSLOT] = Item();
-}
-
-void Inventory::moveItoI(string srcSlot, int itemQty, vector<string> destSlot)
-{
-    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
-    int src = stoi(srcSlot);
-    int srow = src/COLSLOT;
-    int scol = src%COLSLOT;
-    Item isrc = locateSlot(src);
-
-    int ndes = destSlot.size();
-    int des[ndes];
-
-    for(int i = 0; i < ndes; i++)
-    {
-        int drow = stoi(destSlot[i]) / COLSLOT;
-        int dcol = stoi(destSlot[i]) % COLSLOT;
-        if (drow < 0 || drow >= ROWSLOT) {
-            throw new IndexOutOfRangeException(drow);
-        }
-
-        if (dcol < 0 || dcol >= COLSLOT) {
-            throw new IndexOutOfRangeException(dcol);
-        }
-        des[i] = stoi(destSlot[i]);
-    }
-
-    if (itemQty < 0){
-        throw new InvalidQuantityException(itemQty);
-    }
-    
-    if (itemQty == 0) return;
-
-    if (srow < 0 || srow >= ROWSLOT) {
-        throw new IndexOutOfRangeException(srow);
-    }
-
-    if (scol < 0 || scol >= COLSLOT) {
-        throw new IndexOutOfRangeException(scol);
-    }
-
-    if (slot[srow][scol].isNothing()){
-        throw new EmptySlotException(srow, scol);
-    }
-
-    for(int i = 0; i < ndes; i++){
-        if (isrc.getCategory() == "TOOL"){
-            Item slotdes = locateSlot(des[i]);
-            if(slotdes.isEmpty()){
-                slot[des[i] / COLSLOT][des[i] % COLSLOT] = Tool(isrc.getName(),isrc.getDurability(), readItemConfig.getItemConfig());
-                discard(srcSlot,isrc.getQuantity());
-            }
-            throw new InvalidDestinationSlot(des[i]);
-            //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
-        }
-        if (isrc.getCategory() != "TOOL"){
-            Item slotdes = locateSlot(des[i]);
-
-            if(slotdes.isEmpty()){
-                slot[des[i] / COLSLOT][des[i] % COLSLOT] = NonTool(isrc.getName(),isrc.getQuantity(), readItemConfig.getItemConfig());
-                discard(srcSlot ,isrc.getQuantity());
-            }
-            else{
-                if(isrc.getName() != slotdes.getName()){
-                    return; //BEDA BARANG
-                }
-                if(isrc.getName() == slotdes.getName()){
-                    if(itemQty + slotdes.getQuantity() > MAXQTY){
-                        int remainder = (isrc.getQuantity() + slotdes.getQuantity()) - MAXQTY;
-                        slot[des[i] / COLSLOT][des[i] % COLSLOT].setQuantity(MAXQTY);
-                        slot[src / COLSLOT][src % COLSLOT].setQuantity(remainder);
-                        if(slot[src / COLSLOT][src % COLSLOT].getQuantity() <= 0){
-                            discardAll(srcSlot);
-                        }
-                    }
-                    if(itemQty + slotdes.getQuantity() <= MAXQTY){
-                        slot[des[i] / COLSLOT][des[i] % COLSLOT].setQuantity(slotdes.getQuantity()+itemQty);
-                        slot[src / COLSLOT][src % COLSLOT].setQuantity(isrc.getQuantity() - itemQty);
-                        if(slot[src / COLSLOT][src % COLSLOT].getQuantity() <= 0){
-                            discardAll(srcSlot);
-                        }
-                    }   
-                }
-            }
-        }
-    }
-}
-
-void Inventory::moveItoC(string srcSlot, int itemQty, string destSlot, CraftingTable craft)
-{
-    
-    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
-    int src = stoi(srcSlot);
-    int srow = src/COLSLOT;
-    int scol = src%COLSLOT;
-    Item isrc = locateSlot(src);
-    int des = stoi(destSlot);
-    int drow = des/3;
-    int dcol = des%3;
-    Item ides = craft.getSlot(des);
-
-    if (itemQty < 0){
-        throw new InvalidQuantityException(itemQty);
-    }
-    
-    if (itemQty == 0) return;
-
-    if (srow < 0 || srow >= ROWSLOT) {
-        throw new IndexOutOfRangeException(srow);
-    }
-
-    if (scol < 0 || scol >= COLSLOT) {
-        throw new IndexOutOfRangeException(scol);
-    }
-
-    if (drow < 0 || drow >= 3) {
-        throw new IndexOutOfRangeException(drow);
-    }
-
-    if (dcol < 0 || dcol >= 3) {
-        throw new IndexOutOfRangeException(dcol);
-    }
-
-    if (slot[srow][scol].isNothing()){
-        throw new EmptySlotException(srow, scol);
-    }
-
-    if (isrc.getCategory() == "TOOL"){
-        if(craft.getSlot(des).isEmpty()){
-            craft.setSlot(des,isrc);
-            this->discardAll(srcSlot);
-        }
-        else {
-            throw new InvalidDestinationSlot(des);
-            //Destinasi tool harus kosong
-        }
-    }
-    if (isrc.getCategory() != "TOOL"){
-        if(craft.getSlot(des).isEmpty()){
-            craft.setSlot(des,NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig()));
-            this->discard(srcSlot ,itemQty);
-            if(isrc.getQuantity()-itemQty <= 0){
-                this->discardAll(srcSlot);
-            }
-        }
-        else{
-            if(isrc.getName() != ides.getName()){
-                throw new InvalidDestinationSlot(des);
-                //BEDA BARANG
-            }
-            if(isrc.getName() == ides.getName()){
-                if(itemQty + ides.getQuantity() > MAXQTY){
-                    int remainder = (isrc.getQuantity() + ides.getQuantity()) - MAXQTY;
-                    craft.setSlot(des, NonTool(isrc.getName(), MAXQTY,readItemConfig.getItemConfig()));
-                    this->slot[src / COLSLOT][src % COLSLOT].setQuantity(remainder);
-                }
-                if(itemQty + ides.getQuantity() <= MAXQTY){
-                    craft.setSlot(des, NonTool(isrc.getName(), ides.getQuantity()+itemQty,readItemConfig.getItemConfig()));
-                    this->slot[src / COLSLOT][src % COLSLOT].setQuantity(isrc.getQuantity() - itemQty);
-                    if(slot[src / COLSLOT][src % COLSLOT].getQuantity() <= 0){
-                        this->discardAll(srcSlot);
-                    }
-                }   
-            }
-        }
-    }
-}
-
-void Inventory::moveCtoI(string srcSlot, int itemQty, string destSlot, CraftingTable craft)
-{
-    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
-    int src = stoi(srcSlot);
-    int srow = src/3;
-    int scol = src%3;
-    Item isrc = craft.getSlot(src);
-    int des = stoi(destSlot);
-    int drow = des/COLSLOT;
-    int dcol = des%COLSLOT;
-    Item ides = locateSlot(des);
-
-    if (itemQty < 0){
-        throw new InvalidQuantityException(itemQty);
-    }
-    
-    if (itemQty == 0) return;
-    
-    if (srow < 0 || srow >= 3) {
-        throw new IndexOutOfRangeException(srow);
-    }
-
-    if (scol < 0 || scol >= 3) {
-        throw new IndexOutOfRangeException(scol);
-    }
-
-    if (drow < 0 || drow >= ROWSLOT) {
-        throw new IndexOutOfRangeException(drow);
-    }
-
-    if (dcol < 0 || dcol >= COLSLOT) {
-        throw new IndexOutOfRangeException(dcol);
-    }
-
-    if (craft.getSlot(src).isNothing()){
-        throw new EmptySlotException(srow, scol);
-    }
-
-    if (isrc.getCategory() == "TOOL"){
-        if(ides.isEmpty()){
-            craft.setSlot(des,Item());
-            this->slot[src / COLSLOT][src % COLSLOT] = Tool(isrc.getName(), isrc.getDurability(),readItemConfig.getItemConfig());
-        }
-        else {
-            throw new InvalidDestinationSlot(des);
-            //Destinasi tool harus kosong
-        }
-    }
-    if (isrc.getCategory() != "TOOL"){
-        if(ides.isEmpty()){
-            craft.setSlot(des,NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig()));
-            this->discard(srcSlot ,itemQty);
-
-            craft.setSlot(src,NonTool(isrc.getName(), isrc.getQuantity() - itemQty, readItemConfig.getItemConfig()));
-            this->slot[src / COLSLOT][src % COLSLOT] = NonTool(isrc.getName(), itemQty, readItemConfig.getItemConfig());
-            if(isrc.getQuantity()-itemQty <= 0){
-                craft.setSlot(src, Item());
-            }
-        }
-        else{
-            if(isrc.getName() != ides.getName()){
-                throw new InvalidDestinationSlot(des);
-            }
-            if(isrc.getName() == ides.getName()){
-                if(itemQty + ides.getQuantity() > MAXQTY){
-                    int remainder = (isrc.getQuantity() + ides.getQuantity()) - MAXQTY;
-                    craft.setSlot(src, NonTool(isrc.getName(), remainder ,readItemConfig.getItemConfig()));
-                    this->slot[src / COLSLOT][src % COLSLOT].setQuantity(MAXQTY);
-                }
-                if(itemQty + ides.getQuantity() <= MAXQTY){
-                    craft.setSlot(src, NonTool(isrc.getName(), isrc.getQuantity()-itemQty,readItemConfig.getItemConfig()));
-                    this->slot[des / COLSLOT][des % COLSLOT].setQuantity(ides.getQuantity() + itemQty);
-                    if(slot[src / COLSLOT][src % COLSLOT].getQuantity() <= 0){
-                        this->discardAll(srcSlot);
-                    }
-                }   
-            }
-        }
-    }
 }
 
 void Inventory::exportFile()
@@ -422,8 +174,8 @@ void Inventory::exportFile()
             string itemName = readItemConfig.findNameById(id);
             Item newSlot;
 
-            if (ctg == "TOOL") newSlot = Tool(itemName, readItemConfig.getItemConfig());
-            else newSlot = NonTool(itemName, qty, readItemConfig.getItemConfig());
+            if (ctg == "TOOL") newSlot = Tool(readItemConfig.findIdByName(itemName),itemName);
+            else newSlot = NonTool(readItemConfig.findIdByName(itemName),itemName, readItemConfig.findTypeByName(itemName), qty);
 
             setSlot(idx, newSlot);
         }

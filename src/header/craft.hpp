@@ -1,9 +1,8 @@
 #ifndef CRAFT_HPP
 #define CRAFT_HPP
 
-#include "item.hpp"
+#include "itemConfig.hpp"
 #include "recipes.hpp"
-#include "inventory.hpp"
 
 // STL
 #include <string>
@@ -32,7 +31,7 @@ class CraftingTable {
         bool itemInTableSameAsRecipePlacement(vector<vector<string>> recipePlacement);
         
         // CRAFT -> di implementasi, panggil GIVE
-        void craft(Inventory inventory);
+        map<string,int> craft();
 };
 
 #endif

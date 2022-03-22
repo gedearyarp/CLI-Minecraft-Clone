@@ -1,5 +1,4 @@
 #include "../header/craft.hpp"
-#include "../header/item.hpp"
 
 #include "readRecipe.cpp"
 #include "possiblePlacement.cpp"
@@ -10,7 +9,7 @@ using namespace std;
 
 bool isBlockTheSame(string wordInRecipe, string wordInTable)
 {
-    Item temp;
+    ItemConfig temp = ItemConfig("../../config", "item.txt");
     bool isWordAType = temp.isType(wordInRecipe);
     if (!isWordAType)
     {
@@ -116,7 +115,7 @@ bool CraftingTable::itemInTableSameAsRecipePlacement(vector<vector<string>> reci
     return true;
 };
 
-void CraftingTable::craft(Inventory inventory)
+map<string,int> CraftingTable::craft()
 {
     int nItem = this->countItemOnTable();
     if (nItem == 0)
@@ -238,11 +237,13 @@ void CraftingTable::craft(Inventory inventory)
     {
         cout << "Crafting success" << endl;
         cout << "Created : " << resultRecipe.getItemResultQuantity() << " " << resultRecipe.getItemResultName() << endl;
-        inventory.give(resultRecipe.getItemResultName(), resultRecipe.getItemResultQuantity());
         this->clearTable();
+        return map<string,int> { {resultRecipe.getItemResultName(), resultRecipe.getItemResultQuantity()} };
     }
     else
     {
         cout << "No recipe match with item on crafting table" << endl;
+        return map<string,int> { {"-", 0} };
+
     }
 }
