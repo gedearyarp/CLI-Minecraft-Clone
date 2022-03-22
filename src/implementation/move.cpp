@@ -5,7 +5,7 @@ using namespace std;
 
 void Move::moveItoI(Inventory inv, string srcSlot, int itemQty, string destSlot)
 {
-    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
+    ItemConfig readItemConfig = ItemConfig("./config","item.txt");
     int src = stoi(srcSlot);
     int srow = src/COLSLOT;
     int scol = src%COLSLOT;
@@ -83,7 +83,7 @@ void Move::moveItoI(Inventory inv, string srcSlot, int itemQty, string destSlot)
 
 void Move::moveItoC(Inventory inv, string srcSlot, int itemQty, string destSlot, CraftingTable craft)
 {
-    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
+    ItemConfig readItemConfig = ItemConfig("./config","item.txt");
     int src = stoi(srcSlot);
     int srow = src/COLSLOT;
     int scol = src%COLSLOT;
@@ -162,7 +162,7 @@ void Move::moveItoC(Inventory inv, string srcSlot, int itemQty, string destSlot,
 
 void Move::moveCtoI(Inventory inv, string srcSlot, int itemQty, string destSlot, CraftingTable craft)
 {
-    ItemConfig readItemConfig = ItemConfig("../../config","item.txt");
+    ItemConfig readItemConfig = ItemConfig("./config","item.txt");
     int src = stoi(srcSlot);
     int srow = src/3;
     int scol = src%3;

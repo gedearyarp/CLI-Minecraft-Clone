@@ -9,7 +9,7 @@ using namespace std;
 
 bool isBlockTheSame(string wordInRecipe, string wordInTable)
 {
-    ItemConfig temp = ItemConfig("../../config", "item.txt");
+    ItemConfig temp = ItemConfig("./config", "item.txt");
     bool isWordAType = temp.isType(wordInRecipe);
     if (!isWordAType)
     {
@@ -80,23 +80,23 @@ void CraftingTable::setSlot(int slotKe, Item item)
 
 void CraftingTable::showCraftingTable()
 {
-    cout << "Crafting Table" << endl;
+    cout << "Crafting Table: " << endl;
     int idx = 0;
     for (int i = 0; i < 3; i++)
     {
-        cout << "[ C", idx, ": ";
+        cout << "[ ", idx, ": ";
         for (int j = 0; j < 3; j++)
         {
             string name = Table[i][j].getName();
             int quantity = Table[i][j].getQuantity();
-            cout << name << " - " << quantity << " ]";
+            cout << "[C " << name << " - " << quantity << " ]";
             if (j != 2)
             {
                 cout << " ";
             }
             idx++;
         }
-        cout << endl;
+        cout << " ]" << endl;
     }
 }
 
@@ -121,9 +121,10 @@ map<string,int> CraftingTable::craft()
     if (nItem == 0)
     {
         cout << "No item on table" << endl;
+        return map<string,int>();
     }
 
-    ItemConfig readItemConfigs = ItemConfig("../../config", "item.txt");
+    ItemConfig readItemConfigs = ItemConfig("./config", "item.txt");
     map<int, vector<string>> mapOfRecipe = MapRecipesFromRecipesClass(this->recipes);
 
     auto it = mapOfRecipe.find(nItem);

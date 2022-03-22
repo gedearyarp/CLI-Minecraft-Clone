@@ -31,7 +31,7 @@ void Inventory::give(string itemName, int itemQty)
 
     if (itemQty == 0) return;
     
-    string configPath = "../../config";
+    string configPath = "./config";
     string fileName = "item.txt";
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
     string ctg = readItemConfig.findCategoryByName(itemName);
@@ -119,11 +119,11 @@ void Inventory::discardAll(string slotId){
 
 void Inventory::exportFile()
 {
-    string inventoryPath = "../../config/inventory/inventory.txt";
+    string inventoryPath = "./config/inventory/inventory.txt";
     ifstream inv(inventoryPath);
     string line;
 
-    string configPath = "../../config";
+    string configPath = "./config";
     string fileName = "item.txt";
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
 

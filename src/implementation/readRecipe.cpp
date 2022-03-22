@@ -88,7 +88,7 @@ Recipes ReadRecipesFromConfigToRecipesClass()
 {
     Recipes newRecipes;
     struct dirent **namelist;
-    int n = scandir("../../config/recipe", &namelist, NULL, alphasort);
+    int n = scandir("./config/recipe", &namelist, NULL, alphasort);
     if (n < 0)
         perror("scandir");
     else
@@ -99,7 +99,7 @@ Recipes ReadRecipesFromConfigToRecipesClass()
             string filename = namelist[n - 1]->d_name;
             if (filename != "." && filename != "..")
             {
-                ifstream file("../../config/recipe/" + filename);
+                ifstream file("./config/recipe/" + filename);
 
                 // inizialize all config for single recipe
                 SingleRecipe newSingleRecipe;
@@ -109,7 +109,7 @@ Recipes ReadRecipesFromConfigToRecipesClass()
                 string itemResultName = "";
                 string itemResultQuantity = "0";
                 vector<vector<string>> itemPlacement;
-                ItemConfig readItemConfigs = ItemConfig("../../config","item.txt"); // config buat item
+                ItemConfig readItemConfigs = ItemConfig("./config","item.txt"); // config buat item
 
                 string line;
 
