@@ -95,9 +95,9 @@ int main()
         }
         else if (command == "USE")
         {
-            int Slot;
+            string Slot;
             cin >> Slot;
-            // TODO, inventory nyimpennya item, sementara use cuman punya class Tool
+            playerInventory.use(Slot);
         }
         else
         {

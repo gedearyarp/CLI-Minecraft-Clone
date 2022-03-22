@@ -37,7 +37,8 @@ class Inventory {
         void setSlot(int slotKe, Item item);
         int countItem(string itemName) const;
         bool isFull() const;
-
+        
+        void use(string srcSlot);
 };
 
 #endif

@@ -465,3 +465,21 @@ bool Inventory::isFull() const
     }
     return true;
 }
+
+void Inventory::use(string srcSlot)
+{
+    int src = stoi(srcSlot);
+    if (this->slot[src / COLSLOT][src % COLSLOT].getCategory() == "TOOL")
+    {
+        int durability = this->slot[src / COLSLOT][src % COLSLOT].getDurability();
+        this->slot[src / COLSLOT][src % COLSLOT].setDurability(durability -1);
+        if(durability - 1 <= 0)
+        {
+            discardAll(srcSlot);
+        }
+    }
+    else
+    {
+        throw "INVALID TYPE";
+    }
+}
