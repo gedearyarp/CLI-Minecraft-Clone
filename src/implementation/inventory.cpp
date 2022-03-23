@@ -21,7 +21,7 @@ void Inventory::showInventory()
             string curItem = slot[i][j]->getName();
             int curQty = slot[i][j]->getQuantity();
             cout << "[ " <<curItem << " " << curQty ;
-            if(slot[i][j]->getType().compare(0,4,nameTool,0,4) == 0)
+            if(slot[i][j]->getCategory().compare(0,4,nameTool,0,4) == 0)
             {
                 cout << " " << slot[i][j]->getDurability();
             }
