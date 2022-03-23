@@ -14,7 +14,7 @@ using namespace std;
 
 class Inventory {
     private:
-        Item slot[ROWSLOT][COLSLOT];
+        vector< vector<Item> > slot;
         int slotUsed;
     public:
         Inventory();
@@ -24,7 +24,7 @@ class Inventory {
         void discard(string slotId, int itemQty);
         void discardAll(string slotId);
 
-        void exportFile();
+        void importFile();
 
         Item locateSlot(int slotKe);
         void setSlot(int slotKe, Item item);
