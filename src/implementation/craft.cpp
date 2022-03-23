@@ -115,136 +115,209 @@ bool CraftingTable::itemInTableSameAsRecipePlacement(vector<vector<string>> reci
     return true;
 };
 
-map<string,int> CraftingTable::craft()
+map<string, int> CraftingTable::craft()
 {
     int nItem = this->countItemOnTable();
     if (nItem == 0)
     {
         cout << "No item on table" << endl;
-        return map<string,int>();
+        return map<string, int>();
     }
 
-    ItemConfig readItemConfigs = ItemConfig("./config", "item.txt");
-    map<int, vector<string>> mapOfRecipe = MapRecipesFromRecipesClass(this->recipes);
-
-    auto it = mapOfRecipe.find(nItem);
-    vector<string> stringOfPossibleRecipe = it->second;
-
-    vector<SingleRecipe> recipesList = this->recipes.getRecipesList();
-
-    Item itemTemp;
-    bool found = false;
-    SingleRecipe resultRecipe;
-    int count = 0;
-    while (!found && count < stringOfPossibleRecipe.size())
+    // check for increasing durability of TOOL ITEM
+    bool isToolItem = false;
+    for (int i = 3; i < 3; i++)
     {
-        for (string possibleRecipe : stringOfPossibleRecipe)
+        for (int j = 3; j < 3; j++)
         {
-            for (SingleRecipe recipe : recipesList)
+            if (this->Table[i][j].getCategory() == "TOOL")
             {
-                if (possibleRecipe == recipe.getItemResultName())
+                isToolItem = true;
+            }
+        }
+    }
+
+    if (isToolItem)
+    {
+        bool thereIsNonToolItem = false;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (this->Table[i][j].getCategory() == "NONTOOL")
                 {
-                    // ini berarti "recipe" udah merupakan recipe yang ada di possibleRecipe
-                    int recipeRow = recipe.getNRowRecipe();
-                    int recipeCol = recipe.getNColRecipe();
+                    thereIsNonToolItem = true;
+                }
+            }
+        }
 
-                    SingleRecipe mirrorRecipe = recipe.getItemMirroredInPlacement();
-                    bool sameMatrixAsOriginal = recipe.isOriginalRecipeSameAsMirroredRecipe(mirrorRecipe);
-
-                    vector<int> positions;
-
-                    // 1x1
-                    if (recipeRow == 1 && recipeCol == 1)
+        if (thereIsNonToolItem)
+        {
+            cout << "Cannot craft with tool and non-tool item" << endl;
+            return map<string, int>();
+        }
+        else
+        {
+            bool isToolNameSame = false;
+            string toolName = "";
+            bool done = false;
+            bool countDurability = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (!done) {
+                        toolName = this->Table[i][j].getName();
+                        countDurability += this->Table[i][j].getDurability();
+                        done = true;
+                    }  
+                    else 
                     {
-                        positions = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-                    }
-                    // 3x3
-                    else if (recipeRow == 3 && recipeCol == 3)
-                    {
-                        positions = {1};
-                    }
-                    // 2x1
-                    else if (recipeRow == 2 && recipeCol == 1)
-                    {
-                        positions = {1, 2, 3, 4, 5, 6};
-                    }
-                    // 1x2
-                    else if (recipeRow == 1 && recipeCol == 2)
-                    {
-                        positions = {1, 2, 4, 5, 7, 8};
-                    }
-                    // 3x1
-                    else if (recipeRow == 3 && recipeCol == 1)
-                    {
-                        positions = {1, 2, 3, 4, 5, 6};
-                    }
-                    // 1x3
-                    else if (recipeRow == 1 && recipeCol == 3)
-                    {
-                        positions = {1, 2, 3, 4, 5, 6};
-                    }
-                    // 2x3
-                    else if (recipeRow == 2 && recipeCol == 3)
-                    {
-                        positions = {1, 4, 7};
-                    }
-                    // 3x2
-                    else if (recipeRow == 3 && recipeCol == 2)
-                    {
-                        positions = {1, 2, 3};
-                    }
-                    // 2x2
-                    else if (recipeRow == 2 && recipeCol == 2)
-                    {
-                        positions = {1, 2, 4, 5};
-                    }
-                    else
-                    {
-                        positions = {};
-                    }
-
-                    vector<vector<string>> recipePossiblePlacement;
-                    for (int position : positions)
-                    {
-                        recipePossiblePlacement = makeNewMatrix(position, recipe.getItemPlacement());
-                        if (itemInTableSameAsRecipePlacement(recipePossiblePlacement))
+                        if (toolName == this->Table[i][j].getName())
                         {
-                            found = true;
-                            resultRecipe = recipe;
-                            break;
+                            countDurability += this->Table[i][j].getDurability();
                         }
-                    }
-
-                    if (!found && !sameMatrixAsOriginal)
-                    {
-                        for (int position : positions)
+                        else
                         {
-                            recipePossiblePlacement = makeNewMatrix(position, mirrorRecipe.getItemPlacement());
-                            if (itemInTableSameAsRecipePlacement(recipePossiblePlacement))
-                            {
-                                found = true;
-                                resultRecipe = mirrorRecipe;
-                                break;
-                            }
+                            isToolNameSame = true;
                         }
                     }
                 }
             }
-            count++;
+            
+            if (isToolNameSame) {
+                cout << "Tool name is not the same" << endl;
+                return map<string, int>();
+            } else {
+                cout << "Increase Tool" << toolName <<" durability" << endl;
+                return map<string, int> {{"ADD_DURABILITY"+ toolName, countDurability}};
+            }
         }
-    }
-
-    if (found)
-    {
-        cout << "Crafting success" << endl;
-        cout << "Created : " << resultRecipe.getItemResultQuantity() << " " << resultRecipe.getItemResultName() << endl;
-        this->clearTable();
-        return map<string,int> { {resultRecipe.getItemResultName(), resultRecipe.getItemResultQuantity()} };
     }
     else
     {
-        cout << "No recipe match with item on crafting table" << endl;
-        return map<string,int> { {"-", 0} };
 
+        ItemConfig readItemConfigs = ItemConfig("./config", "item.txt");
+        map<int, vector<string>> mapOfRecipe = MapRecipesFromRecipesClass(this->recipes);
+
+        auto it = mapOfRecipe.find(nItem);
+        vector<string> stringOfPossibleRecipe = it->second;
+
+        vector<SingleRecipe> recipesList = this->recipes.getRecipesList();
+
+        Item itemTemp;
+        bool found = false;
+        SingleRecipe resultRecipe;
+        int count = 0;
+        while (!found && count < stringOfPossibleRecipe.size())
+        {
+            for (string possibleRecipe : stringOfPossibleRecipe)
+            {
+                for (SingleRecipe recipe : recipesList)
+                {
+                    if (possibleRecipe == recipe.getItemResultName())
+                    {
+                        // ini berarti "recipe" udah merupakan recipe yang ada di possibleRecipe
+                        int recipeRow = recipe.getNRowRecipe();
+                        int recipeCol = recipe.getNColRecipe();
+
+                        SingleRecipe mirrorRecipe = recipe.getItemMirroredInPlacement();
+                        bool sameMatrixAsOriginal = recipe.isOriginalRecipeSameAsMirroredRecipe(mirrorRecipe);
+
+                        vector<int> positions;
+
+                        // 1x1
+                        if (recipeRow == 1 && recipeCol == 1)
+                        {
+                            positions = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+                        }
+                        // 3x3
+                        else if (recipeRow == 3 && recipeCol == 3)
+                        {
+                            positions = {1};
+                        }
+                        // 2x1
+                        else if (recipeRow == 2 && recipeCol == 1)
+                        {
+                            positions = {1, 2, 3, 4, 5, 6};
+                        }
+                        // 1x2
+                        else if (recipeRow == 1 && recipeCol == 2)
+                        {
+                            positions = {1, 2, 4, 5, 7, 8};
+                        }
+                        // 3x1
+                        else if (recipeRow == 3 && recipeCol == 1)
+                        {
+                            positions = {1, 2, 3, 4, 5, 6};
+                        }
+                        // 1x3
+                        else if (recipeRow == 1 && recipeCol == 3)
+                        {
+                            positions = {1, 2, 3, 4, 5, 6};
+                        }
+                        // 2x3
+                        else if (recipeRow == 2 && recipeCol == 3)
+                        {
+                            positions = {1, 4, 7};
+                        }
+                        // 3x2
+                        else if (recipeRow == 3 && recipeCol == 2)
+                        {
+                            positions = {1, 2, 3};
+                        }
+                        // 2x2
+                        else if (recipeRow == 2 && recipeCol == 2)
+                        {
+                            positions = {1, 2, 4, 5};
+                        }
+                        else
+                        {
+                            positions = {};
+                        }
+
+                        vector<vector<string>> recipePossiblePlacement;
+                        for (int position : positions)
+                        {
+                            recipePossiblePlacement = makeNewMatrix(position, recipe.getItemPlacement());
+                            if (itemInTableSameAsRecipePlacement(recipePossiblePlacement))
+                            {
+                                found = true;
+                                resultRecipe = recipe;
+                                break;
+                            }
+                        }
+
+                        if (!found && !sameMatrixAsOriginal)
+                        {
+                            for (int position : positions)
+                            {
+                                recipePossiblePlacement = makeNewMatrix(position, mirrorRecipe.getItemPlacement());
+                                if (itemInTableSameAsRecipePlacement(recipePossiblePlacement))
+                                {
+                                    found = true;
+                                    resultRecipe = mirrorRecipe;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                count++;
+            }
+        }
+
+        if (found)
+        {
+            cout << "Crafting success" << endl;
+            cout << "Created : " << resultRecipe.getItemResultQuantity() << " " << resultRecipe.getItemResultName() << endl;
+            this->clearTable();
+            return map<string, int>{{resultRecipe.getItemResultName(), resultRecipe.getItemResultQuantity()}};
+        }
+        else
+        {
+            cout << "No recipe match with item on crafting table" << endl;
+            return map<string, int>{{"-", 0}};
+        }
     }
 }

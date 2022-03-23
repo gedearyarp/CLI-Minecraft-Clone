@@ -16,9 +16,12 @@ int main()
     // read item from config file
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
 
-    try{
+    try
+    {
         playerInventory.importFile();
-    } catch (BaseException *err){
+    }
+    catch (BaseException *err)
+    {
         (*err).printMessage();
     }
 
@@ -26,7 +29,8 @@ int main()
     string command;
     while (cin >> command)
     {
-        try{
+        try
+        {
             if (command == "EXPORT")
             {
                 string outputPath;
@@ -37,9 +41,20 @@ int main()
             else if (command == "CRAFT")
             {
                 map<string, int> result = playerCraftingTable.craft();
+
                 for (auto it = result.begin(); it != result.end(); ++it)
                 {
-                    playerInventory.give(it->first, it->second);
+                    string itemName = it->first;
+                    int n = itemName.length();
+                    char itemNameCharArray[n + 1];
+                    strcpy(itemNameCharArray, itemName.c_str());
+                    char *token = strtok(itemNameCharArray, "-");
+
+                    if (token == "ADD_DURABILITY") {
+                        // TODO GIVE TO INVENTORY WITH EXACT DURABILITY
+                    } else {
+                        playerInventory.give(it->first,it->second);
+                    }
                 }
             }
             else if (command == "GIVE")
@@ -119,10 +134,11 @@ int main()
             {
                 cout << "Invalid command" << endl;
             }
-        } catch(BaseException *err){
+        }
+        catch (BaseException *err)
+        {
             (*err).printMessage();
         }
-        
     }
-return 0;
+    return 0;
 }
