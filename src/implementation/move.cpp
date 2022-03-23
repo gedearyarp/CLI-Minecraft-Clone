@@ -3,7 +3,7 @@
 using namespace std;
 
 
-void Move::moveItoI(Inventory& inv, string srcSlot, int itemQty, string destSlot)
+void Move::moveItoI(Inventory& inv, string srcSlot, int justInput, string destSlot)
 {
     ItemConfig readItemConfig = ItemConfig("./config","item.txt");
     int src = stoi(srcSlot.substr(1));
@@ -22,12 +22,12 @@ void Move::moveItoI(Inventory& inv, string srcSlot, int itemQty, string destSlot
         throw new IndexOutOfRangeException(dcol);
     }
 
-    if (itemQty < 0){
+    // if (itemQty < 0){
         
-        throw new InvalidQuantityException(itemQty);
-    }
+    //     throw new InvalidQuantityException(itemQty);
+    // }
     
-    if (itemQty == 0) return;
+   // if (itemQty == 0) return;
 
     if (srow < 0 || srow >= ROWSLOT) {
         throw new IndexOutOfRangeException(srow);
@@ -56,7 +56,7 @@ void Move::moveItoI(Inventory& inv, string srcSlot, int itemQty, string destSlot
     }
     if (isrc.getCategory() != "TOOL"){
         Item slotdes = inv.locateSlot(des);
-
+        int itemQty = inv.slotItem(src)->getQuantity();
         if(slotdes.isEmpty()){
             inv.setSlot(des, new NonTool(isrc.getId(), isrc.getName(), isrc.getType(), itemQty));
             inv.discard(srcSlot ,itemQty);
@@ -95,6 +95,7 @@ void Move::moveItoC(Inventory inv, string srcSlot, int itemQty, string destSlot,
     int drow = des/3;
     int dcol = des%3;
     Item ides = craft.getSlot(des);
+    cout << "masuk sini" << endl;
 
     if (itemQty < 0){
         throw new InvalidQuantityException(itemQty);

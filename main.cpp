@@ -92,21 +92,28 @@ int main()
                 }
                 else if (strstr(slotSrc.c_str(), I.c_str()) && strstr(slotDest.c_str(), C.c_str()))
                 {
+                    cout << "masuk sini 1" << endl;
                     int spaces = 0;
+                    cout << "masuk sini 2" << endl;
                     vector<string> destVector;
+                    cout << "masuk sini 3" << endl;
                     for (int i = 0; i < slotDest.size(); i++)
                     {
+                        cout << "masuk sini" << endl;
                         if (slotDest[i] == ' ')
                         {
+                            cout << "masuk sini 4" << endl;
                             spaces++;
                         }
                         else
                         {
+                            cout << slotDest[i] << endl;
                             destVector[spaces] += slotDest[i];
                         }
                     }
                     for (int i = 0; i < destVector.size(); i++)
                     {
+                        cout << "masuk sini 6" << endl;
                         move.moveItoC(playerInventory, slotSrc, slotQty, destVector[i], playerCraftingTable);
                     }
                 }
