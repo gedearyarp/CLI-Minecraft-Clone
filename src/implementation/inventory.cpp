@@ -4,11 +4,12 @@ using namespace std;
 
 Inventory::Inventory()
 {
-    for(int i = 0; i < ROWSLOT;i++){
-        for(int j = 0; j < COLSLOT; j++){
-            this->slot[i][j] = new Item();
-        }
-    }
+    this->slot = vector<vector<Item*>>(ROWSLOT, vector<Item*>(COLSLOT, new Item()));
+    // for(int i = 0; i < ROWSLOT;i++){
+    //     for(int j = 0; j < COLSLOT; j++){
+    //         this->slot[i][j] = new Item();
+    //     }
+    // }
     this-> slotUsed = 0;
 }
 
