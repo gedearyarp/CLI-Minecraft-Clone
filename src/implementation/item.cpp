@@ -48,7 +48,7 @@ int Item::getQuantity() const { return -1; }
 int Item::getDurability() const { return -1; }
 void Item::setQuantity(int qty) {}
 void Item::setDurability(int durability) {}
-bool Item::isEmpty() const { return true; }
+bool Item::isEmpty() const { return this->id == -1; }
 bool Item::isFull() const { return false; }
 // TODO THROW invalid class
 // JANGAN PAKAI 6 FUNGSI DI ATAS KALAU BUKAN SUBCLASS ITEM
@@ -121,7 +121,7 @@ bool NonTool::isFull() const
 
 bool NonTool::isEmpty() const
 {
-    return this->quantity <= 0;
+    return this->id == -1;
 }
 
 int NonTool::getQuantity() const

@@ -3,14 +3,14 @@
 using namespace std;
 
 
-void Move::moveItoI(Inventory inv, string srcSlot, int itemQty, string destSlot)
+void Move::moveItoI(Inventory& inv, string srcSlot, int itemQty, string destSlot)
 {
     ItemConfig readItemConfig = ItemConfig("./config","item.txt");
-    int src = stoi(srcSlot);
+    int src = stoi(srcSlot.substr(1));
     int srow = src/COLSLOT;
     int scol = src%COLSLOT;
     Item isrc = inv.locateSlot(src);
-    int des = stoi(destSlot);
+    int des = stoi(destSlot.substr(1));
     int drow = des / COLSLOT;
     int dcol = des % COLSLOT;
 
@@ -23,6 +23,7 @@ void Move::moveItoI(Inventory inv, string srcSlot, int itemQty, string destSlot)
     }
 
     if (itemQty < 0){
+        
         throw new InvalidQuantityException(itemQty);
     }
     
@@ -43,39 +44,41 @@ void Move::moveItoI(Inventory inv, string srcSlot, int itemQty, string destSlot)
     if (isrc.getCategory() == "TOOL"){
         Item slotdes = inv.locateSlot(des);
         if(slotdes.isEmpty()){
-            inv.setSlot(src, new Tool(readItemConfig.findIdByName(isrc.getName()),isrc.getName(),isrc.getDurability()));
-            inv.discard(srcSlot,isrc.getQuantity());
+            inv.setSlot(des, new Tool(readItemConfig.findIdByName(isrc.getName()),isrc.getName(),isrc.getDurability()));
+            inv.discard(srcSlot,1);
         }
-        throw new InvalidDestinationSlot(des);
+        else
+        {
+            throw new InvalidDestinationSlot(des);
+        }
+        
         //ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
     }
     if (isrc.getCategory() != "TOOL"){
         Item slotdes = inv.locateSlot(des);
 
         if(slotdes.isEmpty()){
-            inv.setSlot(src, new NonTool(isrc.getId(), isrc.getName(), isrc.getType(), isrc.getQuantity()));
-            inv.discard(srcSlot ,isrc.getQuantity());
+            inv.setSlot(des, new NonTool(isrc.getId(), isrc.getName(), isrc.getType(), itemQty));
+            inv.discard(srcSlot ,itemQty);
         }
         else{
+           
             if(isrc.getName() != slotdes.getName()){
                 return; //BEDA BARANG
             }
             if(isrc.getName() == slotdes.getName()){
-                if(itemQty + slotdes.getQuantity() > MAXQTY){
-                    int remainder = (isrc.getQuantity() + slotdes.getQuantity()) - MAXQTY;
-                    inv.locateSlot(des).setQuantity(MAXQTY);
-                    inv.locateSlot(src).setQuantity(remainder);
-                    if(inv.locateSlot(src).getQuantity() <= 0){
-                        inv.discardAll(srcSlot);
-                    }
+                if(itemQty + inv.slotItem(des)->getQuantity() > MAXQTY){
+                    int remainder = (inv.slotItem(des)->getQuantity() + inv.slotItem(src)->getQuantity()) - MAXQTY;
+                    inv.slotItem(des)->setQuantity(MAXQTY);
+                    inv.slotItem(src)->setQuantity(remainder);
                 }
-                if(itemQty + slotdes.getQuantity() <= MAXQTY){
-                    inv.locateSlot(des).setQuantity(slotdes.getQuantity()+itemQty);
-                    inv.locateSlot(src).setQuantity(isrc.getQuantity() - itemQty);
-                    if(inv.locateSlot(src).getQuantity() <= 0){
-                        inv.discardAll(srcSlot);
-                    }
-                }   
+                if (itemQty + inv.slotItem(des)->getQuantity() <= MAXQTY)
+                {
+
+                    inv.slotItem(des)->setQuantity(inv.slotItem(des)->getQuantity()+itemQty);
+                    
+                    inv.discard(srcSlot, itemQty);
+                }
             }
         }
     }

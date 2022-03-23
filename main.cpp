@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include "./src/header/move.hpp"
 // #include "./src/implementation/readRecipe.cpp"
 
@@ -16,14 +17,14 @@ int main()
     // read item from config file
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
 
-    try
-    {
-        playerInventory.importFile();
-    }
-    catch (BaseException *err)
-    {
-        (*err).printMessage();
-    }
+    // try
+    // {
+    //     playerInventory.importFile();
+    // }
+    // catch (BaseException *err)
+    // {
+    //     (*err).printMessage();
+    // }
 
     // sample interaction
     string command;
@@ -69,16 +70,19 @@ int main()
                 string slotSrc;
                 int slotQty;
                 string slotDest;
+                
+
+                int i;
                 string I = "I";
                 string C = "C";
 
                 Move move = Move();
                 cin >> slotSrc >> slotQty;
                 getline(cin, slotDest);
+                slotDest.erase(remove(slotDest.begin(), slotDest.end(), ' '), slotDest.end());
+
                 if (strstr(slotSrc.c_str(), I.c_str()) && strstr(slotDest.c_str(), I.c_str()))
                 {
-                    vector<string> slotDests;
-                    slotDests.push_back(slotDest);
                     move.moveItoI(playerInventory, slotSrc, slotQty, slotDest);
                     // TODO move i to i, gangerti kenapa slotDest vector of string
                 }
