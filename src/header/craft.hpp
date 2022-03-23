@@ -10,7 +10,7 @@
 
 class CraftingTable {
     private:
-        Item Table[3][3];
+        Item* Table[3][3];
         Recipes recipes;
     public:
         // Create table of 9 x 9 matrix 
@@ -22,7 +22,8 @@ class CraftingTable {
         void clearTable();
 
         Item getSlot(int slotKe) const;
-        void setSlot(int slotKe, Item item);
+        Item *&slotItem(int slotKe);
+        void setSlot(int slotKe, Item* item);
         
         // melihat table crafting
         void showCraftingTable();

@@ -35,7 +35,7 @@ CraftingTable::CraftingTable()
     {
         for (int j = 0; j < 3; j++)
         {
-            this->Table[i][j] = Item();
+            this->Table[i][j] = new Item();
         }
     }
     this->recipes = ReadRecipesFromConfigToRecipesClass();
@@ -48,7 +48,7 @@ int CraftingTable::countItemOnTable()
     {
         for (int j = 0; j < 3; j++)
         {
-            if (this->Table[i][j].getName() != "-")
+            if (this->Table[i][j]->getName() != "-")
             {
                 count++;
             }
@@ -63,19 +63,24 @@ void CraftingTable::clearTable()
     {
         for (int j = 0; j < 3; j++)
         {
-            this->Table[i][j] = Item();
+            this->Table[i][j] = new Item();
         }
     }
 }
 
 Item CraftingTable::getSlot(int slotKe) const
 {
-    return this->Table[slotKe / 3][slotKe % 3];
+    return *this->Table[slotKe / 3][slotKe % 3];
 }
 
-void CraftingTable::setSlot(int slotKe, Item item)
+void CraftingTable::setSlot(int slotKe, Item* item)
 {
     this->Table[slotKe / 3][slotKe % 3] = item;
+}
+
+Item *&CraftingTable::slotItem(int slotKe)
+{
+    return this->Table[slotKe / 3][slotKe % 3];
 }
 
 void CraftingTable::showCraftingTable()
@@ -87,9 +92,14 @@ void CraftingTable::showCraftingTable()
         cout << "[ ", idx, ": ";
         for (int j = 0; j < 3; j++)
         {
-            string name = Table[i][j].getName();
-            int quantity = Table[i][j].getQuantity();
-            cout << "[C " << name << " - " << quantity << " ]";
+            string name = Table[i][j]->getName();
+            int quantity = Table[i][j]->getQuantity();
+            cout << "[C " << name << " "<< quantity ;
+            if (Table[i][j]->getCategory().compare(0, 4, "TOOL", 0, 4) == 0)
+            {
+                cout << " " << Table[i][j]->getDurability();
+            }
+            cout<< " ]";
             if (j != 2)
             {
                 cout << " ";
@@ -106,7 +116,7 @@ bool CraftingTable::itemInTableSameAsRecipePlacement(vector<vector<string>> reci
     {
         for (int j = 0; j < 3; j++)
         {
-            if (!isBlockTheSame(recipePlacement[i][j], this->Table[i][j].getName()))
+            if (!isBlockTheSame(recipePlacement[i][j], this->Table[i][j]->getName()))
             {
                 return false;
             }
@@ -130,7 +140,7 @@ map<string, int> CraftingTable::craft()
     {
         for (int j = 3; j < 3; j++)
         {
-            if (this->Table[i][j].getCategory() == "TOOL")
+            if (this->Table[i][j]->getCategory() == "TOOL")
             {
                 isToolItem = true;
             }
@@ -144,7 +154,7 @@ map<string, int> CraftingTable::craft()
         {
             for (int j = 0; j < 3; j++)
             {
-                if (this->Table[i][j].getCategory() == "NONTOOL")
+                if (this->Table[i][j]->getCategory() == "NONTOOL")
                 {
                     thereIsNonToolItem = true;
                 }
@@ -167,15 +177,15 @@ map<string, int> CraftingTable::craft()
                 for (int j = 0; j < 3; j++)
                 {
                     if (!done) {
-                        toolName = this->Table[i][j].getName();
-                        countDurability += this->Table[i][j].getDurability();
+                        toolName = this->Table[i][j]->getName();
+                        countDurability += this->Table[i][j]->getDurability();
                         done = true;
                     }  
                     else 
                     {
-                        if (toolName == this->Table[i][j].getName())
+                        if (toolName == this->Table[i][j]->getName())
                         {
-                            countDurability += this->Table[i][j].getDurability();
+                            countDurability += this->Table[i][j]->getDurability();
                         }
                         else
                         {
