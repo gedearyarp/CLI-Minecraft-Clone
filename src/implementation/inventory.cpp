@@ -132,7 +132,7 @@ void Inventory::importFile()
         int idx = 0;
         while(getline(inv, line) && idx < 27){
             if (line == "0:0" || line[0] == '0') {
-                setSlot(idx, Item());
+                setSlot(idx, new Item());
                 idx++;
                 continue;
             } 
@@ -177,11 +177,11 @@ void Inventory::importFile()
             string itemName = readItemConfig.findNameById(id);
 
             if (ctg == "TOOL") {
-                Tool newSlot = Tool(id, itemName);
+                Tool* newSlot = new Tool(id, itemName);
                 setSlot(idx, newSlot);
             } 
             else {
-                NonTool newSlot = NonTool(id, itemName, readItemConfig.findTypeByName(itemName), qty);
+                NonTool* newSlot = new NonTool(id, itemName, readItemConfig.findTypeByName(itemName), qty);
                 setSlot(idx, newSlot);
             } 
             idx++;
@@ -197,8 +197,8 @@ Item Inventory::locateSlot(int slotKe){
     return *this->slot[slotKe / COLSLOT][slotKe % COLSLOT];
 }
 
-void Inventory::setSlot(int slotKe, Item item) {
-    this->slot[slotKe / COLSLOT][slotKe % COLSLOT] = &item;
+void Inventory::setSlot(int slotKe, Item* item) {
+    this->slot[slotKe / COLSLOT][slotKe % COLSLOT] = item;
 }
 
 int Inventory::countItem(string itemName) const

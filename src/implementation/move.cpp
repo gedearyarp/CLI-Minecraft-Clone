@@ -43,7 +43,7 @@ void Move::moveItoI(Inventory inv, string srcSlot, int itemQty, string destSlot)
     if (isrc.getCategory() == "TOOL"){
         Item slotdes = inv.locateSlot(des);
         if(slotdes.isEmpty()){
-            inv.setSlot(src, Tool(readItemConfig.findIdByName(isrc.getName()),isrc.getName(),isrc.getDurability()));
+            inv.setSlot(src, new Tool(readItemConfig.findIdByName(isrc.getName()),isrc.getName(),isrc.getDurability()));
             inv.discard(srcSlot,isrc.getQuantity());
         }
         throw new InvalidDestinationSlot(des);
@@ -53,7 +53,7 @@ void Move::moveItoI(Inventory inv, string srcSlot, int itemQty, string destSlot)
         Item slotdes = inv.locateSlot(des);
 
         if(slotdes.isEmpty()){
-            inv.setSlot(src, NonTool(isrc.getId(), isrc.getName(), isrc.getType(), isrc.getQuantity()));
+            inv.setSlot(src, new NonTool(isrc.getId(), isrc.getName(), isrc.getType(), isrc.getQuantity()));
             inv.discard(srcSlot ,isrc.getQuantity());
         }
         else{
@@ -201,7 +201,7 @@ void Move::moveCtoI(Inventory inv, string srcSlot, int itemQty, string destSlot,
     if (isrc.getCategory() == "TOOL"){
         if(ides.isEmpty()){
             craft.setSlot(des,Item());
-            inv.setSlot(src, Tool(readItemConfig.findIdByName(isrc.getName()),isrc.getName(),isrc.getDurability()));
+            inv.setSlot(src, new Tool(readItemConfig.findIdByName(isrc.getName()),isrc.getName(),isrc.getDurability()));
         }
         else {
             throw new InvalidDestinationSlot(des);
@@ -214,7 +214,7 @@ void Move::moveCtoI(Inventory inv, string srcSlot, int itemQty, string destSlot,
             inv.discard(srcSlot ,itemQty);
 
             craft.setSlot(src,NonTool(isrc.getId(), isrc.getName(), isrc.getType(), isrc.getQuantity() - itemQty));
-            inv.setSlot(src, NonTool(isrc.getId(), isrc.getName(), isrc.getType(), itemQty));
+            inv.setSlot(src, new NonTool(isrc.getId(), isrc.getName(), isrc.getType(), itemQty));
             if(isrc.getQuantity()-itemQty <= 0){
                 craft.setSlot(src, Item());
             }

@@ -27,7 +27,7 @@ class Inventory {
         void importFile();
 
         Item locateSlot(int slotKe);
-        void setSlot(int slotKe, Item item);
+        void setSlot(int slotKe, Item* item);
         int countItem(string itemName) const;
         bool isFull() const;
         
