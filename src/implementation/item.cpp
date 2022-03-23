@@ -48,7 +48,7 @@ int Item::getQuantity() const { return -1; }
 int Item::getDurability() const { return -1; }
 void Item::setQuantity(int qty) {}
 void Item::setDurability(int durability) {}
-bool Item::isEmpty() const { return false; }
+bool Item::isEmpty() const { return true; }
 bool Item::isFull() const { return false; }
 // TODO THROW invalid class
 // JANGAN PAKAI 6 FUNGSI DI ATAS KALAU BUKAN SUBCLASS ITEM

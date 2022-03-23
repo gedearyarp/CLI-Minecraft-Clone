@@ -14,7 +14,7 @@ using namespace std;
 
 class Inventory {
     private:
-        Item slot[ROWSLOT][COLSLOT];
+        vector<vector<Item*>> slot;
         int slotUsed;
     public:
         Inventory();

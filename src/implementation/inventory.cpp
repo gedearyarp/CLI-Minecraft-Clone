@@ -6,7 +6,7 @@ Inventory::Inventory()
 {
     for(int i = 0; i < ROWSLOT;i++){
         for(int j = 0; j < COLSLOT; j++){
-            this->slot[i][j] = Item();
+            this->slot[i][j] = new Item();
         }
     }
     this-> slotUsed = 0;
@@ -16,7 +16,7 @@ void Inventory::showInventory()
 {
     for(int i = 0; i < ROWSLOT;i++){
         for(int j = 0; j < COLSLOT; j++){
-            string curItem = slot[i][j].getName();
+            string curItem = slot[i][j]->getName();
             cout << curItem << " ";
         }
         cout << '\n';
@@ -40,11 +40,11 @@ void Inventory::give(string itemName, int itemQty)
 
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){          
-            if (ctg == "NONTOOL" && slot[i][j].getName() == itemName && !slot[i][j].isFull()) {
-                int remainQty = MAXQTY - slot[i][j].getQuantity();
+            if (ctg == "NONTOOL" && slot[i][j]->getName() == itemName && !slot[i][j]->isFull()) {
+                int remainQty = MAXQTY - slot[i][j]->getQuantity();
                 int addQty = min(itemQty, remainQty);
 
-                slot[i][j].setQuantity(slot[i][j].getQuantity() + addQty);
+                slot[i][j]->setQuantity(slot[i][j]->getQuantity() + addQty);
                 itemQty -= remainQty;
             }
         }
@@ -52,16 +52,16 @@ void Inventory::give(string itemName, int itemQty)
 
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){
-            if(ctg == "NONTOOL" && slot[i][j].isEmpty()){
+            if(ctg == "NONTOOL" && slot[i][j]->isEmpty()){
                 int addQty = min(MAXQTY, itemQty);
-                slot[i][j] = NonTool(readItemConfig.findIdByName(itemName),itemName, readItemConfig.findTypeByName(itemName), addQty);
+                slot[i][j] = new NonTool(readItemConfig.findIdByName(itemName),itemName, readItemConfig.findTypeByName(itemName), addQty);
                 
                 this->slotUsed++;
                 itemQty -= addQty;
             } 
 
-            if(ctg == "TOOL" && slot[i][j].isEmpty()){
-                slot[i][j] = Tool(readItemConfig.findIdByName(itemName),itemName);
+            if(ctg == "TOOL" && slot[i][j]->isEmpty()){
+                slot[i][j] = new Tool(readItemConfig.findIdByName(itemName),itemName);
                 
                 this->slotUsed++;
                 itemQty--;
@@ -86,7 +86,7 @@ void Inventory::discard(string slotId, int itemQty)
         throw new IndexOutOfRangeException(col);
     }
 
-    if (slot[row][col].isNothing()){
+    if (slot[row][col]->isNothing()){
         throw new EmptySlotException(row, col);
     }
 
@@ -96,25 +96,25 @@ void Inventory::discard(string slotId, int itemQty)
     
     if (itemQty == 0) return;
 
-    if ((slot[row][col].getCategory() == "TOOL" && itemQty > 1) ||
-        (slot[row][col].getCategory() == "NONTOOL" && itemQty > slot[row][col].getQuantity())
+    if ((slot[row][col]->getCategory() == "TOOL" && itemQty > 1) ||
+        (slot[row][col]->getCategory() == "NONTOOL" && itemQty > slot[row][col]->getQuantity())
     ){
         throw new DiscardQuantityException(
             itemQty,
-            (slot[row][col].getCategory() == "TOOL") ? 1 : (slot[row][col].getQuantity())
+            (slot[row][col]->getCategory() == "TOOL") ? 1 : (slot[row][col]->getQuantity())
         );
     }
 
-    if ((slot[row][col].getCategory() == "TOOL") || 
-        (slot[row][col].getCategory() == "NONTOOL" && itemQty == slot[row][col].getQuantity())
-    ) slot[row][col] = Item();
+    if ((slot[row][col]->getCategory() == "TOOL") || 
+        (slot[row][col]->getCategory() == "NONTOOL" && itemQty == slot[row][col]->getQuantity())
+    ) slot[row][col] = new Item();
 
-    slot[row][col].setQuantity(slot[row][col].getQuantity() - itemQty);
+    slot[row][col]->setQuantity(slot[row][col]->getQuantity() - itemQty);
 }
 
 void Inventory::discardAll(string slotId){
     int slotKe = stoi(slotId);
-    slot[slotKe / COLSLOT][slotKe % COLSLOT] = Item();
+    slot[slotKe / COLSLOT][slotKe % COLSLOT] = new Item();
 }
 
 void Inventory::exportFile()
@@ -187,11 +187,11 @@ void Inventory::exportFile()
 }
 
 Item Inventory::locateSlot(int slotKe){
-    return this->slot[slotKe / COLSLOT][slotKe % COLSLOT];
+    return *this->slot[slotKe / COLSLOT][slotKe % COLSLOT];
 }
 
 void Inventory::setSlot(int slotKe, Item item) {
-    this->slot[slotKe / COLSLOT][slotKe % COLSLOT] = item;
+    this->slot[slotKe / COLSLOT][slotKe % COLSLOT] = &item;
 }
 
 int Inventory::countItem(string itemName) const
@@ -199,9 +199,9 @@ int Inventory::countItem(string itemName) const
     int count = 0;
     for(int i=0; i < ROWSLOT; i++){
         for(int j=0; j < COLSLOT; j++){
-            if(!slot[i][j].isNothing() && slot[i][j].getName() == itemName){
-                if(slot[i][j].getCategory() == "TOOL") count ++;
-                else count += slot[i][j].getQuantity();
+            if(!slot[i][j]->isNothing() && slot[i][j]->getName() == itemName){
+                if(slot[i][j]->getCategory() == "TOOL") count ++;
+                else count += slot[i][j]->getQuantity();
             }
         }
     }
@@ -212,7 +212,7 @@ bool Inventory::isFull() const
 {
     for(int i=0; i < ROWSLOT; i++){
         for(int j=0; j < COLSLOT; j++){
-            if(slot[i][j].isNothing()) return false;
+            if(slot[i][j]->isNothing()) return false;
         }
     }
     return true;
@@ -221,10 +221,10 @@ bool Inventory::isFull() const
 void Inventory::use(string srcSlot)
 {
     int src = stoi(srcSlot);
-    if (this->slot[src / COLSLOT][src % COLSLOT].getCategory() == "TOOL")
+    if (this->slot[src / COLSLOT][src % COLSLOT]->getCategory() == "TOOL")
     {
-        int durability = this->slot[src / COLSLOT][src % COLSLOT].getDurability();
-        this->slot[src / COLSLOT][src % COLSLOT].setDurability(durability -1);
+        int durability = this->slot[src / COLSLOT][src % COLSLOT]->getDurability();
+        this->slot[src / COLSLOT][src % COLSLOT]->setDurability(durability -1);
         if(durability - 1 <= 0)
         {
             discardAll(srcSlot);
