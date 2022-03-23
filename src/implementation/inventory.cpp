@@ -48,17 +48,6 @@ void Inventory::give(string itemName, int itemQty)
 
     Item thisItem = Item(readItemConfig.findIdByName(itemName),itemName,readItemConfig.findTypeByName(itemName),readItemConfig.findCategoryByName(itemName)); 
 
-    for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
-        for(int j = 0; j < COLSLOT && itemQty > 0; j++){
-            if (ctg.compare(0, 7, nonTool, 0, 7) == 0 && slot[i][j]->getName() == itemName && !slot[i][j]->isFull())
-            {
-                int remainQty = MAXQTY - slot[i][j]->getQuantity();
-                int addQty = min(itemQty, remainQty);
-                slot[i][j]->setQuantity(slot[i][j]->getQuantity() + addQty);
-                itemQty -= remainQty;
-            }
-        }
-    }
 
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){
@@ -83,6 +72,19 @@ void Inventory::give(string itemName, int itemQty)
             }
         }
     }
+
+    for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
+        for(int j = 0; j < COLSLOT && itemQty > 0; j++){
+            if (ctg.compare(0, 7, nonTool, 0, 7) == 0 && slot[i][j]->getName() == itemName && !slot[i][j]->isFull())
+            {
+                int remainQty = MAXQTY - slot[i][j]->getQuantity();
+                int addQty = min(itemQty, remainQty);
+                slot[i][j]->setQuantity(slot[i][j]->getQuantity() + addQty);
+                itemQty -= remainQty;
+            }
+        }
+    }
+    
 }
 
 void Inventory::discard(string slotId, int itemQty)
