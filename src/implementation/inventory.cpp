@@ -17,8 +17,10 @@ void Inventory::showInventory()
 {
     for(int i = 0; i < ROWSLOT;i++){
         for(int j = 0; j < COLSLOT; j++){
+
             string curItem = slot[i][j]->getName();
-            cout << curItem << " ";
+            int curQty = slot[i][j]->getQuantity();
+            cout << "[ " <<curItem << " " << curQty << "] ";
         }
         cout << '\n';
     }
@@ -44,7 +46,6 @@ void Inventory::give(string itemName, int itemQty)
             if (ctg == "NONTOOL" && slot[i][j]->getName() == itemName && !slot[i][j]->isFull()) {
                 int remainQty = MAXQTY - slot[i][j]->getQuantity();
                 int addQty = min(itemQty, remainQty);
-
                 slot[i][j]->setQuantity(slot[i][j]->getQuantity() + addQty);
                 itemQty -= remainQty;
             }
@@ -63,10 +64,9 @@ void Inventory::give(string itemName, int itemQty)
 
             if(ctg == "TOOL" && slot[i][j]->isEmpty()){
                 slot[i][j] = new Tool(readItemConfig.findIdByName(itemName),itemName);
-                
                 this->slotUsed++;
                 itemQty--;
-            } 
+            }
         }
     }
 }
@@ -118,7 +118,7 @@ void Inventory::discardAll(string slotId){
     slot[slotKe / COLSLOT][slotKe % COLSLOT] = new Item();
 }
 
-void Inventory::exportFile()
+void Inventory::importFile()
 {
     string inventoryPath = "./config/inventory/inventory.txt";
     ifstream inv(inventoryPath);
@@ -129,8 +129,9 @@ void Inventory::exportFile()
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
 
     if(inv.is_open()) {
-        for(int idx = 0; idx < MAXINV; idx++){
-            if (line == "0:0") {
+        int idx = 0;
+        while(getline(inv, line) && idx < 27){
+            if (line == "0:0" || line[0] == '0') {
                 setSlot(idx, Item());
                 idx++;
                 continue;
@@ -154,9 +155,10 @@ void Inventory::exportFile()
             }
 
             int id, qty;
+            
             try {
                 id = stoi(idItem);
-                qty = stoi(idItem);
+                qty = stoi(qtyItem);
             } catch(exception &err) {
                 throw new InvalidInventoryTextException(line);
             }
@@ -173,12 +175,16 @@ void Inventory::exportFile()
             }
 
             string itemName = readItemConfig.findNameById(id);
-            Item newSlot;
 
-            if (ctg == "TOOL") newSlot = Tool(readItemConfig.findIdByName(itemName),itemName);
-            else newSlot = NonTool(readItemConfig.findIdByName(itemName),itemName, readItemConfig.findTypeByName(itemName), qty);
-
-            setSlot(idx, newSlot);
+            if (ctg == "TOOL") {
+                Tool newSlot = Tool(id, itemName);
+                setSlot(idx, newSlot);
+            } 
+            else {
+                NonTool newSlot = NonTool(id, itemName, readItemConfig.findTypeByName(itemName), qty);
+                setSlot(idx, newSlot);
+            } 
+            idx++;
         }
 
         inv.close();
