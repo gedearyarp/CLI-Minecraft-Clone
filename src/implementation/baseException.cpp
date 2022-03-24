@@ -64,7 +64,7 @@ InvalidNameException::InvalidNameException(string itemName)
 }
 
 void InvalidNameException::printMessage(){
-    cout << itemName << "is not a valid item name" << endl;
+    cout << itemName << " is not a valid item name" << endl;
 }
 
 InvalidIDException::InvalidIDException(int id)
@@ -85,6 +85,16 @@ void InvalidDestinationSlot::printMessage(){
     cout << id << "is not a valid destionation" << endl;
 }
 
+InvalidCategoryException::InvalidCategoryException(string ctg)
+{
+    this->ctg = ctg;
+}
+
+void InvalidCategoryException::printMessage()
+{
+    cout << "Invalid Category -> " << ctg << endl;
+}
+
 CustomException::CustomException(string s)
 {
     this->s = s;
@@ -92,6 +102,6 @@ CustomException::CustomException(string s)
 
 void CustomException::printMessage()
 {
-    cout << "Custom Error -> " << s ;
+    cout << "Custom Error -> " << s << endl;
 }
 

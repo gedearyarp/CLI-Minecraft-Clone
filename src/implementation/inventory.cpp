@@ -172,7 +172,7 @@ void Inventory::importFile()
                 throw new InvalidInventoryTextException(line);
             }
             
-            if (id < 1 || id > MAXINV) {
+            if (id < 1 || id > 38) {
                 throw new IndexOutOfRangeException(id);
             }
 
@@ -189,7 +189,7 @@ void Inventory::importFile()
             string itemName = readItemConfig.findNameById(id);
 
             if (ctg == "TOOL") {
-                Tool* newSlot = new Tool(id, itemName);
+                Tool* newSlot = new Tool(id, itemName, qty);
                 setSlot(idx, newSlot);
             } 
             else {
@@ -262,18 +262,26 @@ bool Inventory::isFull() const
 
 void Inventory::use(string srcSlot)
 {
-    int src = stoi(srcSlot.substr(1));
-    if (this->slot[src / COLSLOT][src % COLSLOT]->getCategory() == "TOOL")
+    srcSlot = srcSlot.erase(0, 1);
+    int src;
+
+    try {
+        src = stoi(srcSlot);
+    } catch(exception &err) {
+        throw new CustomException("stoi error");
+    }
+
+    if (slotItem(src)->getCategory() == "TOOL")
     {
-        int durability = this->slot[src / COLSLOT][src % COLSLOT]->getDurability();
-        this->slot[src / COLSLOT][src % COLSLOT]->setDurability(durability -1);
-        if(durability - 1 <= 0)
+        int durability = slotItem(src)->getDurability();
+        slotItem(src)->setDurability(durability - 1);
+        if(durability - 1 <= 0) 
         {
             discardAll(srcSlot);
         }
     }
     else
     {
-        throw CustomException("INVALID TYPE");
+        throw new InvalidCategoryException(slotItem(src)->getCategory());
     }
 }

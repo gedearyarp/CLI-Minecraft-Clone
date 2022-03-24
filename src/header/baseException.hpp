@@ -83,6 +83,14 @@ public:
     void printMessage();
 };
 
+class InvalidCategoryException : public BaseException {
+private:
+    string ctg;
+public:
+    InvalidCategoryException(string ctg);
+    void printMessage();
+};
+
 class CustomException : public BaseException {
 private:
     string s;
