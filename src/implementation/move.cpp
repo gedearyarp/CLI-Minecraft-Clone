@@ -23,12 +23,17 @@ void Move::moveItoI(Inventory &inv, string srcSlot, int justInput, string destSl
         throw new IndexOutOfRangeException(dcol);
     }
 
-    // if (itemQty < 0){
+    if(justInput != 1)
+    {
+        throw new CustomException("Invalid Input");
+    }
 
-    //     throw new InvalidQuantityException(itemQty);
+    // if (justInput < 0){
+
+    //     throw new InvalidQuantityException(justInput);
     // }
 
-    // if (itemQty == 0) return;
+    // if (justInput == 0) return;
 
     if (srow < 0 || srow >= ROWSLOT)
     {
@@ -163,7 +168,7 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
         }
         else
         {
-            cout << "SLOT IS ALREADY FILLED, please choose another" << endl;
+            throw new CustomException("Crafting Table slot is already filled");
             // gabisa dulu soalnya sementara di crafting tabel maksimal 1
 
             // if(isrc.getName() != ides.getName()){
@@ -197,13 +202,17 @@ void Move::moveCtoI(Inventory &inv, string srcSlot, int justParam, string destSl
     int dcol = des % COLSLOT;
     Item *ides = inv.slotItem(des);
 
-    if (justParam < 0)
+    if(justParam != 1)
     {
-        throw new InvalidQuantityException(justParam);
+        throw new CustomException("Invalid Input");
     }
+    // if (justParam < 0)
+    // {
+    //     throw new InvalidQuantityException(justParam);
+    // }
 
-    if (justParam == 0)
-        return;
+    // if (justParam == 0)
+    //     return;
 
     if (srow < 0 || srow >= 3)
     {
@@ -257,14 +266,12 @@ void Move::moveCtoI(Inventory &inv, string srcSlot, int justParam, string destSl
         }
         else
         {
-            cout << "masuk sini 1" << endl;
             if (isrc->getName() != ides->getName())
             {
                 throw new InvalidDestinationSlot(des);
             }
             else if (isrc->getName() == ides->getName())
             {
-                cout << "masuk sini 2" << endl;
                 if (itemQty + ides->getQuantity() > MAXQTY)
                 {
                     int remainder = (isrc->getQuantity() + ides->getQuantity()) - MAXQTY;
