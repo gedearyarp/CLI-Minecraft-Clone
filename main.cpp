@@ -33,9 +33,7 @@ int main()
         {
             if (command == "EXPORT")
             {
-                string outputPath;
-                cin >> outputPath;
-                ofstream outputFile(outputPath);
+                playerInventory.exportFile();
                 // TODO, fungsi exportfile harusnya nerima parameter path tempat export, terus ngelist semua item yang ada di inventory
             }
             else if (command == "CRAFT")

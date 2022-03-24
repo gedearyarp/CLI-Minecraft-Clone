@@ -209,7 +209,18 @@ void Inventory::importFile()
 void Inventory::exportFile(){
     ofstream fout;
     string filePath = "./tests/res.out";
-
+    fout.open(filePath);
+    for(int i=0; i<27; i++){
+        if(slotItem(i)->isNothing()){
+            fout << "0:0" << endl;
+        }
+        else if(slotItem(i)->getCategory() == "TOOL"){
+            fout << slotItem(i)->getId() << ":" << slotItem(i)->getDurability() << endl;
+        } else {
+            fout << slotItem(i)->getId() << ":" << slotItem(i)->getQuantity() << endl;
+        }
+    }
+    fout.close();
 }
 
 Item Inventory::locateSlot(int slotKe){
