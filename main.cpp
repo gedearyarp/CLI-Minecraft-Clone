@@ -38,20 +38,18 @@ int main()
             }
             else if (command == "CRAFT")
             {
-                cout << "masuk sini 1" << endl;
                 map<string, int> result = playerCraftingTable.craft();
-                cout << "masuk sini 2" << endl;
                 for (auto it = result.begin(); it != result.end(); ++it)
                 {
                     
                     string itemName = it->first;
-                    int n = itemName.length();
-                    char itemNameCharArray[n + 1];
-                    strcpy(itemNameCharArray, itemName.c_str());
-                    char *token = strtok(itemNameCharArray, "-");
+                    stringstream ss(itemName);
+                    string word;
+                    ss >> word;
 
-                    if (token == "ADD_DURABILITY") {
-                        // TODO GIVE TO INVENTORY WITH EXACT DURABILITY
+                    if (word == "ADD_DURABILITY") {
+                        ss >> word;
+                        playerInventory.giveToolWithDurability(word, 1, it->second);
                     } else {
                         playerInventory.give(it->first,it->second);
                     }

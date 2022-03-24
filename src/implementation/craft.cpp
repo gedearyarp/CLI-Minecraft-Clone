@@ -10,13 +10,14 @@ using namespace std;
 bool isBlockTheSame(string wordInRecipe, string wordInTable)
 {
     ItemConfig temp = ItemConfig("./config", "item.txt");
-    bool isWordAType = temp.isType(wordInRecipe);
+    bool isWordAType = temp.isType(wordInRecipe); // return apakah wordInRecipe merupakan type atau bukan // STONE, LOG
     if (!isWordAType)
     {
         return wordInRecipe == wordInTable;
     }
     else
     {
+        // berisi semua item dengan tipe wordInrRecipe
         vector<string> listOfItemString = temp.listOfItemWithType(wordInRecipe);
         for (int i = 0; i < listOfItemString.size(); i++)
         {
@@ -25,6 +26,7 @@ bool isBlockTheSame(string wordInRecipe, string wordInTable)
                 return true;
             }
         }
+        return false;
     }
     return false;
 }
@@ -73,7 +75,7 @@ Item CraftingTable::getSlot(int slotKe) const
     return *this->Table[slotKe / 3][slotKe % 3];
 }
 
-void CraftingTable::setSlot(int slotKe, Item* item)
+void CraftingTable::setSlot(int slotKe, Item *item)
 {
     this->Table[slotKe / 3][slotKe % 3] = item;
 }
@@ -94,12 +96,12 @@ void CraftingTable::showCraftingTable()
         {
             string name = Table[i][j]->getName();
             int quantity = Table[i][j]->getQuantity();
-            cout << "[C " << name << " "<< quantity ;
+            cout << "[C " << name << " " << quantity;
             if (Table[i][j]->getCategory().compare(0, 4, "TOOL", 0, 4) == 0)
             {
                 cout << " " << Table[i][j]->getDurability();
             }
-            cout<< " ]";
+            cout << " ]";
             if (j != 2)
             {
                 cout << " ";
@@ -136,9 +138,9 @@ map<string, int> CraftingTable::craft()
 
     // check for increasing durability of TOOL ITEM
     bool isToolItem = false;
-    for (int i = 3; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for (int j = 3; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             if (this->Table[i][j]->getCategory() == "TOOL")
             {
@@ -171,17 +173,18 @@ map<string, int> CraftingTable::craft()
             bool isToolNameSame = false;
             string toolName = "";
             bool done = false;
-            bool countDurability = 0;
+            int countDurability = 0;
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (!done) {
+                    if (!done)
+                    {
                         toolName = this->Table[i][j]->getName();
                         countDurability += this->Table[i][j]->getDurability();
                         done = true;
-                    }  
-                    else 
+                    }
+                    else
                     {
                         if (toolName == this->Table[i][j]->getName())
                         {
@@ -194,19 +197,22 @@ map<string, int> CraftingTable::craft()
                     }
                 }
             }
-            
-            if (isToolNameSame) {
+
+            if (!isToolNameSame)
+            {
                 cout << "Tool name is not the same" << endl;
                 return map<string, int>();
-            } else {
-                cout << "Increase Tool" << toolName <<" durability" << endl;
-                return map<string, int> {{"ADD_DURABILITY"+ toolName, countDurability}};
+            }
+            else
+            {
+                cout << "Increase Tool " << toolName << " with durability: " << countDurability << endl;
+                this->clearTable();
+                return map<string, int>{{"ADD_DURABILITY " + toolName, countDurability}};
             }
         }
     }
     else
     {
-
         ItemConfig readItemConfigs = ItemConfig("./config", "item.txt");
         map<int, vector<string>> mapOfRecipe = MapRecipesFromRecipesClass(this->recipes);
 
@@ -259,22 +265,22 @@ map<string, int> CraftingTable::craft()
                         // 3x1
                         else if (recipeRow == 3 && recipeCol == 1)
                         {
-                            positions = {1, 2, 3, 4, 5, 6};
+                            positions = {1, 2, 3};
                         }
                         // 1x3
                         else if (recipeRow == 1 && recipeCol == 3)
                         {
-                            positions = {1, 2, 3, 4, 5, 6};
+                            positions = {1, 4, 7};
                         }
                         // 2x3
                         else if (recipeRow == 2 && recipeCol == 3)
                         {
-                            positions = {1, 4, 7};
+                            positions = {1, 4};
                         }
                         // 3x2
                         else if (recipeRow == 3 && recipeCol == 2)
                         {
-                            positions = {1, 2, 3};
+                            positions = {1, 2};
                         }
                         // 2x2
                         else if (recipeRow == 2 && recipeCol == 2)
