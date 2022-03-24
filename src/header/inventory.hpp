@@ -26,7 +26,7 @@ class Inventory {
         void discardAll(string slotId);
 
         void importFile();
-        void exportFile();
+        void exportFile(string fileName);
 
         Item locateSlot(int slotKe);
         Item *& slotItem(int slotKe);

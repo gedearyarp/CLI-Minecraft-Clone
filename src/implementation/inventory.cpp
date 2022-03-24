@@ -13,15 +13,19 @@ void Inventory::showInventory()
     int count = 0;
     for(int i = 0; i < ROWSLOT;i++){
         for(int j = 0; j < COLSLOT; j++){
-            string nameTool = "TOOL";
-            string curItem = slot[i][j]->getName();
-            int curQty = slot[i][j]->getQuantity();
-            cout << "[I" << count << ": " <<curItem << " " << curQty ;
-            if(slot[i][j]->getCategory().compare(0,4,nameTool,0,4) == 0)
-            {
-                cout << " " << slot[i][j]->getDurability();
+            if(slot[i][j]->isNothing()){
+                cout << "[I" << count << ": EMPTY] ";
+            } else {
+                string nameTool = "TOOL";
+                string curItem = slot[i][j]->getName();
+                int curQty = slot[i][j]->getQuantity();
+                cout << "[I" << count << ": " <<curItem << " " << curQty;
+                if(slot[i][j]->getCategory().compare(0,4,nameTool,0,4) == 0)
+                {
+                    cout << " " << slot[i][j]->getDurability();
+                }
+                cout << "] ";
             }
-            cout << "] ";
             count++;
         }
         cout << '\n';
@@ -43,9 +47,20 @@ void Inventory::give(string itemName, int itemQty)
 
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){
+            if (ctg == "NONTOOL" && slot[i][j]->getName() == itemName && !slot[i][j]->isFull() && itemQty > 0)
+            {
+                int remainQty = MAXQTY - slot[i][j]->getQuantity();
+                int addQty = min(itemQty, remainQty);
+                slot[i][j]->setQuantity(slot[i][j]->getQuantity() + addQty);
+                itemQty -= addQty;
+            }
+        }
+    }
+
+    for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
+        for(int j = 0; j < COLSLOT && itemQty > 0; j++){
             if (ctg == "NONTOOL" && slot[i][j]->isEmpty() && itemQty > 0)
             {
-                cout << slot[i][j]->getQuantity() << endl;
                 int addQty = min(MAXQTY, itemQty);
                 NonTool *NT = new NonTool(readItemConfig.findIdByName(itemName), itemName, readItemConfig.findTypeByName(itemName), addQty);
                 slot[i][j] = NT;
@@ -61,18 +76,6 @@ void Inventory::give(string itemName, int itemQty)
 
                 this->slotUsed++;
                 itemQty--;
-            }
-        }
-    }
-
-    for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
-        for(int j = 0; j < COLSLOT && itemQty > 0; j++){
-            if (ctg == "NONTOOL" && slot[i][j]->getName() == itemName && !slot[i][j]->isFull())
-            {
-                int remainQty = MAXQTY - slot[i][j]->getQuantity();
-                int addQty = min(itemQty, remainQty);
-                slot[i][j]->setQuantity(slot[i][j]->getQuantity() + addQty);
-                itemQty -= remainQty;
             }
         }
     }
@@ -154,7 +157,8 @@ void Inventory::discard(string slotId, int itemQty)
 }
 
 void Inventory::discardAll(string slotId){
-    int slotKe = stoi(slotId.substr(1));
+    slotId.erase(0,1); 
+    int slotKe = stoi(slotId);
     slot[slotKe / COLSLOT][slotKe % COLSLOT] = new Item();
 }
 
@@ -237,9 +241,9 @@ void Inventory::importFile()
     }
 }
 
-void Inventory::exportFile(){
+void Inventory::exportFile(string fileName){
     ofstream fout;
-    string filePath = "./tests/res.out";
+    string filePath = "./tests/" + fileName + ".txt";
     fout.open(filePath);
     for(int i=0; i<27; i++){
         if(slotItem(i)->isNothing()){
@@ -293,7 +297,7 @@ bool Inventory::isFull() const
 
 void Inventory::use(string srcSlot)
 {
-    srcSlot = srcSlot.erase(0, 1);
+    srcSlot.erase(0, 1);
     int src;
 
     try {
