@@ -16,14 +16,14 @@ int main()
     // read item from config file
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
 
-    // try
-    // {
-    //     playerInventory.importFile();
-    // }
-    // catch (BaseException *err)
-    // {
-    //     (*err).printMessage();
-    // }
+    try
+    {
+        playerInventory.importFile();
+    }
+    catch (BaseException *err)
+    {
+        (*err).printMessage();
+    }
 
     // sample interaction
     string command;

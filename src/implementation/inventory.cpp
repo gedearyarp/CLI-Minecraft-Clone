@@ -5,11 +5,6 @@ using namespace std;
 Inventory::Inventory()
 {
     this->slot = vector<vector<Item*>>(ROWSLOT, vector<Item*>(COLSLOT, new Item()));
-    // for(int i = 0; i < ROWSLOT;i++){
-    //     for(int j = 0; j < COLSLOT; j++){
-    //         this->slot[i][j] = new Item();
-    //     }
-    // }
     this-> slotUsed = 0;
 }
 
@@ -173,7 +168,7 @@ void Inventory::importFile()
             int id, qty;
             
             try {
-                id = stoi(idItem);
+                id = stoi(idItem); 
                 qty = stoi(qtyItem);
             } catch(exception &err) {
                 throw new InvalidInventoryTextException(line);
@@ -184,10 +179,13 @@ void Inventory::importFile()
             }
 
             string ctg = readItemConfig.findCategoryById(id);
-            if ((ctg == "TOOL" && qty != 1) ||
-                (ctg == "NONTOOL" && (qty < 1 || qty > MAXQTY))
+            if (ctg == "NONTOOL" && (qty < 1 || qty > MAXQTY)
             ) {
                 throw new InvalidQuantityException(qty);
+            }
+
+            if (ctg != "NONTOOL" && ctg != "TOOL"){
+                throw new CustomException(ctg);
             }
 
             string itemName = readItemConfig.findNameById(id);
@@ -200,6 +198,7 @@ void Inventory::importFile()
                 NonTool* newSlot = new NonTool(id, itemName, readItemConfig.findTypeByName(itemName), qty);
                 setSlot(idx, newSlot);
             } 
+            
             idx++;
         }
 
@@ -207,6 +206,12 @@ void Inventory::importFile()
     } else {
         throw new OpenFileErrorException(fileName);
     }
+}
+
+void Inventory::exportFile(){
+    ofstream fout;
+    string filePath = "./tests/res.out";
+
 }
 
 Item Inventory::locateSlot(int slotKe){
@@ -260,6 +265,6 @@ void Inventory::use(string srcSlot)
     }
     else
     {
-        throw "INVALID TYPE";
+        throw CustomException("INVALID TYPE");
     }
 }

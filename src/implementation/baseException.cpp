@@ -84,3 +84,14 @@ InvalidDestinationSlot::InvalidDestinationSlot(int id)
 void InvalidDestinationSlot::printMessage(){
     cout << id << "is not a valid destionation" << endl;
 }
+
+CustomException::CustomException(string s)
+{
+    this->s = s;
+}
+
+void CustomException::printMessage()
+{
+    cout << "Custom Error -> " << s ;
+}
+

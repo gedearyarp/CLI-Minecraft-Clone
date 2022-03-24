@@ -83,4 +83,12 @@ public:
     void printMessage();
 };
 
+class CustomException : public BaseException {
+private:
+    string s;
+public:
+    CustomException(string s);
+    void printMessage();
+};
+
 #endif
