@@ -21,6 +21,7 @@ class Inventory {
 
         void showInventory();
         void give(string itemName, int itemQty);
+        void giveToolWithDurability(string itemName, int itemQty, int durability);
         void discard(string slotId, int itemQty);
         void discardAll(string slotId);
 
