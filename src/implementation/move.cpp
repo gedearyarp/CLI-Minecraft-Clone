@@ -166,23 +166,35 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
     }
     if (isrc->getCategory() != "TOOL")
     {
-        int itemQty = justParam;
+        // UNCOMENT INI KALO GABIKIN MULTI-CRAFTING
+        int itemQty = 1;
         if (craft.getSlot(des).isEmpty())
         {
-            craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), justParam));
-            inv.discard(srcSlot, itemQty);
+            craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), 1));
+            inv.discard(srcSlot, 1);
         }
         else
         {
-            if (isrc->getName() == ides->getName())
-            {
-                inv.discard(srcSlot, itemQty);
-                itemQty = min(itemQty + ides->getQuantity(), MAXQTY);
-                craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), itemQty));
-            }
-            else
+            if (isrc->getName() != ides->getName())
             {
                 throw new InvalidDestinationSlot(des);
+                // BEDA BARANG
+            }
+            if (isrc->getName() == ides->getName())
+            {
+                if (itemQty + ides->getQuantity() > MAXQTY)
+                {
+                    int remainder = (inv.slotItem(des)->getQuantity() + inv.slotItem(src)->getQuantity()) - MAXQTY;
+                    // craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), MAXQTY));
+                    ides->setQuantity(MAXQTY);
+                    inv.slotItem(src)->setQuantity(remainder);
+                }
+                if (itemQty + ides->getQuantity() <= MAXQTY)
+                {
+                    // craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), itemQty));
+                    ides->setQuantity(ides->getQuantity() + itemQty);
+                    inv.discard(srcSlot, itemQty);
+                }
             }
         }
     }
