@@ -110,7 +110,7 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
     int des = stoi(destSlot.substr(1));
     int drow = des / 3;
     int dcol = des % 3;
-    Item ides = craft.getSlot(des);
+    Item *ides = craft.slotItem(des);
 
     if (justParam < 0)
     {
@@ -167,35 +167,36 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
     if (isrc->getCategory() != "TOOL")
     {
         // UNCOMENT INI KALO GABIKIN MULTI-CRAFTING
-        // int itemQty = 1;
-        // if (craft.getSlot(des).isEmpty())
-        // {
-        //     craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), 1));
-        //     inv.discard(srcSlot, 1);
-        // }
-        // else
-        // {
-        //     throw new CustomException("Crafting Table slot is already filled");
-        // }
-        
-        // UNCOMMENT INI KALO BIKIN MULTI-CRAFTING;
         int itemQty = 1;
-        if(isrc->getName() != ides.getName()){
-            throw new InvalidDestinationSlot(des);
-            //BEDA BARANG
+        if (craft.getSlot(des).isEmpty())
+        {
+            craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), 1));
+            inv.discard(srcSlot, 1);
         }
-        if(isrc->getName() == ides.getName()){
-            if(itemQty + ides.getQuantity() > MAXQTY){
-                int remainder = (inv.slotItem(des)->getQuantity() + inv.slotItem(src)->getQuantity()) - MAXQTY;
-                craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), MAXQTY));
-                inv.slotItem(src)->setQuantity(remainder);
+        else
+        {
+            if (isrc->getName() != ides->getName())
+            {
+                throw new InvalidDestinationSlot(des);
+                // BEDA BARANG
             }
-            if(itemQty + ides.getQuantity() <= MAXQTY){
-                craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), itemQty));
-                inv.discard(srcSlot, itemQty);
+            if (isrc->getName() == ides->getName())
+            {
+                if (itemQty + ides->getQuantity() > MAXQTY)
+                {
+                    int remainder = (inv.slotItem(des)->getQuantity() + inv.slotItem(src)->getQuantity()) - MAXQTY;
+                    // craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), MAXQTY));
+                    ides->setQuantity(MAXQTY);
+                    inv.slotItem(src)->setQuantity(remainder);
+                }
+                if (itemQty + ides->getQuantity() <= MAXQTY)
+                {
+                    // craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), itemQty));
+                    ides->setQuantity(ides->getQuantity() + itemQty);
+                    inv.discard(srcSlot, itemQty);
+                }
             }
         }
-        
     }
 }
 
