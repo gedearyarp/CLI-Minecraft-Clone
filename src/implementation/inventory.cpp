@@ -14,13 +14,15 @@ void Inventory::showInventory()
     int count = 0;
     for(int i = 0; i < ROWSLOT;i++){
         for(int j = 0; j < COLSLOT; j++){
+            
             if(slot[i][j]->isNothing()){
-                cout << "[I" << count << ": EMPTY] ";
+                
+                cout << "[I" << (count < 10 ? "0" : "") << count << ": EMPTY] ";
             } else {
                 string nameTool = "TOOL";
                 string curItem = slot[i][j]->getName();
                 int curQty = slot[i][j]->getQuantity();
-                cout << "[I" << count << ": " <<curItem << " " << curQty;
+                cout << "[I" << (count < 10 ? "0" : "") << count << ": " <<curItem << " " << curQty;
                 if(slot[i][j]->getCategory().compare(0,4,nameTool,0,4) == 0)
                 {
                     cout << " " << slot[i][j]->getDurability();
@@ -80,17 +82,11 @@ void Inventory::give(string itemName, int itemQty)
             }
         }
     }
-    
-    if(itemQty > 0){
-        cout << "Inventory is full, " << itemQty << " items is not inputed\n";
-    } else {
-        cout << "GIVE SUCCESS\n";
-    }
 }
 
 void Inventory::giveToolWithDurability(string itemName, int itemQty, int durability)
 {
-    if (itemQty < 0){
+    if (itemQty < 0) {
         throw new InvalidQuantityException(itemQty);
     }
 
@@ -268,7 +264,7 @@ void Inventory::importFile()
 
 void Inventory::exportFile(string fileName){
     ofstream fout;
-    string filePath = "./tests/" + fileName + ".txt";
+    string filePath = fileName;
     fout.open(filePath);
     for(int i=0; i<27; i++){
         if(slotItem(i)->isNothing()){

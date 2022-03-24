@@ -16,14 +16,15 @@ int main()
     // read item from config file
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
 
-    try
-    {
-        playerInventory.importFile();
-    }
-    catch (BaseException *err)
-    {
-        (*err).printMessage();
-    }
+    // UNCOMMENT INI KALO MAU INVENTORYNYA UDAH ADA ISINYA
+    // try
+    // {
+    //     playerInventory.importFile();
+    // }
+    // catch (BaseException *err)
+    // {
+    //     (*err).printMessage();
+    // }
 
     cout << "__________.__     __        __    _________                          " << endl;
     cout << "\\______   \\__|   |__|____ _/  |_  \\_   ___ \\     .__         .__     " << endl;
@@ -46,6 +47,7 @@ int main()
                 string fileName;
                 cin >> fileName;
                 playerInventory.exportFile(fileName);
+                cout << "EXPORT SUCCESS" << '\n';
             }
             else if (command == "CRAFT")
             {
@@ -76,6 +78,7 @@ int main()
                     throw new CustomException("Invalid Input");
                 }
                 playerInventory.give(itemName, itemQty);
+                cout << "GIVE SUCCESS" << '\n';
             }
             else if (command == "MOVE")
             {
@@ -127,6 +130,7 @@ int main()
                         move.moveItoC(playerInventory, slotSrc, slotQty, destVector.at(i), playerCraftingTable);
                     }
                 }
+                cout << "MOVE SUCCESS" << '\n';
             }
             else if (command == "SHOW")
             {
@@ -143,15 +147,18 @@ int main()
                     throw new CustomException("Invalid Input");
                 }
                 playerInventory.discard(slotID, itemQty);
+                cout << "DISCARD SUCCESS" << '\n';
             }
             else if (command == "USE")
             {
                 string Slot;
                 cin >> Slot;
                 playerInventory.use(Slot);
+                cout << "USE SUCCESS" << '\n';
             }
             else if (command == "EXIT")
             {
+                cout << "GOODBYE!" << '\n';
                 break;
             }
             else if (command == "HELP")
@@ -168,7 +175,7 @@ int main()
             }
             else
             {
-                cout << "Invalid command" << endl;
+                cout << "Command is invalid. Enter 'HELP' for more." << endl;
             }
         }
         catch (BaseException *err)
