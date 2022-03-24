@@ -20,7 +20,7 @@ InvalidQuantityException::InvalidQuantityException(int qty){
 }
 
 void InvalidQuantityException::printMessage(){
-    cout << "Quantity" << this->qty << " is invalid." << '\n';
+    cout << "Quantity " << this->qty << " is invalid." << '\n';
 }
 
 EmptySlotException::EmptySlotException(int row, int col){
@@ -82,7 +82,7 @@ InvalidDestinationSlot::InvalidDestinationSlot(int id)
 }
 
 void InvalidDestinationSlot::printMessage(){
-    cout << id << "is not a valid destionation" << endl;
+    cout << id << "is not a valid destination" << endl;
 }
 
 InvalidCategoryException::InvalidCategoryException(string ctg)

@@ -61,11 +61,18 @@ int CraftingTable::countItemOnTable()
 
 void CraftingTable::clearTable()
 {
+    int idx = 0;
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            this->Table[i][j] = new Item();
+            if (this->Table[i][j]->getCategory() == "TOOL") {
+                this->Table[i][j] = new Item();
+            } else {
+                Item* src = this->slotItem(idx);
+                this->Table[i][j] = new NonTool(src->getId(), src->getName(), src->getType(), src->getQuantity()-1);
+            }
+            idx++;
         }
     }
 }
@@ -87,26 +94,28 @@ Item *&CraftingTable::slotItem(int slotKe)
 
 void CraftingTable::showCraftingTable()
 {
-    cout << "Crafting Table: " << endl;
-    int idx = 0;
+    cout << "Crafting Table <ItemName Quantity/Durability>: " << endl;
+    int count = 0;
     for (int i = 0; i < 3; i++)
     {
-        cout << "[ ", idx, ": ";
+        cout << "[ ";
         for (int j = 0; j < 3; j++)
         {
             string name = Table[i][j]->getName();
             int quantity = Table[i][j]->getQuantity();
-            cout << "[C " << name << " " << quantity;
-            if (Table[i][j]->getCategory().compare(0, 4, "TOOL", 0, 4) == 0)
-            {
-                cout << " " << Table[i][j]->getDurability();
+            cout << "[C" << count << ": " << name << " ";
+            if (Table[i][j]->getCategory() == "TOOL" ) {
+                cout << Table[i][j]->getDurability();
+            } else {
+                cout << Table[i][j]->getQuantity();
             }
+        
             cout << " ]";
             if (j != 2)
             {
                 cout << " ";
             }
-            idx++;
+            count++;
         }
         cout << " ]" << endl;
     }
