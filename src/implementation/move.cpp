@@ -120,6 +120,12 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
     if (justParam == 0)
         return;
 
+    //UNCOMMENT INI KALO BIKIN MULTI-CRAFT
+    // if (justParam > 1)
+    // {
+    //     throw new InvalidQuantityException(justParam);
+    // }
+    
     if (srow < 0 || srow >= ROWSLOT)
     {
         throw new IndexOutOfRangeException(srow);
@@ -160,33 +166,36 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
     }
     if (isrc->getCategory() != "TOOL")
     {
-        int itemQty = 1;
-        if (craft.getSlot(des).isEmpty())
-        {
-            craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), 1));
-            inv.discard(srcSlot, 1);
+        //UNCOMENT INI KALO GABIKIN MULTI-CRAFTING
+        // int itemQty = 1;
+        // if (craft.getSlot(des).isEmpty())
+        // {
+        //     craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), 1));
+        //     inv.discard(srcSlot, 1);
+        // }
+        // else
+        // {
+        //     throw new CustomException("Crafting Table slot is already filled");
+        // }
+        
+        //UNCOMMENT INI KALO BIKIN MULTI-CRAFTING;
+        int itemQty = justParam;
+        if(isrc->getName() != ides.getName()){
+            throw new InvalidDestinationSlot(des);
+            //BEDA BARANG
         }
-        else
-        {
-            throw new CustomException("Crafting Table slot is already filled");
-            // gabisa dulu soalnya sementara di crafting tabel maksimal 1
-
-            // if(isrc.getName() != ides.getName()){
-            //     throw new InvalidDestinationSlot(des);
-            //     //BEDA BARANG
-            // }
-            // if(isrc.getName() == ides.getName()){
-            //     if(itemQty + ides.getQuantity() > MAXQTY){
-            //         int remainder = (inv.slotItem(des)->getQuantity() + inv.slotItem(src)->getQuantity()) - MAXQTY;
-            //         craft.setSlot(des, NonTool(isrc.getId(), isrc.getName(), isrc.getType(), MAXQTY));
-            //         inv.slotItem(src)->setQuantity(remainder);
-            //     }
-            //     if(itemQty + ides.getQuantity() <= MAXQTY){
-            //         craft.setSlot(des, NonTool(isrc.getId(), isrc.getName(), isrc.getType(), itemQty));
-            //         inv.discard(srcSlot, itemQty);
-            //     }
-            // }
+        if(isrc->getName() == ides.getName()){
+            if(itemQty + ides.getQuantity() > MAXQTY){
+                int remainder = (inv.slotItem(des)->getQuantity() + inv.slotItem(src)->getQuantity()) - MAXQTY;
+                craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), MAXQTY));
+                inv.slotItem(src)->setQuantity(remainder);
+            }
+            if(itemQty + ides.getQuantity() <= MAXQTY){
+                craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), itemQty));
+                inv.discard(srcSlot, itemQty);
+            }
         }
+        
     }
 }
 
