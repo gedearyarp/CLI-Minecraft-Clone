@@ -8,7 +8,7 @@ void Move::moveItoI(Inventory &inv, string srcSlot, int justInput, string destSl
     int src = stoi(srcSlot.substr(1));
     int srow = src / COLSLOT;
     int scol = src % COLSLOT;
-    Item isrc = inv.locateSlot(src);
+    Item *isrc = inv.slotItem(src);
     int des = stoi(destSlot.substr(1));
     int drow = des / COLSLOT;
     int dcol = des % COLSLOT;
@@ -50,12 +50,12 @@ void Move::moveItoI(Inventory &inv, string srcSlot, int justInput, string destSl
         throw new EmptySlotException(srow, scol);
     }
 
-    if (isrc.getCategory() == "TOOL")
+    if (isrc->getCategory() == "TOOL")
     {
         Item slotdes = inv.locateSlot(des);
         if (slotdes.isEmpty())
         {
-            inv.setSlot(des, new Tool(readItemConfig.findIdByName(isrc.getName()), isrc.getName(), isrc.getDurability()));
+            inv.setSlot(des, new Tool(readItemConfig.findIdByName(isrc->getName()), isrc->getName(), isrc->getDurability()));
             inv.discard(srcSlot, 1);
         }
         else
@@ -65,23 +65,23 @@ void Move::moveItoI(Inventory &inv, string srcSlot, int justInput, string destSl
 
         // ASUMSI LOKASI PILIHAN SELALU KOSONG UNTUK TOOL
     }
-    if (isrc.getCategory() != "TOOL")
+    if (isrc->getCategory() != "TOOL")
     {
         Item slotdes = inv.locateSlot(des);
         int itemQty = inv.slotItem(src)->getQuantity();
         if (slotdes.isEmpty())
         {
-            inv.setSlot(des, new NonTool(isrc.getId(), isrc.getName(), isrc.getType(), itemQty));
+            inv.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), itemQty));
             inv.discard(srcSlot, itemQty);
         }
         else
         {
 
-            if (isrc.getName() != slotdes.getName())
+            if (isrc->getName() != slotdes.getName())
             {
                 return; // BEDA BARANG
             }
-            else if (isrc.getName() == slotdes.getName())
+            else if (isrc->getName() == slotdes.getName())
             {
                 if (itemQty + inv.slotItem(des)->getQuantity() > MAXQTY)
                 {
