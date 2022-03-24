@@ -20,7 +20,7 @@ ItemConfig::ItemConfig(string configPath, string fileName)
         string category = "";
         for (int i = 0; i < line.size(); i++)
         {
-            if (line[i] != ' ')
+            if (line[i] != ' ' && line[i] != '\n')
             {
                 if (spaces == 0)
                     id += line[i];
