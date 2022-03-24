@@ -81,6 +81,11 @@ void Inventory::give(string itemName, int itemQty)
         }
     }
     
+    if(itemQty > 0){
+        cout << "Inventory is full, " << itemQty << " items is not inputed\n";
+    } else {
+        cout << "GIVE SUCCESS\n";
+    }
 }
 
 void Inventory::giveToolWithDurability(string itemName, int itemQty, int durability)
@@ -117,8 +122,16 @@ void Inventory::giveToolWithDurability(string itemName, int itemQty, int durabil
 
 void Inventory::discard(string slotId, int itemQty)
 {
+    if (itemQty == 0) return;
+
     slotId.erase(0,1); 
-    int idNum = stoi(slotId);
+    int idNum;
+
+    try {
+        idNum = stoi(slotId);
+    } catch(exception &err) {
+        throw new CustomException("stoi error");
+    }
 
     int row = idNum/COLSLOT;
     int col = idNum%COLSLOT;
@@ -138,15 +151,13 @@ void Inventory::discard(string slotId, int itemQty)
     if (itemQty < 0){
         throw new InvalidQuantityException(itemQty);
     }
-    
-    if (itemQty == 0) return;
 
     if ((slot[row][col]->getCategory() == "TOOL" && itemQty > 1) ||
         (slot[row][col]->getCategory() == "NONTOOL" && itemQty > slot[row][col]->getQuantity())
     ){
         throw new DiscardQuantityException(
-            itemQty,
-            (slot[row][col]->getCategory() == "TOOL") ? 1 : (slot[row][col]->getQuantity())
+            (slot[row][col]->getCategory() == "TOOL") ? 1 : (slot[row][col]->getQuantity()),
+            itemQty
         );
     }
 
@@ -158,12 +169,20 @@ void Inventory::discard(string slotId, int itemQty)
     }
 
     slot[row][col]->setQuantity(slot[row][col]->getQuantity() - itemQty);
-
 }
 
 void Inventory::discardAll(string slotId){
     slotId.erase(0,1); 
-    int slotKe = stoi(slotId);
+    int slotKe;
+
+    try {
+        slotKe = stoi(slotId);
+    } catch(exception &err) {
+        throw new CustomException("stoi error");
+    }
+
+    if(slotItem(slotKe)->isNothing()) return;
+
     slot[slotKe / COLSLOT][slotKe % COLSLOT] = new Item();
     this->slotUsed--;
 }
@@ -210,7 +229,7 @@ void Inventory::importFile()
                 id = stoi(idItem); 
                 qty = stoi(qtyItem);
             } catch(exception &err) {
-                throw new InvalidInventoryTextException(line);
+                throw new CustomException("stoi error");
             }
             
             if (id < 1 || id > 38) {
@@ -262,10 +281,6 @@ void Inventory::exportFile(string fileName){
         }
     }
     fout.close();
-}
-
-Item Inventory::locateSlot(int slotKe){
-    return *this->slot[slotKe / COLSLOT][slotKe % COLSLOT];
 }
 
 void Inventory::setSlot(int slotKe, Item* item) {

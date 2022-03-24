@@ -30,7 +30,7 @@ EmptySlotException::EmptySlotException(int row, int col){
 
 void EmptySlotException::printMessage(){
     int slotIdx = 9*row + col;
-    cout << "Slot with id I" << slotIdx << "is Empty." << '\n'; 
+    cout << "Slot with id I" << slotIdx << " is Empty." << '\n'; 
 }
 
 DiscardQuantityException::DiscardQuantityException(int slotQty, int discardQty){
@@ -73,7 +73,7 @@ InvalidIDException::InvalidIDException(int id)
 }
 
 void InvalidIDException::printMessage(){
-    cout << id << "is not a valid item id" << endl;
+    cout << id << " is not a valid item id" << endl;
 }
 
 InvalidDestinationSlot::InvalidDestinationSlot(int id)

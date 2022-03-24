@@ -25,8 +25,18 @@ int main()
         (*err).printMessage();
     }
 
+    cout << "__________.__     __        __    _________                          " << endl;
+    cout << "\\______   \\__|   |__|____ _/  |_  \\_   ___ \\     .__         .__     " << endl;
+    cout << " |     ___/  |   |  \\__  \\\\   __\\ /    \\  \\/   __|  |___   __|  |___ " << endl;
+    cout << " |    |   |  |   |  |/ __ \\|  |   \\     \\____ /__    __/  /__    __/ " << endl;
+    cout << " |____|   |__/\\__|  (____  /__|    \\______  /    |__|        |__|    " << endl;
+    cout << "             \\______|    \\/               \\/  MINECRAFT CLONE V.01" << endl;
+    cout << endl << "Enter \'HELP\' to show all valid command." << endl;
+
+
     // sample interaction
     string command;
+    cout << "\nINPUT COMMAND: ";
     while (cin >> command)
     {
         try
@@ -144,6 +154,18 @@ int main()
             {
                 break;
             }
+            else if (command == "HELP")
+            {
+                cout << "1. SHOW" << '\n';
+                cout << "2. GIVE <ITEM_NAME> <ITEM_QTY>" << '\n';
+                cout << "3. DISCARD <INVENTORY_SLOT_ID> <ITEM_QTY>" << '\n';
+                cout << "4. MOVE <INVENTORY_SLOT_ID> N <CRAFTING_SLOT_ID_1>" << '\n';
+                cout << "5. MOVE <INVENTORY_SLOT_ID_SRC> 1 <INVENTORY_SLOT_ID_DEST>" << '\n';
+                cout << "6. MOVE <CRAFTING_SLOT_ID> 1 <INVENTORY_SLOT_ID>" << '\n';
+                cout << "7. USE <INVENTORY_SLOT_ID>" << '\n';
+                cout << "8. CRAFT" << '\n';
+                cout << "9. EXPORT <NAMA_FILE>" << '\n';
+            }
             else
             {
                 cout << "Invalid command" << endl;
@@ -153,6 +175,7 @@ int main()
         {
             (*err).printMessage();
         }
+        cout << "\nINPUT COMMAND: ";
     }
     return 0;
 }

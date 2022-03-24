@@ -28,7 +28,6 @@ class Inventory {
         void importFile();
         void exportFile(string fileName);
 
-        Item locateSlot(int slotKe);
         Item *& slotItem(int slotKe);
         void setSlot(int slotKe, Item* item);
         int countItem(string itemName) const;
