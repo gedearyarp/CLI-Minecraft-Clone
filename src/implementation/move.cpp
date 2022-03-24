@@ -45,15 +45,15 @@ void Move::moveItoI(Inventory &inv, string srcSlot, int justInput, string destSl
         throw new IndexOutOfRangeException(scol);
     }
 
-    if (inv.locateSlot(9 * srow + scol).isNothing())
+    if (inv.slotItem(9 * srow + scol)->isNothing())
     {
         throw new EmptySlotException(srow, scol);
     }
 
     if (isrc->getCategory() == "TOOL")
     {
-        Item slotdes = inv.locateSlot(des);
-        if (slotdes.isEmpty())
+        Item *slotdes = inv.slotItem(des);
+        if (slotdes->isEmpty())
         {
             inv.setSlot(des, new Tool(readItemConfig.findIdByName(isrc->getName()), isrc->getName(), isrc->getDurability()));
             inv.discard(srcSlot, 1);
@@ -67,9 +67,9 @@ void Move::moveItoI(Inventory &inv, string srcSlot, int justInput, string destSl
     }
     if (isrc->getCategory() != "TOOL")
     {
-        Item slotdes = inv.locateSlot(des);
+        Item *slotdes = inv.slotItem(des);
         int itemQty = inv.slotItem(src)->getQuantity();
-        if (slotdes.isEmpty())
+        if (slotdes->isEmpty())
         {
             inv.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), itemQty));
             inv.discard(srcSlot, itemQty);
@@ -77,11 +77,11 @@ void Move::moveItoI(Inventory &inv, string srcSlot, int justInput, string destSl
         else
         {
 
-            if (isrc->getName() != slotdes.getName())
+            if (isrc->getName() != slotdes->getName())
             {
-                return; // BEDA BARANG
+                throw new CustomException("Different Items");
             }
-            else if (isrc->getName() == slotdes.getName())
+            else if (isrc->getName() == slotdes->getName())
             {
                 if (itemQty + inv.slotItem(des)->getQuantity() > MAXQTY)
                 {
@@ -146,7 +146,7 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
         throw new IndexOutOfRangeException(dcol);
     }
 
-    if (inv.locateSlot(9 * srow + scol).isNothing())
+    if (inv.slotItem(9 * srow + scol)->isNothing())
     {
         throw new EmptySlotException(srow, scol);
     }
@@ -253,8 +253,8 @@ void Move::moveCtoI(Inventory &inv, string srcSlot, int justParam, string destSl
     {
         if (ides->isEmpty())
         {
-            craft.setSlot(des, new Item());
-            inv.setSlot(src, new Tool(readItemConfig.findIdByName(isrc->getName()), isrc->getName(), isrc->getDurability()));
+            craft.setSlot(src, new Item());
+            inv.setSlot(des, new Tool(isrc->getId(), isrc->getName(), isrc->getDurability()));
         }
         else
         {

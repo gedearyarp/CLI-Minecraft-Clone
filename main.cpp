@@ -62,6 +62,10 @@ int main()
                 string itemName;
                 int itemQty;
                 cin >> itemName >> itemQty;
+                if(cin.fail())
+                {
+                    throw new CustomException("Invalid Input");
+                }
                 playerInventory.give(itemName, itemQty);
             }
             else if (command == "MOVE")
@@ -69,7 +73,6 @@ int main()
                 string slotSrc;
                 int slotQty;
                 string slotDest;
-                
 
                 int i;
                 string I = "I";
@@ -79,6 +82,11 @@ int main()
                 cin >> slotSrc >> slotQty;
                 getline(cin, slotDest);
                 slotDest.erase(remove(slotDest.begin(), slotDest.end(), ' '), slotDest.end());
+                
+                if (cin.fail())
+                {
+                    throw new CustomException("Invalid Input");
+                }
 
                 if (strstr(slotSrc.c_str(), I.c_str()) && strstr(slotDest.c_str(), I.c_str()))
                 {
@@ -99,7 +107,13 @@ int main()
                         string added = string(1,slotDest[i]) + string(1,slotDest[i+1]);
                         destVector.push_back(added);
                     }
-                    for (int i = 0; i < destVector.size(); i++)
+
+                    if (destVector.size() != slotQty)
+                    {
+                        throw new CustomException("Too many slot destination");
+                    }
+
+                    for (int i = 0; i < slotQty; i++)
                     {
                         move.moveItoC(playerInventory, slotSrc, slotQty, destVector.at(i), playerCraftingTable);
                     }
@@ -116,6 +130,10 @@ int main()
                 string slotID;
                 int itemQty;
                 cin >> slotID >> itemQty;
+                if (cin.fail())
+                {
+                    throw new CustomException("Invalid Input");
+                }
                 playerInventory.discard(slotID, itemQty);
             }
             else if (command == "USE")
