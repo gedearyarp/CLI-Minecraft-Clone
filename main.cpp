@@ -36,7 +36,6 @@ int main()
                 string fileName;
                 cin >> fileName;
                 playerInventory.exportFile(fileName);
-                // TODO, fungsi exportfile harusnya nerima parameter path tempat export, terus ngelist semua item yang ada di inventory
             }
             else if (command == "CRAFT")
             {
@@ -122,7 +121,6 @@ int main()
             else if (command == "SHOW")
             {
                 playerCraftingTable.showCraftingTable();
-                cout << "Inventory: " << endl;
                 playerInventory.showInventory();
             }
             else if (command == "DISCARD")

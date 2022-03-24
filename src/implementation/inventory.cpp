@@ -10,6 +10,7 @@ Inventory::Inventory()
 
 void Inventory::showInventory()
 {
+    cout << "Inventory: " << '\n';
     int count = 0;
     for(int i = 0; i < ROWSLOT;i++){
         for(int j = 0; j < COLSLOT; j++){
@@ -151,15 +152,20 @@ void Inventory::discard(string slotId, int itemQty)
 
     if ((slot[row][col]->getCategory() == "TOOL") || 
         (slot[row][col]->getCategory() == "NONTOOL" && itemQty == slot[row][col]->getQuantity())
-    ) slot[row][col] = new Item();
+    ) {
+        slot[row][col] = new Item();
+        this->slotUsed--;
+    }
 
     slot[row][col]->setQuantity(slot[row][col]->getQuantity() - itemQty);
+
 }
 
 void Inventory::discardAll(string slotId){
     slotId.erase(0,1); 
     int slotKe = stoi(slotId);
     slot[slotKe / COLSLOT][slotKe % COLSLOT] = new Item();
+    this->slotUsed--;
 }
 
 void Inventory::importFile()
