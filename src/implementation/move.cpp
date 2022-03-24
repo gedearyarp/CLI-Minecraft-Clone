@@ -23,7 +23,7 @@ void Move::moveItoI(Inventory &inv, string srcSlot, int justInput, string destSl
         throw new IndexOutOfRangeException(dcol);
     }
 
-    if(justInput != 1)
+    if (justInput != 1)
     {
         throw new CustomException("Invalid Input");
     }
@@ -125,7 +125,7 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
     // {
     //     throw new InvalidQuantityException(justParam);
     // }
-    
+
     if (srow < 0 || srow >= ROWSLOT)
     {
         throw new IndexOutOfRangeException(srow);
@@ -170,18 +170,21 @@ void Move::moveItoC(Inventory &inv, string srcSlot, int justParam, string destSl
         if (craft.getSlot(des).isEmpty())
         {
             craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), justParam));
-            inv.discard(srcSlot, 1);
+            inv.discard(srcSlot, itemQty);
         }
         else
         {
-            if (isrc->getName() == ides->getName()) {
+            if (isrc->getName() == ides->getName())
+            {
                 inv.discard(srcSlot, itemQty);
                 itemQty = min(itemQty + ides->getQuantity(), MAXQTY);
                 craft.setSlot(des, new NonTool(isrc->getId(), isrc->getName(), isrc->getType(), itemQty));
-            } else {
+            }
+            else
+            {
                 throw new InvalidDestinationSlot(des);
             }
-        }    
+        }
     }
 }
 
@@ -197,7 +200,7 @@ void Move::moveCtoI(Inventory &inv, string srcSlot, int justParam, string destSl
     int dcol = des % COLSLOT;
     Item *ides = inv.slotItem(des);
 
-    if(justParam != 1)
+    if (justParam != 1)
     {
         throw new CustomException("Invalid Input");
     }

@@ -82,7 +82,7 @@ InvalidDestinationSlot::InvalidDestinationSlot(int id)
 }
 
 void InvalidDestinationSlot::printMessage(){
-    cout << id << "is not a valid destination" << endl;
+    cout << id << " is not a valid destination" << endl;
 }
 
 InvalidCategoryException::InvalidCategoryException(string ctg)
