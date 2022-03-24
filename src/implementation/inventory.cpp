@@ -36,8 +36,6 @@ void Inventory::give(string itemName, int itemQty)
     
     string configPath = "./config";
     string fileName = "item.txt";
-    string nonTool = "NONTOOL";
-    string nameTool = "TOOL";
     ItemConfig readItemConfig = ItemConfig(configPath, fileName);
     string ctg = readItemConfig.findCategoryByName(itemName);
 
@@ -46,7 +44,7 @@ void Inventory::give(string itemName, int itemQty)
 
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){
-            if (ctg.compare(0, 7, nonTool, 0, 7) == 0 && slot[i][j]->isEmpty() && itemQty > 0)
+            if (ctg == "NONTOOL" && slot[i][j]->isEmpty() && itemQty > 0)
             {
                 cout << slot[i][j]->getQuantity() << endl;
                 int addQty = min(MAXQTY, itemQty);
@@ -57,7 +55,7 @@ void Inventory::give(string itemName, int itemQty)
                 itemQty -= addQty;
             }
 
-            else if (ctg.compare(0, 4, nameTool, 0, 4) == 0 && slot[i][j]->isEmpty() && itemQty > 0)
+            else if (ctg == "TOOL" && slot[i][j]->isEmpty() && itemQty > 0)
             {
                 Tool *T = new Tool(readItemConfig.findIdByName(itemName), itemName);
                 slot[i][j] = T;
@@ -70,7 +68,7 @@ void Inventory::give(string itemName, int itemQty)
 
     for(int i = 0; i < ROWSLOT && itemQty > 0;i++){
         for(int j = 0; j < COLSLOT && itemQty > 0; j++){
-            if (ctg.compare(0, 7, nonTool, 0, 7) == 0 && slot[i][j]->getName() == itemName && !slot[i][j]->isFull())
+            if (ctg == "NONTOOL" && slot[i][j]->getName() == itemName && !slot[i][j]->isFull())
             {
                 int remainQty = MAXQTY - slot[i][j]->getQuantity();
                 int addQty = min(itemQty, remainQty);
