@@ -80,13 +80,10 @@ void CraftingTable::clearTable()
                 {
                     Item *src = this->slotItem(idx);
                     int itemQty = src->getQuantity();
-                    if (src->getQuantity() < 0)
-                    {
-                        this->Table[i][j] = new NonTool(src->getId(), src->getName(), src->getType(), -1);
-                    }
-                    else
-                    {
-                        this->Table[i][j] = new NonTool(src->getId(), src->getName(), src->getType(), itemQty - 1);
+                    if (itemQty - 1 == 0) {
+                        this->Table[i][j] = new Item();
+                    } else {
+                       this->Table[i][j] = new NonTool(src->getId(), src->getName(), src->getType(), itemQty - 1);
                     }
                 }
             }
@@ -122,14 +119,18 @@ void CraftingTable::showCraftingTable()
         {
             string name = Table[i][j]->getName();
             int quantity = Table[i][j]->getQuantity();
-            cout << "[C" << count << ": " << name << " ";
-            if (Table[i][j]->getCategory() == "TOOL")
-            {
-                cout << Table[i][j]->getDurability();
-            }
-            else
-            {
-                cout << Table[i][j]->getQuantity();
+            cout << "[C" << count << ": ";
+            if (name == "-") {
+                cout << "EMPTY";
+            } else {
+                if (Table[i][j]->getCategory() == "TOOL")
+                {
+                    cout << Table[i][j]->getDurability();
+                }
+                else
+                {
+                    cout << Table[i][j]->getQuantity();
+                }
             }
 
             cout << " ]";
