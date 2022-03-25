@@ -36,6 +36,7 @@ Command yang dapat digunakan dalam program ini :
 
 ## Screenshot
 ![image](https://user-images.githubusercontent.com/71170262/160136485-2b62ec9a-2a1d-44fc-887d-27ba8d94bbc5.png)
+<br>
 Tampilan awal program
 
 ## Setup
