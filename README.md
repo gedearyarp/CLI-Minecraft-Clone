@@ -5,7 +5,7 @@ Program ini dibentuk menggunakan prinsip Object-Oriented Programming dengan meng
 Program ini dibentuk oleh kelompok Pijat C++ dengan tujuan memenuhi salah satu Tugas Besar IF2210 Pemrograman Berorientasi Objek. 
 
 ## Table of Contents
-* [General Information](#general-information)
+* [Authors](#authors)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
 * [Setup](#setup)
