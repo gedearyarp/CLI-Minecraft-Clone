@@ -34,6 +34,10 @@ Command yang dapat digunakan dalam program ini :
 - CRAFT -> Membuat Item dari CraftingTable sesuai dengan resep tertentu
 - EXPORT -> Meng-_Export_ isi dari Inventory ke suatu Directory 
 
+## Screenshot
+![image](https://user-images.githubusercontent.com/71170262/160136485-2b62ec9a-2a1d-44fc-887d-27ba8d94bbc5.png)
+Tampilan awal program
+
 ## Setup
 Permainan ini membutuhkan : 
 - g++
