@@ -235,9 +235,9 @@ map<string, int> CraftingTable::craft()
             }
             else
             {
-                cout << "Increase Tool " << toolName << " with durability: " << countDurability << endl;
+                cout << "Increase Tool " << toolName << " with durability: " << min(countDurability, 10) << endl;
                 this->clearTable();
-                return map<string, int>{{"ADD_DURABILITY " + toolName, countDurability}};
+                return map<string, int>{{"ADD_DURABILITY " + toolName, min(countDurability, 10)}};
             }
         }
     }
