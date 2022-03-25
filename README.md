@@ -80,4 +80,6 @@ make all
 ## Project Status
 Project ini sudah  _selesai_ 
 
+### Copyright
+2022 © C# C# di dinding. All Rights Reserved.
 
