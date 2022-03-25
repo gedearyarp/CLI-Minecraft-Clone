@@ -1,26 +1,62 @@
-# Minecraft-Template
+# Pijat C++ Minecraft Clone
+Application to simulate Minecraft Invetory, Item , and Crafting Behaviour using Command Line Interface.
 
-Template repository for Tubes 1 IF2210 2021/2022. Feel free to replace this README with your own content.
+## Table of Contents
+* [General Information](#general-information)
+* [Technologies Used](#technologies-used)
+* [Features](#features)
+* [Setup](#setup)
+* [Usage](#usage)
 
-## What's Inside
-This template consists of:
-- config folder containing all the config files (items and recipes)
-- tests folder containing two sample test files (input and answer)
-- main.cpp containing the sample main code
-- check.cpp containing the code for checking
-- makefile for compiling and testing
+## General Information
 
-## Running the Makefile
-Make sure you are using Linux with C++17. WSL also works if you are using Windows.
+
+## Technologies Used
+- C++ 17 
+
+## Features
+Command yang dapat digunakan dalam program ini :
+- HELP -> Menampilkan seluruh command yang bisa digunakan pemain
+- SHOW -> Menampilkan isi dari CraftingTable dan Inventory di Console
+- DISCARD -> Menghilangkan suatu Item dari Inventory
+- MOVE -> Memindahkan Item, terdapat 3 opsi, dari Inventory ke Inventory, dari Inventory ke CraftingTable, dan dari CraftingTable ke Inventory
+- USE -> Menggunakan item dengan kategori Tool dan mengurangi durabilitas sebesar 1
+- CRAFT -> Membuat Item dari CraftingTable sesuai dengan resep tertentu
+- EXPORT -> Meng-_Export_ isi dari Inventory ke suatu Directory 
+
+## Setup
+Permainan ini membutuhkan : 
+- g++
+- make
+- Linux
+
+Langkah menjalankan program :
+1. Lakukan clone pada repository ini, gunakan Linux/WSL dan pastikan make dan g++ sudah terinstall sebelumnya. Bila belum bisa dilakukan install dengan _command_
 ```
-sudo apt-get install make g++
+sudo apt-get install build-essential
+```
+2. Buka repository ini dan jalankan _command_
+```
+make compile
+```
+3. _command_ diatas akan melakukan compile kepada seluruh program dan membuat file "main" dan "main.exe"
+
+## Usage
+
+Langkah setelah sudah Compile program : 
+1. Gunakan _command_ ./main pada command line
+2. Ketik HELP untuk melihat semua command yang tersedia
+3. Gunakan command - command tersebut untuk memainkan permainan, resep dan item yang ada pada permainan ini hanya sebagian kecil dari item yang sebenernya ada pada permainan Minecraft
+
+Program ini juga dapat digunakan otomatis langsung menerima command dari sebuah file dan langsung melakukan test apakah output dari program sesuai output sebenarnya. Berikut langkah - langkahnya :
+1. Sudah tersedia testcase pada folder tests. Anda juga dapat menambahkan testcase sendiri dengan format input ``x.in`` dan ``x.ans`` dengan x berupa suatu angka. file ``.in`` berisi command - command yang akan dijalankan dan file ``.ans`` berisi ekspektasi output dari program
+2. Jalankan _command_
+```
 make all
 ```
-Using the sample main file, it should return that 1 out of 2 tests passed.
+3. Program akan otomatis menjalankan semua Command dan melakukan export ke folder tests dengan output berupa file ``x.out``. Program juga secara otomatis membandingkan output program dan jawaban sebenernya dan akan memunculkan berapa test yang lolos.
 
-## Adding More Tests
-You can add more tests by adding more files to the tests folder. Tests consists of two files, input with "in" extension and answer with "ans" extension. Each test should have exactly one EXPORT command which exports the current inventory into an "out" file in the tests folder. Please refer to the sample tests. Checking will be done by comparing the answer file and the output file.
+## Project Status
+Project ini sudah  _selesai_ 
 
-As the test is done by comparing the output files, you can freely use standard output in your program.
 
-Automated testing will not work if you are using GUI (obviously).# TUBES-OOP
