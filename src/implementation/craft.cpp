@@ -200,7 +200,7 @@ map<string, int> CraftingTable::craft()
         }
         else
         {
-            bool isToolNameSame = false;
+            bool isToolNameSame = true;
             string toolName = "";
             bool done = false;
             int countDurability = 0;
@@ -216,15 +216,19 @@ map<string, int> CraftingTable::craft()
                     }
                     else
                     {
-                        if (toolName == this->Table[i][j]->getName())
+                        if (this->Table[i][j]->getName() != "-")
                         {
-                            countDurability += this->Table[i][j]->getDurability();
+                            if (toolName == this->Table[i][j]->getName())
+                            {
+                                countDurability += this->Table[i][j]->getDurability();
+                            }
+                            else
+                            {
+                                isToolNameSame = false;
+                                break;
+                            }
                         }
-                        else
-                        {
-                            isToolNameSame = true;
-                        }
-                    }
+                    }    
                 }
             }
 
