@@ -1,5 +1,8 @@
 # Pijat C++ Minecraft Clone
-Application to simulate Minecraft Invetory, Item , and Crafting Behaviour using Command Line Interface.
+Pijat C++ Minecraft Clone merupakan cloning dari permainan minecraft dengan menggunakan Command Line Interface.
+Program ini dibentuk menggunakan prinsip Object-Oriented Programming dengan mengimplementasikan Inheritance, Polymorphism, Method Overloading, Exception, serta menggunakan Standard Template Library (STL) dari C++. Ketika program dijalankan, player dapat melakukan beberapa hal mulai dari menampilkan, mengisi, dan membuang item pada inventory, memindahkan item dari inventory table menuju crafting table, serta melakukan crafting untuk mendapatkan item baru.
+
+Program ini dibentuk oleh kelompok Pijat C++ dengan tujuan memenuhi salah satu Tugas Besar IF2210 Pemrograman Berorientasi Objek. 
 
 ## Table of Contents
 * [General Information](#general-information)
@@ -8,8 +11,15 @@ Application to simulate Minecraft Invetory, Item , and Crafting Behaviour using 
 * [Setup](#setup)
 * [Usage](#usage)
 
-## General Information
-
+## Authors
+| Nama                           | NIM      |
+| ------------------------------ | -------- |
+| I Gede Arya Raditya P          | 13520036 |
+| Arik Rayi Arkananta            | 13520048 |
+| Samuel Christopher Swandi      | 13520075 |
+| Grace Claudia                  | 13520078 |
+| Andhika Arta Aryanto           | 13520081 |
+| Januar Budi Ghifari            | 13520132 |
 
 ## Technologies Used
 - C++ 17 
