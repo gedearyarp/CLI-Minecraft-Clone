@@ -10,6 +10,7 @@ Program ini dibentuk oleh kelompok Pijat C++ dengan tujuan memenuhi salah satu T
 * [Features](#features)
 * [Setup](#setup)
 * [Usage](#usage)
+* [Project Status](#project-status)
 
 ## Authors
 | Nama                           | NIM      |
@@ -42,7 +43,7 @@ Tampilan awal program
 <br>
 ![image](https://user-images.githubusercontent.com/71170262/160136665-402c6eee-d8c5-410e-a946-15ab07107ec2.png)
 <br>
-Display CraftingTable dan Inventory
+Display Crafting Table dan Inventory
 
 ## Setup
 Permainan ini membutuhkan : 
