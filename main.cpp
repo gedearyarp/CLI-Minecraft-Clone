@@ -93,7 +93,8 @@ int main()
                 Move move = Move();
                 cin >> slotSrc >> slotQty;
                 getline(cin, slotDest);
-                slotDest.erase(remove(slotDest.begin(), slotDest.end(), ' '), slotDest.end());
+                slotDest.erase(0, slotDest.find_first_not_of(" \n\r\t"));
+                slotDest.erase(slotDest.find_last_not_of(" \n\r\t") + 1);
                 
                 if (cin.fail())
                 {
@@ -119,7 +120,7 @@ int main()
                         string added = string(1,slotDest[i]) + string(1,slotDest[i+1]);
                         destVector.push_back(added);
                     }
-
+                    
                     if (destVector.size() != slotQty)
                     {
                         throw new CustomException("Too many slot destination");
