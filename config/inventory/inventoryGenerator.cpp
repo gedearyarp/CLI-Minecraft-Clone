@@ -3,15 +3,7 @@
 #include "../../src/implementation/itemConfig.cpp" 
 #include "../../src/implementation/item.cpp"  
 
-
 using namespace std;
- 
-#define ll long long
-#define fi first
-#define se second
-#define pb(a) push_back(a)
-#define mp(a, b) make_pair(a, b)
-#define el '\n'
 
 int main() {
 	srand((unsigned)time(0));
