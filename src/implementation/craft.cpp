@@ -123,9 +123,8 @@ void CraftingTable::showCraftingTable()
             if (name == "-") {
                 cout << "EMPTY";
             } else {
-                string curItem = Table[i][j]->getName();
                 int curQty = Table[i][j]->getQuantity();
-                cout << curItem << " " << curQty;
+                cout << name << " " << curQty;
                 if (Table[i][j]->getCategory() == "TOOL")
                 {
                     cout << " " << Table[i][j]->getDurability();
