@@ -95,7 +95,8 @@ int main()
                 getline(cin, slotDest);
                 slotDest.erase(0, slotDest.find_first_not_of(" \n\r\t"));
                 slotDest.erase(slotDest.find_last_not_of(" \n\r\t") + 1);
-                
+                slotDest.erase(remove(slotDest.begin(), slotDest.end(), ' '), slotDest.end());
+
                 if (cin.fail())
                 {
                     throw new CustomException("Invalid Input");
