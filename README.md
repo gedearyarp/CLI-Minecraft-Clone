@@ -38,6 +38,10 @@ Command yang dapat digunakan dalam program ini :
 ![image](https://user-images.githubusercontent.com/71170262/160136485-2b62ec9a-2a1d-44fc-887d-27ba8d94bbc5.png)
 <br>
 Tampilan awal program
+<br>
+![image](https://user-images.githubusercontent.com/71170262/160136665-402c6eee-d8c5-410e-a946-15ab07107ec2.png)
+<br>
+Display CraftingTable dan Inventory
 
 ## Setup
 Permainan ini membutuhkan : 
